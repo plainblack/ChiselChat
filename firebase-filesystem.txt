@@ -1,3 +1,5 @@
+/chat  <- all chat data goes here
+/chat/channels  <- the list of rooms or channels where messages are stored
 /chat/channels/:channelid  <- the unique id of the channel
 /chat/channels/:channelid/id  <- the unique id of the channel, because you won't have it if you're just given the channel object
 /chat/channels/:channelid/name  <- the name of the channel
@@ -11,9 +13,19 @@
 /chat/channels/:channelid/messages/:messageid/userName  <- the name of the user who created this message
 /chat/channels/:channelid/messages/:messageid/message  <- the text of the message
 /chat/channels/:channelid/messages/:messageid/dateCreated  <- the date/time stamp of when this message was created
+/chat/users  <- the list of users attached to the chat system
 /chat/users/:userid  <- the firebase auth.id of this user
 /chat/users/:userid/id  <- the unique id of the user, because you won't have it if you're just given the user object
 /chat/users/:userid/name  <- the name of this user as displayed in the chat
 /chat/users/:userid/avatarUri  <- the URI that points to an image the user wants to represent themselves, if any
 /chat/users/:userid/isModerator  <- if true this user is a moderator
 /chat/users/:userid/profileUri  <- the URI that points to a user's user profile, if any
+/chat/presence  <- we keep track of who is currently online here
+/chat/presence/:userid  <- the unique id of the user
+/chat/presence/:userid/:sessionid  <- firebase session id, a user might be logged in more than once (two browsers for example)
+/chat/presence/:userid/:sessionid/id  <- the unique id of the user
+/chat/presence/:userid/:sessionid/name  <- the name the user goes by in chat
+/chat/suspensions  <- if someone gets banned, we store that banning here
+/chat/suspensions/:userid  <- the unique id of the user being banned
+/chat/suspensions/:userid/date  <- when is this ban lifted
+
