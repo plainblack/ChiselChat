@@ -1,0 +1,19 @@
+/chat/channels/:channelid  <- the unique id of the channel
+/chat/channels/:channelid/id  <- the unique id of the channel, because you won't have it if you're just given the channel object
+/chat/channels/:channelid/name  <- the name of the channel
+/chat/channels/:channelid/type  <- can be "public", "private", or "official"
+/chat/channels/:channelid/createdByUserId  <- the id of the user who created this channel, see /chat/users/:userid
+/chat/channels/:channelid/authorizedUsers  <- a list of users who can access this channel
+/chat/channels/:channelid/messages  <- the list of messages attached to this channel
+/chat/channels/:channelid/messages/:messageid  <- the unique id of the message
+/chat/channels/:channelid/messages/:messageid/type  <- can be "normal" or "me"
+/chat/channels/:channelid/messages/:messageid/userId  <- the id of the user who created this message, see /chat/users/:userid 
+/chat/channels/:channelid/messages/:messageid/username  <- the name of the user who created this message
+/chat/channels/:channelid/messages/:messageid/message  <- the text of the message
+/chat/channels/:channelid/messages/:messageid/dateCreated  <- the date/time stamp of when this message was created
+/chat/users/:userid  <- the firebase auth.id of this user
+/chat/users/:userid/id  <- the unique id of the user, because you won't have it if you're just given the user object
+/chat/users/:userid/username  <- the name of this user as displayed in the chat
+/chat/users/:userid/avatarUri  <- the URI that points to an image the user wants to represent themselves, if any
+/chat/users/:userid/isModerator  <- if true this user is a moderator
+/chat/users/:userid/profileUri  <- the URI that points to a user's user profile, if any
