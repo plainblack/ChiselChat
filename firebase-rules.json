@@ -15,7 +15,7 @@
         ".write": false,
         "channels" : {
             ".read": true,
-            "$channelId" : {
+            "$channelId" : { 
                 // Append-only by anyone, and admins can add official channels, and edit or remove channels as well.
                 ".write": "(auth != null) && (!data.exists() || root.child('chat').child('users').hasChild(auth.id).child('isModerator').val() == true || data.child('createdByUserId').val() === auth.id)",
                 ".validate": "newData.hasChildren(['name','type'])",
@@ -42,6 +42,36 @@
                     }
                 }
             }
+        },
+        "users" : {
+            // A list of users and their associated metadata, which can be updated by the single user or a moderator.
+            "$userId": {
+                ".write": "(auth != null) && (auth.id === $userId || root.child('chat').child('users').hasChild(auth.id).child('isModerator').val() == true)",
+                ".read": "(auth != null) && (auth.id === $userId || root.child('chat').child('users').hasChild(auth.id).child('isModerator').val() == true)",
+                ".validate": "($userId === newData.child('id').val())",
+                "isModerator" : {
+                    ".write" : "(auth != null) && auth.id === $userId && auth.chat_admin == true"
+                }
+            }
+        },
+        "presence": {
+          // A mapping of active, online sessions and user ids.
+          ".read": true,
+          "$userId": {
+            "$sessionId": {
+              ".write": "(auth != null) && (!data.exists() || !newData.exists() || data.child('id').val() === auth.id)",
+              "id": {
+                ".validate": "(newData.val() === auth.id)" 
+              },
+              "name": {
+                ".validate": "(newData.isString())"
+              }
+            }
+          }
+        },
+        "suspensions": {
+          ".write": "(auth != null) && root.child('chat').child('users').hasChild(auth.id).child('isModerator').val() == true",
+          ".read": "(auth != null) && root.child('chat').child('users').hasChild(auth.id).child('isModerator').val() == true"
         }
     }
   }
