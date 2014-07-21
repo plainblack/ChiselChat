@@ -1,0 +1,12 @@
+{
+  "name": "chat",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "author": "JT Smith",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-concat": "~0.4.0"
+  }
+}
