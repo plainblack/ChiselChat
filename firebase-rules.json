@@ -26,7 +26,7 @@
                   ".validate": "(auth.id === newData.val())"
                 },
                 "type": {
-                  ".validate": "('public' === newData.val()) || 'private' === newData.val() || ('official' === newData.val() && (root.child('chat').child('users').child(auth.id).child('isModerator').val())"
+                  ".validate": "('public' === newData.val()) || 'private' === newData.val() || ('official' === newData.val() && (root.child('chat').child('users').child(auth.id).child('isModerator').val() == true))"
                 },
                 // A list of users that may read messages from this channel.
                 "authorizedUsers": {
