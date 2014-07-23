@@ -325,18 +325,20 @@
     <script>
         //Configuration object
         var ChiselChat = {};
-        [% IF current_user %]
+        [% IF chat_user %]
         //User config, if missing then you're a guest
         ChiselChat.user = {
-            "userId" : [% current_user.id %],
-            "profileUri" : [% current_user.profile_uri %],
-            "name" : [% current_user.display_name %],
-            "avatarUri" : [% current_user.avatar.preview_uri %],
-            "isModerator" : [% current_user.is_curator %],
+            "userId" : [% chat_user.id %],
+            "profileUri" : [% chat_user.profile_uri %],
+            "name" : [% chat_user.name %],
+            "avatarUri" : [% chat_user.avatar_uri %],
+            "isModerator" : [% chat_user.is_admin %],
         };
         [% ENDIF %]
         //Chat config, for other stuff
-        ChiselChat.chat = {};
+        ChiselChat.chat = {
+            "firebaseUri" : [% firebase_uri %]
+        };
     </script>
     <script src="lib/chiselapp.js"></script>
 <script>
