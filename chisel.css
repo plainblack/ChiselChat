@@ -1,0 +1,190 @@
+#chiselchat {
+    font-family: sans-serif;
+    font-size: 12px;
+    z-index: 1000000;
+}
+#chiselchat .cc_tabs {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    width: 100%;
+    height: 20px;
+    border: 0;
+}
+#chiselchat .cc_tab {
+    width: 120px;
+    background-color: #ccc;
+    color: #000;
+    margin-right: 5px;
+    padding: 3px;
+    float: right;
+    border: 1px solid #aaa;
+    height: 20px;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+}
+#chiselchat .cc_tab:hover {
+    background-color: #ddd;
+}
+#chiselchat .cc_tab#cc_power {
+    display: inline-block;
+    margin: 0;
+    width: 10px;
+}
+#chiselchat .cc_tab#cc_presence {
+    margin: 0;
+}
+#chiselchat .cc_tab .cc_new_count {
+    background-color: #eee;
+    color: #000;
+    font-size: 80%;
+    font-weight: bold;
+    display: inline-block;
+    padding: 1px;
+    position: absolute;
+    right: 3px;
+    top: 3px;
+}
+#chiselchat .cc_tab.cc_open {
+    background-color: #333;
+    color: #ccc;
+    font-weight: bold;
+    border: 1px solid #333;
+}
+#chiselchat .cc_tab.cc_open .cc_new_count {
+    display: none;
+}
+#chiselchat .cc_channels {
+}
+#chiselchat .cc_channels .cc_title {
+    color: #fff;
+    background-color: #555;
+    margin: 0;
+    padding: 5px;
+    height: 13px;
+    font-weight: bold;
+    z-index: 1000001;
+    overflow: hidden;
+}
+#chiselchat .cc_channel {
+    position: fixed;
+    bottom: 25px;
+    right: 150px;
+    background-color: #333;
+    width: 50%;
+    height: 50%;
+    display: none;
+    display: scroll;
+}
+#chiselchat .cc_channel.cc_open {
+    display: block;
+}
+#chiselchat .cc_channel .cc_history {
+    overflow: scroll;
+    z-index: 1000000;
+    width: 100%;
+    overflow: scroll;
+}
+#chiselchat .cc_channel .cc_history .cc_post {
+    margin: 5px;
+    margin-top: 15px;
+    padding: 0px;
+    color: #fff;
+}
+#chiselchat .cc_channel .cc_history .cc_avatar {
+    margin-right: 5px;
+    width: 25px;
+    height: 25px;
+    float: left;
+}
+#chiselchat .cc_channel .cc_history .cc_avatar img {
+    height: 100%;
+    width: 100%;
+    background-color: #aaa;
+}
+#chiselchat .cc_channel .cc_history .cc_user {
+    font-size: 90%;
+    font-weight: bold;
+}
+#chiselchat .cc_channel .cc_history .cc_timestamp {
+    color: #aaa;
+    font-size: 80%;
+    display: inline;
+}
+#chiselchat .cc_channel .cc_history .cc_controls {
+    display: inline;
+}
+#chiselchat .cc_channel .cc_history .cc_controls a {
+    font-size: 80%;
+    padding: 1px;
+    color: #aaa;   
+    margin-left: 10px;
+}
+#chiselchat .cc_channel .cc_history .cc_message {
+    margin-top: 3px;
+    margin-left: 30px;
+}
+#chiselchat .cc_channel .cc_history .cc_me_message {
+    text-align: center;
+    font-style: italic;
+    color: #aaa;
+}
+#chiselchat .cc_admin {
+    font-weight: bold;
+    color: orange;
+}
+#chiselchat .cc_channel .cc_say {
+    z-index: 100000001;
+    width: 100%;
+    height: 20px;
+}
+#chiselchat .cc_channel .cc_say input {
+    color: #000;
+    border: 5px solid #333;
+    background-color: #fff;
+    width: 100%;
+    padding: 1px;
+    height: 25px;
+    font-size: 110%;
+}
+#chiselchat #cc_presence_list {
+    position: fixed;
+    bottom: 25px;
+    right: 5px;
+    background-color: #333;
+    color: #fff;
+    width: 140px;
+    height: 50%;
+    display: none;
+    overflow: hidden;
+}
+#chiselchat #cc_presence_list.cc_open {
+    display: block;
+}
+#chiselchat #cc_presence_list .cc_chatter {
+    white-space: nowrap;
+    overflow: hidden;
+}
+#chiselchat #cc_presence_list .cc_chatter img {
+    height: 20px; 
+    width: 20px; 
+    background-color: #aaa;
+    margin: 3px;
+    vertical-align: middle;
+}
+#chiselchat #cc_presence_list #cc_chatters {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100%;
+}
+@media (max-width: 767px) {
+    #chiselchat #cc_presence_list.cc_open, #chiselchat .cc_tab#cc_presence {
+        display: none;
+    }
+    #chiselchat .cc_channel.cc_open {
+        width: 90%;
+        right: 5px;
+        height: 70%;
+    }
+}
