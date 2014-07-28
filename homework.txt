@@ -1,0 +1,14 @@
+Homework assignments from pD:
+
+
+1) Analyze the sample presence code from angular-firebase
+
+
+
+2) Look into writing a custom filter for angular, to format chat messages correctly
+
+
+
+3) Build a scrubber for inputted chat that rejects HTML, CSS, etc.
+
+jQuery(html).text();
