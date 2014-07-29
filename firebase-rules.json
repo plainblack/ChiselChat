@@ -1,18 +1,16 @@
 {
   "rules": {
-    ".read": true,
+    ".read": false,
     ".write": false,
     "status" : {
       "$user_id" : { 
-        ".write" : "auth.id == $userId"
+        ".write" : "auth.id == $user_id"
       }
     },
     "auction" : {
       ".write" : true
     },
-    "chat" : {
-        ".read": false,
-        ".write": false,
+    "chat": {
         "channels" : {
             ".read": true,
             "$channelId" : { 
@@ -39,10 +37,10 @@
                           ".write": "(auth != null) && (data.val() === null || root.child('chat').child('users').child(auth.id).child('isModerator').val() == true && (root.child('chat').child('channels').child($channelId).child('type').val() != 'private' || root.child('chat').child('channels').child($channelId).child('authorizedUsers').hasChild(auth.id)) && (!root.child('suspensions').hasChild(auth.id) || root.child('suspensions').child(auth.id).val() < now))",
                           ".validate": "(newData.hasChildren(['userId','name','message','timestamp']))"
                         }
-                    }
                 }
             }
         },
+      
         "users" : {
             // A list of users and their associated metadata, which can be updated by the single user or a moderator.
             "$userId": {
@@ -50,7 +48,7 @@
                 ".read": "(auth != null) && (auth.id === $userId || root.child('chat').child('users').child(auth.id).child('isModerator').val() == true)",
                 ".validate": "($userId === newData.child('id').val())",
                 "isModerator" : {
-                    ".write" : "(auth != null) && auth.id === $userId && auth.chat_admin == true"
+                    ".write" : "(auth != null) && auth.id === $userId && auth.chat_admin == 1"
                 }
             }
         },

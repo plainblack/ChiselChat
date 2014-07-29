@@ -3,6 +3,9 @@ Homework assignments from pD:
 
 1) Analyze the sample presence code from angular-firebase
 
+fb.onDisconnect
+
+
 
 
 2) Look into writing a custom filter for angular, to format chat messages correctly
