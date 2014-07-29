@@ -3,11 +3,13 @@
     ".read": false,
     ".write": false,
     "status" : {
+      ".read": true,
       "$user_id" : { 
         ".write" : "auth.id == $user_id"
       }
     },
     "auction" : {
+      ".read" : true,
       ".write" : true
     },
     "chat": {
@@ -48,7 +50,7 @@
                 ".read": "(auth != null) && (auth.id === $userId || root.child('chat').child('users').child(auth.id).child('isModerator').val() == true)",
                 ".validate": "($userId === newData.child('id').val())",
                 "isModerator" : {
-                    ".write" : "(auth != null) && auth.id === $userId && auth.chat_admin == 1"
+                    ".validate" : "(auth != null) && auth.id === $userId && auth.chat_admin == true"
                 }
             }
         },
