@@ -1,12 +1,33 @@
 {
-  "name": "chat",
+  "name": "chiselchat",
+  "title": "Chisel Chat",
+  "description": "Bad ass chat",
+  "homepage": "http://chisel.ch",
+  "author": {
+    "name": "Plain Black",
+    "url": "http://www.plainblack.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/plainblack/ChiselChat.git"
+  },
+  "bugs": "https://github.com/plainblack/ChiselChat/issues",
+  "licenses": [{
+    "type": "Proprietary",
+    "url": "http://chisel.ch/license"
+  }],
   "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
-  "author": "JT Smith",
-  "license": "ISC",
+  "dependencies": {},
   "devDependencies": {
-    "grunt": "~0.4.5",
-    "grunt-contrib-concat": "~0.4.0"
-  }
+    "grunt": "~0.4.0",
+    "grunt-contrib-clean": "~0.4.1",
+    "grunt-contrib-concat": "~0.1.1",
+    "grunt-contrib-jshint": "~0.1.0",
+    "grunt-contrib-jst": "~0.5.0",
+    "grunt-contrib-less": "~0.5.0",
+    "grunt-contrib-uglify": "~0.1.0",
+    "grunt-contrib-watch": "~0.1.4",
+    "grunt-docco": "~0.2.0"
+  },
+  "keywords": ["firebase", "chat", "talk", "real-time", "synchronization", "websocket"]
 }

@@ -1,0 +1,59 @@
+<div id='chiselchat'>
+    
+    <ul id='chiselchat-tab-list'>
+        <li>
+          <a href='#chiselchat-presence-list' data-toggle='tab' title='Rooms &amp; People'>Rooms &amp; People</a>
+        </li>
+    </ul>
+    <div id='chiselchat-tab-content' class='tab-content'>
+    
+        <div id='chiselchat-presence-list' class='chiselchat-tab-pane active'>
+            <div class="chiselchat-title">
+                Rooms &amp; People    
+            </div>
+
+            <div class='dropdown' style=''>
+                <a id='chiselchat-btn-rooms' class='dropdown-toggle btn full' data-toggle="dropdown" href='#'>
+                  Chat Rooms
+                </a>
+                <div class='dropdown-menu full' role='menu'>
+                  <ul id='chiselchat-room-list'></ul>
+                  <div class='dropdown-footer aligncenter'>
+                    <button type='button' class='btn twothird center' id='chiselchat-btn-create-room-prompt'>Create Room</button>
+                  </div>
+                </div>
+              </div>
+
+            <br><hr><br>
+            <div class='dropdown'>
+                    <a data-event='chiselchat-user-search-btn'  data-toggle="dropdown" href='#'>
+                      Private Chat Invite
+                    </a>
+                    <div class='dropdown-menu' role='menu'>
+                      <div class='dropdown-header'>
+                        <div class='search-wrapper'>
+                          <input type='text' data-event='chiselchat-user-search' data-template='templates/user-search-list-item.html' data-target='chiselchat-user-search' data-controls='chiselchat-user-search-controls'>
+                        </div>
+                      </div>
+                      <ul id='chiselchat-user-search'></ul>
+
+                      <div class='dropdown-footer'>
+                        <div id='chiselchat-user-search-controls'>
+                          <button type='button' data-event='chiselchat-user-search' data-toggle='chiselchat-pagination-next' data-template='templates/user-search-list-item.html' data-target='chiselchat-user-search' data-controls='chiselchat-user-search-controls' disabled=disabled>Next</button>
+                        </div>
+
+                        <label>
+                          <small>Use "+ Invite" button within chat rooms for regular invites.</small>
+                        </label>
+                      </div>
+                    </div>
+                  </div>            
+            
+            
+            
+        </div>     
+    
+    </div>
+
+  <div id='chiselchat-footer' class='clearfix'></div>
+</div>

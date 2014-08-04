@@ -1,1 +1,0 @@
-//chat.jquery('<div>hi there</div>').appendTo('body');

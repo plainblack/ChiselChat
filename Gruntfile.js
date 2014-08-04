@@ -1,27 +1,97 @@
 module.exports = function(grunt) {
 
+  "use strict";
+
+  // Initializes the Grunt tasks with the following settings
   grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
-    concat: {
+
+    // A list of files which will be syntax-checked by JSHint.
+    jshint: {
+      files: ['src/js/shims.js', 'src/js/chiselchat.js', 'src/js/chiselchat-ui.js'],
       options: {
-        separator: ';',
-      },
-      dist: {
-        src: [
-          'src/intro.js', 
-          'lib/jquery-1.10.2.min.js',
-          'lib/angular-1.2.13.min.js',
-          'lib/middlin.js',
-          'src/chat.js', 
-          'src/outro.js'
-        ],
-        dest: 'dist/chat.js',
-      },
+        regexdash: false
+      }
     },
+
+    // Precompile templates and strip whitespace with 'processContent'.
+    jst: {
+      compile: {
+        options: {
+          path: 'templates',
+          namespace: 'ChiselchatDefaultTemplates',
+          prettify: true,
+          processContent: function(src) {
+            return src.replace(/(^\s+|\s+$)/gm, '');
+          }
+        },
+        files: {
+          'compiled/templates.js': ['templates/*.html']
+        }
+      }
+    },
+
+    // Compile and minify LESS CSS for production.
+    less: {
+      development: {
+        files: {
+          "build/chiselchat/chiselchat.css": "src/less/styles.less"
+        }
+      },
+      production: {
+        options: {
+          yuicompress: true
+        },
+        files: {
+          "build/chiselchat/chiselchat.min.css": "src/less/styles.less"
+        }
+      }
+    },
+
+    // Concatenate files in a specific order.
+    concat: {
+      js: {
+        src: [
+          'src/js/libs/underscore-1.4.4.min.js',
+          'compiled/templates.js',
+          'src/js/shims.js',
+          'src/js/chiselchat.js',
+          'src/js/chiselchat-ui.js'
+        ],
+        dest: 'build/chiselchat/chiselchat.js'
+      }
+    },
+
+    // Minify concatenated files.
+    uglify: {
+      dist: {
+        src: ['<%= concat.js.dest %>'],
+        dest: 'build/chiselchat/chiselchat.min.js'
+      }
+    },
+
+    // Clean up temporary files.
+    clean: ['compiled/'],
+
+    // Tasks to execute upon file change when using `grunt watch`.
+    watch: {
+      src: {
+        files: ['src/**/*.*', 'templates/**/*.*'],
+        tasks: ['default']
+      }
+    }
   });
 
+  // Load specific plugins, which have been installed and specified in package.json.
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-jst');
+  grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-docco');
 
-  grunt.registerTask('default', ['concat']);
+  // Default task operations if simply calling `grunt` without options.
+  grunt.registerTask('default', ['jshint', 'jst', 'less', 'concat', 'uglify', 'clean']);
 
 };
