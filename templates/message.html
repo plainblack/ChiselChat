@@ -5,11 +5,11 @@
   <div class='chiselchat-timestamp'><%- localtime %></div>
   <% if (!disableActions) { %>
       <div class='chiselchat-controls'>
-          <a href='#!' data-event='chiselchat-user-chat' title='Invite to Private Chat'>PM</a> 
-          <a href='#!' data-event='chiselchat-user-mute-toggle' title='Mute User'>Mute</a>
-          <a href="#">Delete</a> 
-          <a href="#">Kick</a> 
-          <a href="#">Ban</a>
+          <a href='javascript: void(0);' data-event='chiselchat-user-chat' title='Invite to Private Chat'>PM</a> 
+          <a href='javascript: void(0);' data-event='chiselchat-user-mute-toggle' title='Mute User'>Mute</a>
+          <a href='javascript: void(0);'>Delete</a> 
+          <a href='javascript: void(0);'>Kick</a> 
+          <a href='javascript: void(0);'>Ban</a>
       </div>
   <% } %>
   <div class='chiselchat-message-content'><%= message %></div>
