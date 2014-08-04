@@ -1,4 +1,14 @@
 @charset "UTF-8";
+@main-background-color: #333;
+@main-text-color: #ccc;
+@main-text-color-important: #fff;
+@highlight-background-color: #eee;
+@highlight-text-color: #000;
+@active-background-color: #ccc;
+@active-text-color: #000;
+@input-background-color: #fff;
+@input-text-color: #000;
+@moderator-text-color: orange;
 
 #chiselchat {
     font-family: sans-serif;
@@ -19,11 +29,11 @@
 #chiselchat-tab-list li {
     display: inline;
     width: 120px;
-    background-color: #ccc;
+    background-color: @main-background-color;
     margin-right: 5px;
     padding: 3px;
     float: right;
-    border: 1px solid #aaa;
+    border: 1px solid @main-background-color;
     height: 20px;
     position: relative;
     overflow: hidden;
@@ -31,12 +41,15 @@
 }
 #chiselchat-tab-list li a {
     text-decoration: none;
-    color: black;
+    color: @main-text-color;
     width: 100%;
     display: block;
 }
 #chiselchat-tab-list li:hover {
-    background-color: #ddd;
+    background-color: @highlight-background-color;
+}
+#chiselchat-tab-list li a:hover {
+    color: @highlight-text-color;
 }
 #chiselchat-tab-list li#cc_power {
     display: inline-block;
@@ -47,8 +60,8 @@
     margin: 0;
 }
 #chiselchat-tab-list li .chiselchat-new-count {
-    background-color: #eee;
-    color: #000;
+    background-color: @highlight-background-color;
+    color: @highlight-text-color;
     font-size: 80%;
     font-weight: bold;
     display: inline-block;
@@ -58,12 +71,12 @@
     top: 3px;
 }
 #chiselchat-tab-list li.active {
-    background-color: #333;
+    background-color: @active-background-color;
     font-weight: bold;
-    border: 1px solid #333;
+    border: 1px solid @active-background-color;
 }
 #chiselchat-tab-list li.active a {
-    color: #ccc;
+    color: @active-text-color;
 }
 #chiselchat-tab-list li.active .chiselchat-new-count {
     display: none;
@@ -71,8 +84,8 @@
 #chiselchat-tab-content {
 }
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-title {
-    color: #fff;
-    background-color: #555;
+    color: @main-text-color-important;
+    background-color: lighten(@main-background-color, 10%);
     margin: 0;
     padding: 5px;
     height: 13px;
@@ -81,18 +94,18 @@
     overflow: hidden;
 }
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-close-tab {
-    color: #aaa;
+    color: @main-text-color;
     text-decoration: none;
     position: absolute;
     top: 2;
-    right: 2;
+    right: 5;
     font-size: 110%;
 }
 #chiselchat-tab-content .chiselchat-tab-pane {
     position: fixed;
     bottom: 25px;
     right: 150px;
-    background-color: #333;
+    background-color: @main-background-color;
     width: 50%;
     height: 50%;
     display: none;
@@ -109,7 +122,7 @@
 }
 
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-tab-pane-menu a {
-    color: #aaa;
+    color: @main-text-color;
 }
 
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history {
@@ -123,7 +136,7 @@
     margin: 5px;
     margin-top: 15px;
     padding: 0px;
-    color: #fff;
+    color: @main-text-color-important;
 }
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-avatar {
     margin-right: 5px;
@@ -134,16 +147,16 @@
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-avatar img {
     height: 100%;
     width: 100%;
-    background-color: #aaa;
+    background-color: @main-text-color;
 }
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-user a {
     font-size: 90%;
     font-weight: bold;
     text-decoration: none;
-    color: #aaa;
+    color: @main-text-color;
 }
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-timestamp {
-    color: #aaa;
+    color: @main-text-color;
     font-size: 80%;
     display: inline;
 }
@@ -153,7 +166,7 @@
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-controls a {
     font-size: 80%;
     padding: 1px;
-    color: #aaa;   
+    color: @main-text-color;   
     margin-left: 10px;
 }
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-content {
@@ -163,11 +176,11 @@
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-me-message {
     text-align: center;
     font-style: italic;
-    color: #aaa;
+    color: @main-text-color;
 }
-#chiselchat .chiselchat-admin {
+#chiselchat .chiselchat-moderator {
     font-weight: bold;
-    color: orange;
+    color: @moderator-text-color;
 }
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-say {
     z-index: 100000001;
@@ -178,9 +191,9 @@
     left: 0;
 }
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-say textarea {
-    color: #000;
-    border: 5px solid #333;
-    background-color: #fff;
+    color: @input-text-color;
+    border: 5px solid @main-background-color;
+    background-color: @input-background-color;
     width: 100%;
     padding: 1px;
     height: 100%;
@@ -191,15 +204,15 @@
     position: fixed;
     bottom: 25px;
     right: 5px;
-    background-color: #333;
-    color: #fff;
+    background-color: @main-background-color;
+    color: @main-text-color;
     width: 140px;
     height: 50%;
     display: none;
     overflow: hidden;
 }
 #chiselchat #chiselchat-presence-list a {
-    color: #aaa;
+    color: @main-text-color;
 }
 #chiselchat #chiselchat-presence-list.active {
     display: block;
@@ -211,7 +224,7 @@
 #chiselchat #chiselchat-presence-list .cc_chatter img {
     height: 20px; 
     width: 20px; 
-    background-color: #aaa;
+    background-color: @main-text-color;
     margin: 3px;
     vertical-align: middle;
 }
@@ -223,8 +236,8 @@
 .chiselchat-prompt {
     min-width: 300px;
     max-width: 500px;
-    background-color: #333;
-    color: #fff;
+    background-color: @main-background-color;
+    color: @main-text-color-important;
     border: 3px outset black;
     position: fixed;
     margin-left: auto;
@@ -238,13 +251,13 @@
     right: 5px;
 }
 .chiselchat-prompt-header, .chiselchat-prompt-footer {
-    color: #aaa;
+    color: @main-text-color;
     font-weight: bold;
-    background-color: #444;
+    background-color: lighten(@main-background-color, 10%);
 }
 .chiselchat-prompt-header a {
     text-decoration: none;
-    color: #fff;
+    color: @main-text-color;
 }
 .chiselchat-prompt-body {
     padding: 20px;
