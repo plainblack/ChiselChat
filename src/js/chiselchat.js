@@ -211,9 +211,7 @@
     _onNotification: function(snapshot) {
       var notification = snapshot.val();
       if (!notification.read) {
-        if (notification.notificationType !== 'suspension' || notification.data.suspendedUntil < new Date().getTime()) {
           snapshot.ref().child('read').set(true);
-        }
         this._invokeEventCallbacks('notification', notification);
       }
         else {

@@ -35,6 +35,9 @@
     // A list of rooms to enter once we've made room for them (once we've hit the max room limit).
     this._roomQueue = [];
 
+    // A toggle so that in some circumstances a chat tab can focus automatically.
+    this.autoFocusTab = false;
+      
     // Define some constants regarding maximum lengths, client-enforced.
     this.maxLengthUsername = 15;
     this.maxLengthUsernameDisplay = 15;
@@ -189,6 +192,7 @@
       if (invitation.status && invitation.status === 'accepted') {
           self.success(invitation.toUserName + ' accepted your invite.','Invitation Accepted');
         this._chat.getRoom(invitation.roomId, function(room) {
+          self.autoFocusTab = true;
           self.attachTab(invitation.roomId, room.name);
         });
       } else {
@@ -356,6 +360,7 @@
             if (self.$messages[roomId]) {
               self.focusTab(roomId);
             } else {
+              self.autoFocusTab = true;
               self._chat.enterRoom(roomId, roomName);
             }
             return false;
@@ -600,6 +605,7 @@
             $prompt.find('[data-toggle=accept]').first().click(function() {
               $prompt.remove();
               var roomName = 'Private Chat';
+              self.autoFocusTab = true;
               self._chat.createRoom(roomName, 'private', function(roomId) {
                 self._chat.inviteUser(userId, roomId, roomName);
               });
@@ -636,6 +642,7 @@
     $createRoomButton.bind('click', function(event) {
       var roomName = $('#chiselchat-input-room-name').val();
       $('#chiselchat-prompt-create-room').remove();
+      self.autoFocusTab = true;
       self._chat.createRoom(roomName);
       return false;
     });
@@ -951,9 +958,15 @@ ChiselchatUI.prototype.success = function(message, title) {
       self.sortListLexicographically('#chiselchat-room-user-list-' + roomId);
       return false;
     });
+      
+    // set message count to 0
+    self.resetNewMessageCount(roomId); 
 
     // Automatically select the new tab.
-    this.focusTab(roomId);
+    if (self.autoFocusTab) {
+        this.focusTab(roomId);
+        self.autoFocusTab = false;
+    }
   };
 
   /**
