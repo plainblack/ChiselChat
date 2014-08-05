@@ -248,7 +248,7 @@
   // --------------
 
   // Initialize the library and setup data listeners.
-  Chiselchat.prototype.setUser = function(userId, userName, callback) {
+  Chiselchat.prototype.setUser = function(userId, userName, isModerator, callback) {
     var self = this;
 
     self._firebase.root().child('.info/authenticated').on('value', function(snapshot) {
@@ -257,6 +257,16 @@
 
         self._userId = userId.toString();
         self._userName = userName.toString();
+        self._isModerator = isModerator;
+        if (self._isModerator) {
+            self._moderatorsRef.child(self._userId).set(true);
+        }
+        else {
+            var wasModerator = self._moderatorsRef.child(self._userId);
+            if (wasModerator) {
+                wasModetator.remove();
+            }
+        }
         self._userRef = self._firebase.child('users').child(self._userId);
         self._loadUserMetadata(function() {
           root.setTimeout(function() {
