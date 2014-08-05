@@ -63,10 +63,10 @@
     width: 10px;
 }
 #chiselchat-tab-list li#chiselchat-presence-tab {
-    margin: 0;
     width: 55px;
 }
-#chiselchat-tab-list li#chiselchat-rooms-tab {
+#chiselchat-tab-list li#chiselchat-room-tab {
+    margin: 0;
     width: 55px;
 }
 #chiselchat-tab-list li .chiselchat-new-count {
@@ -127,7 +127,8 @@
 
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-tab-pane-menu {
     width: 35%;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
     float: right;
 }
 
@@ -138,7 +139,8 @@
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history {
     z-index: 1000000;
     width: 65%;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
     float: left;
     height: 80%;
 }
@@ -213,7 +215,7 @@
     max-width: 100%;
     font-family: sans-serif;
 }
-#chiselchat #chiselchat-presence-list, #chiselchat #chiselchat-rooms-list {
+#chiselchat #chiselchat-presence-pane, #chiselchat #chiselchat-room-pane {
     position: fixed;
     bottom: 25px;
     right: 5px;
@@ -224,24 +226,47 @@
     display: none;
     overflow: hidden;
 }
-#chiselchat #chiselchat-presence-list a, #chiselchat #chiselchat-rooms-list a {
+#chiselchat #chiselchat-presence-pane .chiselchat-scrollable-list, #chiselchat #chiselchat-room-pane .chiselchat-scrollable-list {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 80%;
+}
+#chiselchat #chiselchat-room-pane #chiselchat-room-list {
+    padding-left: 5px;
+}
+#chiselchat #chiselchat-room-pane #chiselchat-create-room input {
+    background-color: @input-background-color;
+    color: @input-text-color;
+    width: 80px;
+    margin: 0;
+    border: none;
+}
+#chiselchat #chiselchat-room-pane #chiselchat-create-room button {
+    margin: 0;
+    width: 55px;
+    border: none;
+    padding: 1px;
+    background-color: @highlight-background-color;
+    color: @highlight-text-color;
+}
+#chiselchat #chiselchat-presence-pane a, #chiselchat #chiselchat-room-pane a {
     color: @main-text-color;
 }
-#chiselchat #chiselchat-presence-list.active, #chiselchat #chiselchat-rooms-list.active {
+#chiselchat #chiselchat-presence-pane.active, #chiselchat #chiselchat-room-pane.active {
     display: block;
 }
-#chiselchat #chiselchat-presence-list .cc_chatter {
+#chiselchat #chiselchat-presence-pane .cc_chatter {
     white-space: nowrap;
     overflow: hidden;
 }
-#chiselchat #chiselchat-presence-list .cc_chatter img {
+#chiselchat #chiselchat-presence-pane .cc_chatter img {
     height: 20px; 
     width: 20px; 
     background-color: @main-text-color;
     margin: 3px;
     vertical-align: middle;
 }
-#chiselchat #chiselchat-presence-list #cc_chatters {
+#chiselchat #chiselchat-presence-pane #cc_chatters {
     overflow-y: scroll;
     overflow-x: hidden;
     height: 100%;
@@ -276,7 +301,7 @@
     padding: 20px;
 }
 @media (max-width: 767px) {
-    #chiselchat #chiselchat-presence-list.active, #chiselchat-tab-content .chiselchat-tab-pane#chiselchat-presence {
+    #chiselchat #chiselchat-presence-list.active, #chiselchat-tab-content .chiselchat-tab-pane#chiselchat-presence-tab {
         display: none;
     }
     #chiselchat-tab-content .chiselchat-tab-pane.active {
@@ -285,7 +310,6 @@
         height: 70%;
     }
 }
-
 
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity {
     text-align: center;

@@ -41,7 +41,7 @@
     // Define some constants regarding maximum lengths, client-enforced.
     this.maxLengthUsername = 15;
     this.maxLengthUsernameDisplay = 15;
-    this.maxLengthRoomName = 24;
+    this.maxLengthRoomName = 16;
     this.maxLengthMessage = 1000;
     this.maxUserSearchResults = 100;
 
@@ -119,7 +119,9 @@
     _renderLayout: function() {
       var template = ChiselchatDefaultTemplates["templates/layout-full.html"];
       $(this._el).html(template({
-        maxLengthUsername: this.maxLengthUsername
+        maxLengthUsername: this.maxLengthUsername,
+        maxLengthRoomName: this.maxLengthRoomName,
+        isModerator: this._chat.userIsModerator()
       }));
     },
 
@@ -345,10 +347,10 @@
   ChiselchatUI.prototype._bindForRoomList = function() {
     var self = this;
 
-    $('#chiselchat-btn-rooms').bind('click', function() {
-      if ($(this).parent().hasClass('open')) {
+    $('#chiselchat-room-tab').bind('click', function() {
+   /*   if ($(this).hasClass('active')) {
         return;
-      }
+      }*/
 
       var $this = $(this),
           template = ChiselchatDefaultTemplates["templates/room-list-item.html"],

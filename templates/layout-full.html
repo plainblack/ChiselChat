@@ -1,16 +1,16 @@
 <div id='chiselchat'>
     
     <ul id='chiselchat-tab-list'>
-        <li id='chiselchat-presence-tab'>
-          <a href='#chiselchat-presence-list' data-toggle='tab' title='People'>People</a>
+        <li id='chiselchat-room-tab'>
+          <a href='#chiselchat-room-pane' data-toggle='tab' title='Rooms'>Rooms</a>
         </li>
-        <li id='chiselchat-rooms-tab'>
-          <a href='#chiselchat-rooms-list' data-toggle='tab' title='Rooms'>Rooms</a>
+        <li id='chiselchat-presence-tab'>
+          <a href='#chiselchat-presence-pane' data-toggle='tab' title='People'>People</a>
         </li>
     </ul>
     <div id='chiselchat-tab-content' class='tab-content'>
     
-        <div id='chiselchat-presence-list' class='chiselchat-tab-pane'>
+        <div id='chiselchat-presence-pane' class='chiselchat-tab-pane'>
             <div class="chiselchat-title">
                 People    
             </div>
@@ -40,22 +40,19 @@
                   </div>            
             
         </div>     
-        <div id='chiselchat-rooms-list' class='chiselchat-tab-pane'>
+        <div id='chiselchat-room-pane' class='chiselchat-tab-pane'>
             <div class="chiselchat-title">
                 Rooms    
             </div>
 
-            <div class='dropdown' style=''>
-                <a id='chiselchat-btn-rooms' class='dropdown-toggle btn full' data-toggle="dropdown" href='javascript: void(0);'>
-                  Chat Rooms
-                </a>
-                <div class='dropdown-menu full' role='menu'>
-                  <ul id='chiselchat-room-list'></ul>
-                  <div class='dropdown-footer aligncenter'>
-                    <button type='button' id='chiselchat-btn-create-room-prompt'>Create Room</button>
-                  </div>
+                <div id='chiselchat-create-room'>
+                    <input id='chiselchat-input-room-name' data-input='chiselchat-room-name' type='text' placeholder='Room name...' maxlength='<%- maxLengthRoomName %>'>
+                    <button type='button' id='chiselchat-btn-create-room'>Create</button>
                 </div>
-              </div>
+    
+                <div class="chiselchat-scrollable-list">
+                    <ul id='chiselchat-room-list'></ul>
+                </div>
             
         </div>       
     </div>
