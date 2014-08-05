@@ -917,9 +917,9 @@ ChiselchatUI.prototype.success = function(message, title) {
     var $tab = $(tabListTemplate(room));
     this.$tabList.append($tab);
       
-    $messages.css('height',  ($tabContent.height() - 70) + 'px');
+    $messages.css('height',  ($tabContent.height() - 75) + 'px');
       $(window).resize(function() {
-          $messages.css('height',  ($tabContent.height() - 70) + 'px');
+          $messages.css('height',  ($tabContent.height() - 75) + 'px');
       });
 
     // Attach on-shown event to move tab to front and scroll to bottom.
