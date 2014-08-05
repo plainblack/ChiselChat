@@ -232,11 +232,11 @@
    * This method assumes that the underlying Firebase reference has
    * already been authenticated.
    */
-  ChiselchatUI.prototype.setUser = function(userId, userName) {
+  ChiselchatUI.prototype.setUser = function(userId, userName, isModerator) {
     var self = this;
 
     // Initialize data events
-    self._chat.setUser(userId, userName, function(user) {
+    self._chat.setUser(userId, userName, isModerator, function(user) {
       self._user = user;
 
       if (self._chat.userIsModerator()) {
