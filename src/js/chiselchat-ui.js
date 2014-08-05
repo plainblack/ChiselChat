@@ -626,24 +626,15 @@
    */
   ChiselchatUI.prototype._bindForRoomListing = function() {
     var self = this,
-        $createRoomPromptButton = $('#chiselchat-btn-create-room-prompt'),
         $createRoomButton = $('#chiselchat-btn-create-room'),
         renderRoomList = function(event) {
           var type = $(this).data('room-type');
-
           self.sortListLexicographically('#chiselchat-room-list');
         };
-
-    // Handle click of the create new room prompt-button.
-    $createRoomPromptButton.bind('click', function(event) {
-      self.promptCreateRoom();
-      return false;
-    });
 
     // Handle click of the create new room button.
     $createRoomButton.bind('click', function(event) {
       var roomName = $('#chiselchat-input-room-name').val();
-      $('#chiselchat-prompt-create-room').remove();
       self.autoFocusTab = true;
       self._chat.createRoom(roomName);
       return false;
@@ -1112,44 +1103,7 @@ ChiselchatUI.prototype.success = function(message, title) {
     return '' + hours + ':' + minutes + ampm;
   };
 
-  /**
-   * Launch a prompt to allow the user to create a new room.
-   */
-  ChiselchatUI.prototype.promptCreateRoom = function() {
-    var self = this;
-    var template = ChiselchatDefaultTemplates["templates/prompt-create-room.html"];
-
-    var $prompt = this.prompt('Create Public Room', template({
-      maxLengthRoomName: this.maxLengthRoomName,
-      isModerator: self._chat.userIsModerator()
-    }));
-    $prompt.find('a.close').first().click(function() {
-      $prompt.remove();
-      return false;
-    });
-
-
-    $prompt.find('[data-toggle=submit]').first().click(function() {
-      var name = $prompt.find('[data-input=chiselchat-room-name]').first().val();
-      if (name !== '') {
-        self._chat.createRoom(name, 'public');
-        $prompt.remove();
-      }
-      return false;
-    });
-
-    $prompt.find('[data-input=chiselchat-room-name]').first().focus();
-    $prompt.find('[data-input=chiselchat-room-name]').first().bind('keydown', function(e) {
-      if (e.which === 13) {
-        var name = $prompt.find('[data-input=chiselchat-room-name]').first().val();
-        if (name !== '') {
-          self._chat.createRoom(name, 'public');
-          $prompt.remove();
-          return false;
-        }
-      }
-    });
-  };
+  
 
   /**
    * Inner method to launch a prompt given a specific title and HTML content.
