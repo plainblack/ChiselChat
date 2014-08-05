@@ -255,7 +255,7 @@
   };
 
   /**
-   * Binds a custom context menu to messages for superusers to warn or ban
+   * Binds moderation to messages for superusers to warn or ban
    * users for violating terms of service.
    */
   ChiselchatUI.prototype._bindSuperuserUIEvents = function() {
@@ -267,56 +267,9 @@
           roomId = $('[data-message-id="' + messageId + '"]').closest('[data-room-id]').data('room-id');
 
           return { messageId: messageId, userId: userId, roomId: roomId };
-        },
-        clearMessageContextMenus = function() {
-          // Remove any context menus currently showing.
-          $('[data-toggle="chiselchat-contextmenu"]').each(function() {
-            $(this).remove();
-          });
-
-          // Remove any messages currently highlighted.
-          $('#chiselchat .message.highlighted').each(function() {
-            $(this).removeClass('highlighted');
-          });
-        },
-        showMessageContextMenu = function(event) {
-          var $this = $(this),
-              $message = $this.closest('[data-message-id]'),
-              template = ChiselchatDefaultTemplates["templates/message-context-menu.html"],
-              messageVars = parseMessageVars.call(this, event),
-              $template;
-
-          event.preventDefault();
-
-          // Clear existing menus.
-          clearMessageContextMenus();
-
-          // Highlight the relevant message.
-          $this.addClass('highlighted');
-
-          self._chat.getRoom(messageVars.roomId, function(room) {
-            // Show the context menu.
-            $template = $(template({
-              id: $message.data('message-id')
-            }));
-            $template.css({
-              left: event.clientX,
-              top: event.clientY
-            }).appendTo(self.$wrapper);
-          });
         };
 
-    // Handle dismissal of message context menus (any non-right-click click event).
-    $(document).bind('click', { self: this }, function(event) {
-      if (!event.button || event.button != 2) {
-        clearMessageContextMenus();
-      }
-    });
-
-    // Handle display of message context menus (via right-click on a message).
-    $(document).delegate('[data-class="chiselchat-message"]', 'contextmenu', showMessageContextMenu);
-
-    // Handle click of the 'Warn User' contextmenu item.
+    // Handle click of the 'Warn User' moderation item.
     $(document).delegate('[data-event="chiselchat-user-warn"]', 'click', function(event) {
       var messageVars = parseMessageVars.call(this, event);
       self._chat.warnUser(messageVars.userId);
@@ -325,7 +278,7 @@
       });
     });
 
-    // Handle click of the 'Suspend User (1 Hour)' contextmenu item.
+    // Handle click of the 'Suspend User (1 Hour)' moderation item.
     $(document).delegate('[data-event="chiselchat-user-suspend-hour"]', 'click', function(event) {
       var messageVars = parseMessageVars.call(this, event);
       self._chat.suspendUser(messageVars.userId, /* 1 Hour = 3600s */ 60*60);
@@ -334,7 +287,7 @@
       });
     });
 
-    // Handle click of the 'Suspend User (1 Day)' contextmenu item.
+    // Handle click of the 'Suspend User (1 Day)' moderation item.
     $(document).delegate('[data-event="chiselchat-user-suspend-day"]', 'click', function(event) {
       var messageVars = parseMessageVars.call(this, event);
       self._chat.suspendUser(messageVars.userId, /* 1 Day = 86400s */ 24*60*60);
@@ -343,7 +296,7 @@
       });
     });
 
-    // Handle click of the 'Delete Message' contextmenu item.
+    // Handle click of the 'Delete Message' moderation item.
     $(document).delegate('[data-event="chiselchat-message-delete"]', 'click', function(event) {
       var messageVars = parseMessageVars.call(this, event);
       self._chat.deleteMessage(messageVars.roomId, messageVars.messageId);
