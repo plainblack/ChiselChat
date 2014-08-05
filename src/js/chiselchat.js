@@ -286,6 +286,14 @@
         this.enterRoom(rooms[roomId].id);
       }
     }, /* onError */ function(){}, /* context */ this);
+    // join any official rooms
+    this._roomRef.once('value', function(snapshot) {
+      var rooms = snapshot.val();
+      for (var roomId in rooms) {
+        if (rooms[roomId].type != 'official') continue;
+        this.enterRoom(roomId);
+      }
+    }, /* onError */ function(){}, /* context */ this);
   };
 
   // Callback registration. Supports each of the following events:
