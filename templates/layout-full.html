@@ -1,30 +1,20 @@
 <div id='chiselchat'>
     
     <ul id='chiselchat-tab-list'>
-        <li>
-          <a href='#chiselchat-presence-list' data-toggle='tab' title='Rooms &amp; People'>Rooms &amp; People</a>
+        <li id='chiselchat-presence-tab'>
+          <a href='#chiselchat-presence-list' data-toggle='tab' title='People'>People</a>
+        </li>
+        <li id='chiselchat-rooms-tab'>
+          <a href='#chiselchat-rooms-list' data-toggle='tab' title='Rooms'>Rooms</a>
         </li>
     </ul>
     <div id='chiselchat-tab-content' class='tab-content'>
     
         <div id='chiselchat-presence-list' class='chiselchat-tab-pane'>
             <div class="chiselchat-title">
-                Rooms &amp; People    
+                People    
             </div>
-
-            <div class='dropdown' style=''>
-                <a id='chiselchat-btn-rooms' class='dropdown-toggle btn full' data-toggle="dropdown" href='javascript: void(0);'>
-                  Chat Rooms
-                </a>
-                <div class='dropdown-menu full' role='menu'>
-                  <ul id='chiselchat-room-list'></ul>
-                  <div class='dropdown-footer aligncenter'>
-                    <button type='button' id='chiselchat-btn-create-room-prompt'>Create Room</button>
-                  </div>
-                </div>
-              </div>
-
-            <br><hr><br>
+            
             <div class='dropdown'>
                     <a data-event='chiselchat-user-search-btn'  data-toggle="dropdown" href='javascript: void(0);'>
                       Private Chat Invite
@@ -49,10 +39,25 @@
                     </div>
                   </div>            
             
-            
-            
         </div>     
-    
+        <div id='chiselchat-rooms-list' class='chiselchat-tab-pane'>
+            <div class="chiselchat-title">
+                Rooms    
+            </div>
+
+            <div class='dropdown' style=''>
+                <a id='chiselchat-btn-rooms' class='dropdown-toggle btn full' data-toggle="dropdown" href='javascript: void(0);'>
+                  Chat Rooms
+                </a>
+                <div class='dropdown-menu full' role='menu'>
+                  <ul id='chiselchat-room-list'></ul>
+                  <div class='dropdown-footer aligncenter'>
+                    <button type='button' id='chiselchat-btn-create-room-prompt'>Create Room</button>
+                  </div>
+                </div>
+              </div>
+            
+        </div>       
     </div>
 
   <div id='chiselchat-footer' class='clearfix'></div>

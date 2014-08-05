@@ -694,22 +694,14 @@
           });
         },
         activate = function (element, container, callback) {
-          var $active = container.find('> .active'),
-              transition = callback && $.support.transition && $active.hasClass('fade');
+          var $active = container.find('> .active');
 
-          function next() {
             $active
               .removeClass('active')
               .find('> .dropdown-menu > .active')
               .removeClass('active');
 
             element.addClass('active');
-
-            if (transition) {
-              element.addClass('in');
-            } else {
-              element.removeClass('fade');
-            }
 
             if (element.parent('.dropdown-menu')) {
               element.closest('li.dropdown').addClass('active');
@@ -718,15 +710,7 @@
             if (callback) {
               callback();
             }
-          }
-
-          if (transition) {
-            $active.one($.support.transition.end, next);
-          } else {
-            next();
-          }
-
-          $active.removeClass('in');
+         
       };
 
     $(document).delegate('[data-toggle="tab"]', 'click', function(event) {
