@@ -234,11 +234,11 @@
    * This method assumes that the underlying Firebase reference has
    * already been authenticated.
    */
-  ChiselchatUI.prototype.setUser = function(userId, userName, isModerator) {
+  ChiselchatUI.prototype.setUser = function(userId, userName, isModerator, userAvatarUri, userProfileUri) {
     var self = this;
 
     // Initialize data events
-    self._chat.setUser(userId, userName, isModerator, function(user) {
+    self._chat.setUser(userId, userName, isModerator, userAvatarUri, userProfileUri, function(user) {
       self._user = user;
 
       if (self._chat.userIsModerator()) {
@@ -986,6 +986,11 @@ ChiselchatUI.prototype.success = function(message, title) {
       disableActions  : (!self._user || rawMessage.userId == self._user.id),
       userIsModerator : self._chat.userIsModerator()
     };
+
+    if (self._user) {
+        message.userAvatarUri  = self._user.userAvatarUri;
+        message.userProfileUri = self._user.userProfileUri;
+    }
 
     // While other data is escaped in the Underscore.js templates, escape and
     // process the message content here to add additional functionality (add links).
