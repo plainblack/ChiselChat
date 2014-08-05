@@ -10,6 +10,12 @@
 @input-text-color: #000;
 @moderator-text-color: orange;
 
+.border-radius(@radius) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  border-radius: @radius;
+}
+
 #chiselchat {
     font-family: sans-serif;
     font-size: 12px;
@@ -138,12 +144,24 @@
     padding: 0px;
     color: @main-text-color-important;
 }
+
+#chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity {
+    text-align: center;
+    font-style: italic;
+    color: @main-text-color;
+}
+
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-avatar {
     margin-right: 5px;
     width: 25px;
     height: 25px;
     float: left;
 }
+
+#chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-avatar, #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-timestamp, #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-controls {
+    display: none;
+}
+
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-avatar img {
     height: 100%;
     width: 100%;
@@ -155,6 +173,13 @@
     text-decoration: none;
     color: @main-text-color;
 }
+
+#chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-user, #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-message-content {
+    display: inline;
+    padding: 0;
+    margin: 0;
+}
+
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-timestamp {
     color: @main-text-color;
     font-size: 80%;
@@ -172,11 +197,6 @@
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-content {
     margin-top: 3px;
     margin-left: 30px;
-}
-#chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-me-message {
-    text-align: center;
-    font-style: italic;
-    color: @main-text-color;
 }
 #chiselchat .chiselchat-moderator {
     font-weight: bold;
@@ -273,3 +293,34 @@
     }
 }
 
+
+  .contextmenu {
+    position: fixed;
+    z-index: 1001;
+    min-width: 150px;
+    border: 1px solid #cccccc;
+    .border-radius(4px);
+  }
+  .contextmenu ul {
+    background-color: #ffffff;
+    list-style: none;
+  }
+  .contextmenu ul > li > a {
+    display: block;
+    padding: 3px 10px;
+    clear: both;
+    font-weight: normal;
+    line-height: 20px;
+    color: #333333;
+    white-space: nowrap;
+  }
+  .contextmenu ul > li > a.highlight {
+    background-color: #d9edf7;
+  }
+  .contextmenu ul > li > a:hover,
+  .contextmenu ul > li > a:focus {
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #0081c2;
+    outline: 0;
+  }

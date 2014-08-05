@@ -320,24 +320,34 @@
     $(document).delegate('[data-event="chiselchat-user-warn"]', 'click', function(event) {
       var messageVars = parseMessageVars.call(this, event);
       self._chat.warnUser(messageVars.userId);
+      self._chat.getUserNameById(messageVars.userId, function(snapshot) {
+        self._chat.sendMessage(messageVars.roomId, 'warned '+snapshot.val()+'.', 'activity');
+      });
     });
 
     // Handle click of the 'Suspend User (1 Hour)' contextmenu item.
     $(document).delegate('[data-event="chiselchat-user-suspend-hour"]', 'click', function(event) {
       var messageVars = parseMessageVars.call(this, event);
       self._chat.suspendUser(messageVars.userId, /* 1 Hour = 3600s */ 60*60);
+      self._chat.getUserNameById(messageVars.userId, function(snapshot) {
+        self._chat.sendMessage(messageVars.roomId, 'suspended '+snapshot.val()+' for 1 hour.', 'activity');
+      });
     });
 
     // Handle click of the 'Suspend User (1 Day)' contextmenu item.
     $(document).delegate('[data-event="chiselchat-user-suspend-day"]', 'click', function(event) {
       var messageVars = parseMessageVars.call(this, event);
       self._chat.suspendUser(messageVars.userId, /* 1 Day = 86400s */ 24*60*60);
+      self._chat.getUserNameById(messageVars.userId, function(snapshot) {
+        self._chat.sendMessage(messageVars.roomId, 'suspended '+snapshot.val()+' for 1 day.', 'activity');
+      });
     });
 
     // Handle click of the 'Delete Message' contextmenu item.
     $(document).delegate('[data-event="chiselchat-message-delete"]', 'click', function(event) {
       var messageVars = parseMessageVars.call(this, event);
       self._chat.deleteMessage(messageVars.roomId, messageVars.messageId);
+       $("[data-message-id='"+messageVars.messageId+"']").remove();
     });
   };
 
@@ -1009,7 +1019,8 @@
       name            : rawMessage.name,
       type            : rawMessage.type || 'default',
       isSelfMessage   : (self._user && rawMessage.userId == self._user.id),
-      disableActions  : (!self._user || rawMessage.userId == self._user.id)
+      disableActions  : (!self._user || rawMessage.userId == self._user.id),
+      userIsModerator : self._chat.userIsModerator()
     };
 
     // While other data is escaped in the Underscore.js templates, escape and

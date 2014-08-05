@@ -539,6 +539,11 @@
     });
   };
 
+  Chiselchat.prototype.getUserNameById = function(userId, cb) {
+    var self = this;
+      self._firebase.child('users').child(userId+'/name').once('value',cb);
+  };     
+
   Chiselchat.prototype.getUsersByRoom = function() {
     var self = this,
         roomId = arguments[0],
