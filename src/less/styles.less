@@ -94,7 +94,7 @@
     background-color: lighten(@main-background-color, 10%);
     margin: 0;
     padding: 5px;
-    height: 13px;
+    height: 24px;
     font-weight: bold;
     z-index: 1000001;
     overflow: hidden;
@@ -140,31 +140,23 @@
 }
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message {
     margin: 5px;
-    margin-top: 15px;
+    margin-top: 20px;
     padding: 0px;
     color: @main-text-color-important;
 }
 
-#chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity {
-    text-align: center;
-    font-style: italic;
-    color: @main-text-color;
-}
-
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-avatar {
     margin-right: 5px;
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
     float: left;
-}
-
-#chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-avatar, #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-timestamp, #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-controls {
-    display: none;
+    text-align: center;
 }
 
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-avatar img {
-    height: 100%;
     width: 100%;
+    height: 100%;
+    margin-bottom: 2px;
     background-color: @main-text-color;
 }
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-user a {
@@ -174,15 +166,9 @@
     color: @main-text-color;
 }
 
-#chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-user, #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-message-content {
-    display: inline;
-    padding: 0;
-    margin: 0;
-}
-
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-timestamp {
     color: @main-text-color;
-    font-size: 80%;
+    font-size: 60%;
     display: inline;
 }
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-controls {
@@ -191,12 +177,14 @@
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-controls a {
     font-size: 80%;
     padding: 1px;
-    color: @main-text-color;   
+    color: darken(@main-text-color,40%);   
     margin-left: 10px;
+    text-decoration: none;
 }
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-content {
     margin-top: 3px;
     margin-left: 30px;
+    font-size: 110%;
 }
 #chiselchat .chiselchat-moderator {
     font-weight: bold;
@@ -219,6 +207,7 @@
     height: 100%;
     font-size: 110%;
     max-width: 100%;
+    font-family: sans-serif;
 }
 #chiselchat #chiselchat-presence-list {
     position: fixed;
@@ -292,3 +281,21 @@
         height: 70%;
     }
 }
+
+
+#chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity {
+    text-align: center;
+    font-style: italic;
+    color: @main-text-color;
+}
+
+#chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-avatar, #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-timestamp, #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-controls {
+    display: none;
+}
+
+#chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-user, #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-message-content {
+    display: inline;
+    padding: 0;
+    margin: 0;
+}
+

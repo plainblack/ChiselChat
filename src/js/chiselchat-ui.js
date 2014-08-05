@@ -184,17 +184,15 @@
     _onChatInviteResponse: function(invitation) {
       if (!invitation.status) return;
 
-      var self = this,
-          template = ChiselchatDefaultTemplates["templates/prompt-invite-reply.html"],
-          $prompt;
+      var self = this;
 
       if (invitation.status && invitation.status === 'accepted') {
-        $prompt = this.prompt('Accepted', template(invitation));
+          self.success(invitation.toUserName + ' accepted your invite.','Invitation Accepted');
         this._chat.getRoom(invitation.roomId, function(room) {
           self.attachTab(invitation.roomId, room.name);
         });
       } else {
-        $prompt = this.prompt('Declined', template(invitation));
+          self.error(invitation.toUserName + ' declined your invite.','Invitation Declined');
       }
 
       $prompt.find('a.close').click(function() {
@@ -206,7 +204,7 @@
     // Events related to admin or moderator notifications.
     _onNotification: function(notification) {
       if (notification.notificationType === 'warning') {
-        this.renderAlertPrompt('Warning', 'You are being warned for inappropriate messaging. Further violation may result in temporary or permanent ban of service.');
+          this.warn('You are being warned for inappropriate messaging. Further violation may result in temporary or permanent ban of service.');
       } else if (notification.notificationType === 'suspension') {
         var suspendedUntil = notification.data.suspendedUntil,
             secondsLeft = Math.round((suspendedUntil - new Date().getTime()) / 1000),
@@ -219,7 +217,7 @@
             secondsLeft -= 3600*hours;
           }
           timeLeft += Math.floor(secondsLeft / 60) + ' minutes';
-          this.renderAlertPrompt('Suspended', 'A moderator has suspended you for violating site rules. You cannot send messages for another ' + timeLeft + '.');
+          this.error('A moderator has suspended you for violating site rules. You cannot send messages for another ' + timeLeft + '.','Suspended');
         }
       }
     }
@@ -255,7 +253,7 @@
   };
 
   /**
-   * Binds moderation to messages for superusers to warn or ban
+   * Binds to messages for superusers to warn or ban
    * users for violating terms of service.
    */
   ChiselchatUI.prototype._bindSuperuserUIEvents = function() {
@@ -805,6 +803,59 @@
     });
   };
 
+    
+ChiselchatUI.prototype.warn = function(message, title) {
+    $.pnotify({
+        addclass: 'alert-warning',
+        title: title || 'Warning',
+        text: message,
+        icon: 'glyphicon glyphicon-exclamation-sign',
+        opacity: 0.95,
+        history: false,
+        sticker: false
+    });
+};    
+    
+ChiselchatUI.prototype.info = function(message, title) {
+    $.pnotify({
+        addclass: 'alert-info',
+        type: 'info',
+        title: title || 'Info',
+        text: message,
+        icon: 'glyphicon glyphicon-info-sign',
+        opacity: 0.95,
+        history: false,
+        sticker: false
+    });
+};
+    
+ChiselchatUI.prototype.error = function(message, title) {
+    $.pnotify({
+        addclass: 'alert-danger',
+        type: 'error',
+        title: title || 'Error',
+        text: message,
+        icon: 'glyphicon glyphicon-warning-sign',
+        opacity: 0.95,
+        history: false,
+        sticker: false
+    });
+};
+
+ChiselchatUI.prototype.success = function(message, title) {
+    $.pnotify({
+        addclass: 'alert-success',
+        type: 'success',
+        title: title || 'Success',
+        text: message,
+        icon: 'glyphicon glyphicon-ok-sign',
+        opacity: 0.95,
+        history: false,
+        sticker: false
+    });
+};    
+    
+    
   /**
    * Reset's the new message count on a room.
    *
@@ -815,23 +866,6 @@
       if ($tabLink.length) {
           $tabLink.first().children('.chiselchat-new-count').html('0');
       }
-  };
-    
-  /**
-   * Given a title and message content, show an alert prompt to the user.
-   *
-   * @param    {string}    title
-   * @param    {string}    message
-   */
-  ChiselchatUI.prototype.renderAlertPrompt = function(title, message) {
-    var template = ChiselchatDefaultTemplates["templates/prompt-alert.html"],
-        $prompt = this.prompt(title, template({ message: message }));
-
-      $prompt.find('.close').click(function() {
-        $prompt.remove();
-        return false;
-      });
-      return;
   };
 
   /**
@@ -885,7 +919,11 @@
       var message = self.trimWithEllipsis($textarea.val(), self.maxLengthMessage);
       if ((e.which === 13) && (message !== '')) {
         $textarea.val('');
-        self._chat.sendMessage(roomId, message);
+        self._chat.sendMessage(roomId, message, 'default', function(error) {
+            if (error) {
+                self.error('You are not allowed to post messages right now.');
+            }
+        });
         return false;
       }
     });

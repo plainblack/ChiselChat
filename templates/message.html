@@ -1,23 +1,30 @@
 <div class='chiselchat-message chiselchat-message-<%- type %> <% if (isSelfMessage) { %> chiselchat-message-self <% } %>' data-message-id='<%- id %>' data-user-id='<%- userId %>' data-user-name='<%- name %>' data-class="chiselchat-message">
   
-  <div class='chiselchat-avatar'><a href=''><img src=''></a></div>
-  <div class='chiselchat-user'><a href=''><%- name %></a></div>
-  <div class='chiselchat-timestamp'><%- localtime %></div>
-  <div class='chiselchat-controls'>
-      <% if (!disableActions) { %>
-              <a href='javascript: void(0);' data-event='chiselchat-user-chat' title='Invite to Private Chat'>PM</a> 
-              <a href='javascript: void(0);' data-event='chiselchat-user-mute-toggle' title='Mute User'>Mute</a>
-              <% if (userIsModerator) { %>
-                  <a href='javascript: void(0);' data-event='chiselchat-user-warn'>Warn</a> 
-                  <a href='javascript: void(0);' data-event='chiselchat-user-suspend-hour'>Ban (hour)</a>
-                  <a href='javascript: void(0);' data-event='chiselchat-user-suspend-day'>Ban (day)</a>
-              <% } %>
-      <% } %>
+  <div class='chiselchat-avatar'>
+      <a href=''><img src=''></a>
+      <div class='chiselchat-timestamp'><%- localtime %></div>
+  </div>
+  <div class='chiselchat-user'><a href=''><%- name %></a>
+      &nbsp;
+      <span class='chiselchat-controls'>
+          <% if (!disableActions) { %>
+                  <a href='javascript: void(0);' data-event='chiselchat-user-chat' title='Invite to Private Chat'>PM</a> 
+                  <a href='javascript: void(0);' data-event='chiselchat-user-mute-toggle' title='Mute User'>Mute</a>
+                  <% if (userIsModerator) { %>
+                      <a href='javascript: void(0);' data-event='chiselchat-user-warn'>Warn</a> 
+                      <a href='javascript: void(0);' data-event='chiselchat-user-suspend-hour'>Ban (hour)</a>
+                      <a href='javascript: void(0);' data-event='chiselchat-user-suspend-day'>Ban (day)</a>
+                  <% } %>
+          <% } %>
+      </span>      
+  </div>
+      
+  <div class='chiselchat-message-content'>
+      <%= message %>
       <% if (userIsModerator) { %>
-          <a href='javascript: void(0);' data-event='chiselchat-message-delete'>Delete Msg</a> 
+          <span class='chiselchat-controls'>&nbsp;<a href='javascript: void(0);' data-event='chiselchat-message-delete'>&times;</a> 
       <% } %>
   </div>
-  <div class='chiselchat-message-content'><%= message %></div>
     
       
 </div>

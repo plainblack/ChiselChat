@@ -216,6 +216,9 @@
         }
         this._invokeEventCallbacks('notification', notification);
       }
+        else {
+            snapshot.ref().remove();
+        }
     },
 
     // Events to monitor chat invitations and invitation replies.
