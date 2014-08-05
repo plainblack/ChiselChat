@@ -264,7 +264,7 @@
         else {
             var wasModerator = self._moderatorsRef.child(self._userId);
             if (wasModerator) {
-                wasModetator.remove();
+                wasModerator.remove();
             }
         }
         self._userRef = self._firebase.child('users').child(self._userId);
