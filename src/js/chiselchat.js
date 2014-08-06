@@ -79,12 +79,12 @@
 
       // Update the user record with a default name on user's first visit.
       this._userRef.transaction(function(current) {
-        if (!current || !current.id || !current.name) {
           return {
             id: self._userId,
-            name: self._userName
+            name: self._userName,
+            userAvatarUri: self._userAvatarUri,
+            userProfileUri: self._userProfileUri
           };
-        }
       }, function(error, committed, snapshot) {
         self._user = snapshot.val();
         self._moderatorsRef.child(self._userId).once('value', function(snapshot) {
