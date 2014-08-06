@@ -988,7 +988,9 @@ ChiselchatUI.prototype.success = function(message, title) {
       type            : rawMessage.type || 'default',
       isSelfMessage   : (self._user && rawMessage.userId == self._user.id),
       disableActions  : (!self._user || rawMessage.userId == self._user.id),
-      userIsModerator : self._chat.userIsModerator()
+      userIsModerator : self._chat.userIsModerator(),
+      userAvatarUri   : '',
+      userProfileUri  : ''
     };
 
     if (user) {

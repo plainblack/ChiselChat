@@ -289,6 +289,9 @@
         var user = snap.val();
         self._chatter_cache[userId] = user;
         callback(user);
+      }, function () {
+        //Can't look up that user, call the callback anyway so stuff can happen without users.
+        callback();
       });
     }
     else {
