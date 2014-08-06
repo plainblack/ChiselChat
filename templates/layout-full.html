@@ -14,41 +14,23 @@
             <div class="chiselchat-title">
                 People    
             </div>
+        
+            <form id='chiselchat-user-search-form'>
+                <input type='text' data-event='chiselchat-user-search' data-template='templates/user-search-list-item.html' data-target='chiselchat-user-search' data-controls='chiselchat-user-search-controls' placeholder='Search'>
+            </form>
             
-            <div class='dropdown'>
-                    <a data-event='chiselchat-user-search-btn'  data-toggle="dropdown" href='javascript: void(0);'>
-                      Private Chat Invite
-                    </a>
-                    <div class='dropdown-menu' role='menu'>
-                      <div class='dropdown-header'>
-                        <div class='search-wrapper'>
-                          <input type='text' data-event='chiselchat-user-search' data-template='templates/user-search-list-item.html' data-target='chiselchat-user-search' data-controls='chiselchat-user-search-controls'>
-                        </div>
-                      </div>
-                      <ul id='chiselchat-user-search'></ul>
-
-                      <div class='dropdown-footer'>
-                        <div id='chiselchat-user-search-controls'>
-                          <button type='button' data-event='chiselchat-user-search' data-toggle='chiselchat-pagination-next' data-template='templates/user-search-list-item.html' data-target='chiselchat-user-search' data-controls='chiselchat-user-search-controls' disabled=disabled>Next</button>
-                        </div>
-
-                        <label>
-                          <small>Use "+ Invite" button within chat rooms for regular invites.</small>
-                        </label>
-                      </div>
-                    </div>
-                  </div>            
-            
+            <div class="chiselchat-scrollable-list">
+                <ul id='chiselchat-user-search'></ul>
+            </div>
         </div>     
         <div id='chiselchat-room-pane' class='chiselchat-tab-pane'>
             <div class="chiselchat-title">
                 Rooms    
             </div>
 
-                <div id='chiselchat-create-room'>
-                    <input id='chiselchat-input-room-name' data-input='chiselchat-room-name' type='text' placeholder='Room name...' maxlength='<%- maxLengthRoomName %>'>
-                    <button type='button' id='chiselchat-btn-create-room'>Create</button>
-                </div>
+                <form id='chiselchat-create-room'>
+                    <input id='chiselchat-input-room-name' data-input='chiselchat-room-name' type='text' placeholder='Create new room...' maxlength='<%- maxLengthRoomName %>'>
+                </form>
     
                 <div class="chiselchat-scrollable-list">
                     <ul id='chiselchat-room-list'></ul>

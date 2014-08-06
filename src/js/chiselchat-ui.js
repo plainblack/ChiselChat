@@ -433,13 +433,12 @@
         },
         userSearch = function(targetId, templateId, controlsId, prefix, startAt, endAt) {
           var $target = $('#' + targetId),
-              $controls = $('#' + controlsId),
               template = ChiselchatDefaultTemplates[templateId];
 
           // Query results, filtered by prefix, using the defined startAt and endAt markets.
           self._chat.getUsersByPrefix(prefix, startAt, endAt, self.maxUserSearchResults, function(users) {
             var numResults = 0,
-                $prevBtn, $nextBtn, username, firstResult, lastResult;
+                username, firstResult, lastResult;
 
             $target.empty();
 
@@ -462,43 +461,22 @@
               }
             }
 
-            if ($controls) {
-              $prevBtn = $controls.find('[data-toggle="chiselchat-pagination-prev"]');
-              $nextBtn = $controls.find('[data-toggle="chiselchat-pagination-next"]');
 
-              // Sort out configuration for the 'next' button
-              if (lastResult) {
-                $nextBtn
-                  .data('event', 'chiselchat-user-search')
-                  .data('startAt', lastResult)
-                  .data('prefix', prefix)
-                  .removeClass('disabled').removeAttr('disabled');
-              } else {
-                $nextBtn
-                  .data('event', null)
-                  .data('startAt', null)
-                  .data('prefix', null)
-                  .addClass('disabled').attr('disabled', 'disabled');
-              }
-            }
           });
         };
 
     $(document).delegate('[data-event="chiselchat-user-search"]', 'keyup', handleUserSearchSubmit);
     $(document).delegate('[data-event="chiselchat-user-search"]', 'click', handleUserSearchSubmit);
+    $(document).delegate('#chiselchat-user-search-form', 'submit', handleUserSearchSubmit);
 
     // Upon click of the dropdown, autofocus the input field and trigger list population.
-    $(document).delegate('[data-event="chiselchat-user-search-btn"]', 'click', function(event) {
+    $(document).delegate('#chiselchat-presence-tab', 'click', function(event) {
       event.stopPropagation();
-      var $input = $(this).next('div.dropdown-menu').find('input');
+      var $input = $('#chiselchat-user-search-form').find('input');
       $input.focus();
       $input.trigger(jQuery.Event('keyup'));
     });
 
-    // Ensure that the dropdown stays open despite clicking on the input element.
-    $(document).delegate('[data-event="chiselchat-user-search"]', 'click', function(event) {
-      event.stopPropagation();
-    });
   };
 
   /**
@@ -626,17 +604,22 @@
    */
   ChiselchatUI.prototype._bindForRoomListing = function() {
     var self = this,
-        $createRoomButton = $('#chiselchat-btn-create-room'),
         renderRoomList = function(event) {
           var type = $(this).data('room-type');
           self.sortListLexicographically('#chiselchat-room-list');
         };
 
     // Handle click of the create new room button.
-    $createRoomButton.bind('click', function(event) {
+    $('#chiselchat-create-room').bind('submit', function(event) {
       var roomName = $('#chiselchat-input-room-name').val();
-      self.autoFocusTab = true;
-      self._chat.createRoom(roomName);
+      $('#chiselchat-input-room-name').val('');
+      if (roomName.length) {
+          self.autoFocusTab = true;
+          self._chat.createRoom(roomName);
+      }
+      else {
+          self.error('Room name must be specified.');
+      }
       return false;
     });
   };
