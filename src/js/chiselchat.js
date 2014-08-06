@@ -260,14 +260,9 @@
         self._isModerator = isModerator;
         self._userAvatarUri  = userAvatarUri.toString();
         self._userProfileUri = userProfileUri.toString();
-        if (self._isModerator) {
+        if (self._isModerator === true) {
             self._moderatorsRef.child(self._userId).set(true);
-        }
-        else {
-            var wasModerator = self._moderatorsRef.child(self._userId);
-            if (wasModerator) {
-                wasModerator.remove();
-            }
+            self._moderatorsRef.child(self._userId).onDisconnect().remove();
         }
         self._userRef = self._firebase.child('users').child(self._userId);
         self._loadUserMetadata(function() {
