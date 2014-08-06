@@ -155,8 +155,12 @@
     },
     _onNewMessage: function(roomId, message) {
       var userId = message.userId;
+      var self = this;
       if (!this._user || !this._user.muted || !this._user.muted[userId]) {
-        this.showMessage(roomId, message);
+        //Lookup the user, then show the message
+        this._chat.lookupUser(userId, function (user) {
+            self.showMessage(roomId, message, user);
+        });
       }
     },
     _onRemoveMessage: function(roomId, messageId) {
@@ -971,7 +975,7 @@ ChiselchatUI.prototype.success = function(message, title) {
    * @param    {string}    roomId
    * @param    {string}    message
    */
-  ChiselchatUI.prototype.showMessage = function(roomId, rawMessage) {
+  ChiselchatUI.prototype.showMessage = function(roomId, rawMessage, user) {
     var self = this;
 
     // Setup defaults
@@ -987,9 +991,10 @@ ChiselchatUI.prototype.success = function(message, title) {
       userIsModerator : self._chat.userIsModerator()
     };
 
-    if (self._user) {
-        message.userAvatarUri  = self._user.userAvatarUri;
-        message.userProfileUri = self._user.userProfileUri;
+    if (user) {
+        message.userAvatarUri  = user.userAvatarUri;
+        message.userProfileUri = user.userProfileUri;
+        message.name           = user.name;
     }
 
     // While other data is escaped in the Underscore.js templates, escape and

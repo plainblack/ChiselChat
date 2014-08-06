@@ -55,6 +55,9 @@
     // Setup and establish default options.
     this._options = options || {};
 
+    // cache of user data
+    this._chatter_cache = {};
+
     // The number of historical messages to load per room.
     this._options.numMaxMessages = this._options.numMaxMessages || 50;
   }
@@ -77,7 +80,7 @@
     _loadUserMetadata: function(onComplete) {
       var self = this;
 
-      // Update the user record with a default name on user's first visit.
+      // Update the user record with a default name on every visit.
       this._userRef.transaction(function(current) {
           return {
             id: self._userId,
@@ -87,6 +90,8 @@
           };
       }, function(error, committed, snapshot) {
         self._user = snapshot.val();
+        //Preload the user cache to save a remote fetch.
+        self._chatter_cache[self._user.id] = self._user;
         self._moderatorsRef.child(self._userId).once('value', function(snapshot) {
           self._isModerator = !!snapshot.val();
           root.setTimeout(onComplete, 0);
@@ -273,6 +278,22 @@
         });
       }
     });
+  };
+
+  //Load user data from firebase for display in messages and presence.
+  //After the data is found
+  Chiselchat.prototype.lookupUser = function(userId, callback) {
+    var self = this;
+    if (!( userId in self._chatter_cache)) {
+      var userRef = self._firebase.child('users').child(userId).once('value', function (snap) {
+        var user = snap.val();
+        self._chatter_cache[userId] = user;
+        callback(user);
+      });
+    }
+    else {
+        callback(this._chatter_cache[userId]);
+    }
   };
 
   // Resumes the previous session by automatically entering rooms.
