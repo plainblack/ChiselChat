@@ -94,7 +94,10 @@
       }
     },
     "moderators": {
-      ".read": "(auth != null)"
+      ".read": "(auth != null)",
+      "$userId": {
+          ".write": "(auth != null) && (auth.id === $userId) && (auth.chat_admin == true)"
+      }
     },
     "suspensions": {
       ".write": "(auth != null) && (root.child('moderators').hasChild(auth.id))",
