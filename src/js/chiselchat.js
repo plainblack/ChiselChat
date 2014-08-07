@@ -80,13 +80,14 @@
     _loadUserMetadata: function(onComplete) {
       var self = this;
 
-      // Update the user record with a default name on every visit.
+      // Update the user record on every visit.
       this._userRef.transaction(function(current) {
           return {
             id: self._userId,
             name: self._userName,
             avatarUri: self._avatarUri,
-            profileUri: self._profileUri
+            profileUri: self._profileUri,
+            isModerator: self._isModerator
           };
       }, function(error, committed, snapshot) {
         self._user = snapshot.val();
