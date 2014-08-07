@@ -164,11 +164,15 @@
 
             var profile, avatar;
             if (user.profileUri) {
-                $message.find('.chiselchat-avatar a').attr('href', profile);
-                $message.find('.chiselchat-user a').attr('href', profile);
+                $message.find('.chiselchat-avatar > a').attr('href', user.profileUri);
+                $message.find('.chiselchat-user > a').attr('href', user.profileUri);
             }
             if (user.avatarUri) {
-                $message.find('.chiselchat-avatar img').attr('src', avatar);
+                $message.find('.chiselchat-avatar img').attr('src', user.avatarUri);
+            }
+            if (user.isModerator) {
+                console.log(user.name + " is a moderator ");
+                $message.find('.chiselchat-user > a').addClass('chiselchat-moderator');
             }
         });
       }
