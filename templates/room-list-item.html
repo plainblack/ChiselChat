@@ -2,7 +2,9 @@
   <a href='javascript: void(0);' class='chiselchat-room-list-item <% if (isRoomOpen) { %> highlight <% } %>'>
     <span title='<%- name %>'><%- name %></span>
   </a> 
-  <% if (userIsModerator) { %>
-    <a href='javascript: void(0);' class='chiselchat-delete-room' title='Remove Room'>&times;</a>
+  <% if (type != 'official') { %>
+      <% if (userIsModerator) { %>
+        <a href='javascript: void(0);' class='chiselchat-delete-room' title='Remove Room'>&times;</a>
+      <% } %>
   <% } %>
 </li>

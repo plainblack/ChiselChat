@@ -136,6 +136,13 @@
 
       // Listen for messages from moderators and adminstrators.
       this._userRef.child('notifications').on('child_added', this._onNotification, this);
+        
+      // make people leave room if a room is deleted
+      var self = this;
+      this._roomRef.on('child_removed', function(snapshot) {
+          self.leaveRoom(snapshot.name());
+      });              
+        
     },
 
     // Append the new callback to our list of event handlers.
