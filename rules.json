@@ -1,5 +1,5 @@
 {
-  // Chisel Chat sample security rules
+  // Firechat sample security rules
   "rules": {
     // By default, make all data private unless specified otherwise.
     ".read": false,
@@ -32,6 +32,7 @@
       "$roomId": {
         // A list of messages by room, viewable by anyone for public rooms, or authorized users for private rooms.
         ".read": "(root.child('room-metadata').child($roomId).child('type').val() != 'private' || root.child('room-metadata').child($roomId).child('authorizedUsers').hasChild(auth.id))",
+        ".write": "(auth != null) && root.child('moderators').hasChild(auth.id)",
         "$msgId": {
           // Allow anyone to append to this list and allow admins to edit or remove.
           ".write": "(auth != null) && (data.val() === null || root.child('moderators').hasChild(auth.id)) && (root.child('room-metadata').child($roomId).child('type').val() != 'private' || root.child('room-metadata').child($roomId).child('authorizedUsers').hasChild(auth.id)) && (!root.child('suspensions').hasChild(auth.id) || root.child('suspensions').child(auth.id).val() < now)",
@@ -42,6 +43,7 @@
     "room-users": {
       "$roomId": {
         ".read": "(root.child('room-metadata').child($roomId).child('type').val() != 'private' || root.child('room-metadata').child($roomId).child('authorizedUsers').hasChild(auth.id))",
+        ".write": "(auth != null) && root.child('moderators').hasChild(auth.id)",
         "$userId": {
           // A list of users by room, viewable by anyone for public rooms, or authorized users for private rooms.
           ".write": "(auth != null) && ($userId === auth.id || root.child('moderators').hasChild(auth.id))",
@@ -53,9 +55,9 @@
     },
     "users": {
       // A list of users and their associated metadata, which can be updated by the single user or a moderator.
+      ".read" : true,
       "$userId": {
         ".write": "(auth != null) && (auth.id === $userId || (root.child('moderators').hasChild(auth.id)))",
-        ".read": "(auth != null) && (auth.id === $userId || (root.child('moderators').hasChild(auth.id)))",
         ".validate": "($userId === newData.child('id').val())",
         "invites": {
           // A list of chat invitations from other users, append-only by anyone.
