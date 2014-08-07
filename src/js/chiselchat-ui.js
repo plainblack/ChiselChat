@@ -180,25 +180,13 @@
     // Events related to chat invitations.
     _onChatInvite: function(invitation) {
       var self = this;
-      var template = ChiselchatDefaultTemplates["templates/prompt-invitation.html"];
-      var $prompt = this.prompt('Invite', template(invitation));
-      $prompt.find('a.close').click(function() {
-        $prompt.remove();
-        self._chat.declineInvite(invitation.id);
-        return false;
-      });
-
-      $prompt.find('[data-toggle=accept]').click(function() {
-        $prompt.remove();
-        self._chat.acceptInvite(invitation.id);
-        return false;
-      });
-
-      $prompt.find('[data-toggle=decline]').click(function() {
-        $prompt.remove();
-        self._chat.declineInvite(invitation.id);
-        return false;
-      });
+        self.confirm(invitation.fromUserName + ' invited you to join ' + invitation.toRoomName, 'Invitation', function(){
+            self._chat.acceptInvite(invitation.id);
+            return false;
+        }, function() {
+            self._chat.declineInvite(invitation.id);
+            return false;
+        });
     },
     _onChatInviteResponse: function(invitation) {
       if (!invitation.status) return;
@@ -549,77 +537,36 @@
    */
   ChiselchatUI.prototype._bindForChatInvites = function() {
     var self = this,
-        renderInvitePrompt = function(event) {
+        inviteUser = function(event) {
           var $this = $(this),
               userId = $this.closest('[data-user-id]').data('user-id'),
               roomId = $this.closest('[data-room-id]').data('room-id'),
-              userName = $this.closest('[data-user-name]').data('user-name'),
-              template = ChiselchatDefaultTemplates["templates/prompt-invite-private.html"],
-              $prompt;
-
+              userName = $this.closest('[data-user-name]').data('user-name');
+            
           self._chat.getRoom(roomId, function(room) {
-            $prompt = self.prompt('Invite', template({
-              userName: userName,
-              roomName: room.name
-            }));
-
-            $prompt.find('a.close').click(function() {
-              $prompt.remove();
-              return false;
-            });
-
-            $prompt.find('[data-toggle=decline]').click(function() {
-              $prompt.remove();
-              return false;
-            });
-
-            $prompt.find('[data-toggle=accept]').first().click(function() {
-              $prompt.remove();
-              self._chat.inviteUser(userId, roomId, room.name);
-              return false;
-            });
-            return false;
-          });
+                self._chat.inviteUser(userId, roomId, room.name);
+                self.info(userName + ' invited.');
+          });            
           return false;
         },
-        renderPrivateInvitePrompt = function(event) {
+        privateInviteUser = function(event) {
           var $this = $(this),
               userId = $this.closest('[data-user-id]').data('user-id'),
-              userName = $this.closest('[data-user-name]').data('user-name'),
-              template = ChiselchatDefaultTemplates["templates/prompt-invite-private.html"],
-              $prompt;
+              userName = $this.closest('[data-user-name]').data('user-name');
 
           if (userId && userName) {
-            $prompt = self.prompt('Private Invite', template({
-              userName: userName,
-              roomName: 'Private Chat'
-            }));
-
-            $prompt.find('a.close').click(function() {
-              $prompt.remove();
-              return false;
-            });
-
-            $prompt.find('[data-toggle=decline]').click(function() {
-              $prompt.remove();
-              return false;
-            });
-
-            $prompt.find('[data-toggle=accept]').first().click(function() {
-              $prompt.remove();
               var roomName = 'Private Chat';
               self.autoFocusTab = true;
               self._chat.createRoom(roomName, 'private', function(roomId) {
                 self._chat.inviteUser(userId, roomId, roomName);
+                self.info(userName + ' invited.');
               });
-              return false;
-            });
           }
           return false;
         };
 
-    $(document).delegate('[data-event="chiselchat-user-chat"]', 'click', renderPrivateInvitePrompt);
-    $(document).delegate('[data-event="chiselchat-user-invite"]', 'click', renderInvitePrompt);
+    $(document).delegate('[data-event="chiselchat-user-chat"]', 'click', privateInviteUser);
+    $(document).delegate('[data-event="chiselchat-user-invite"]', 'click', inviteUser);
   };
 
   /**
@@ -794,8 +741,33 @@
   };
 
     
+ChiselchatUI.prototype.confirm = function(message, title, confirm, cancel) {
+    (new PNotify({
+    title: title || 'Confirmation Needed',
+    text: message,
+    icon: 'glyphicon glyphicon-question-sign',
+    hide: false,
+    confirm: {
+        confirm: true
+    },
+    buttons: {
+        closer: false,
+        sticker: false
+    },
+    history: {
+        history: false
+    }
+    })).get().on('pnotify.confirm', function() {
+        confirm();
+    }).on('pnotify.cancel', function() {
+        cancel();
+    });
+}; 
+    
+    
+    
 ChiselchatUI.prototype.warn = function(message, title) {
-    $.pnotify({
+    new PNotify({
         addclass: 'alert-warning',
         title: title || 'Warning',
         text: message,
@@ -807,7 +779,7 @@ ChiselchatUI.prototype.warn = function(message, title) {
 };    
     
 ChiselchatUI.prototype.info = function(message, title) {
-    $.pnotify({
+    new PNotify({
         addclass: 'alert-info',
         type: 'info',
         title: title || 'Info',
@@ -820,7 +792,7 @@ ChiselchatUI.prototype.info = function(message, title) {
 };
     
 ChiselchatUI.prototype.error = function(message, title) {
-    $.pnotify({
+    new PNotify({
         addclass: 'alert-danger',
         type: 'error',
         title: title || 'Error',
@@ -833,7 +805,7 @@ ChiselchatUI.prototype.error = function(message, title) {
 };
 
 ChiselchatUI.prototype.success = function(message, title) {
-    $.pnotify({
+    new PNotify({
         addclass: 'alert-success',
         type: 'success',
         title: title || 'Success',
