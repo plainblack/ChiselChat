@@ -420,6 +420,23 @@
     // Invoke event callbacks for the room-exit event.
     self._onLeaveRoom(roomId);
   };
+    
+    
+  // delete a chat room.
+  Chiselchat.prototype.removeRoom = function(roomId) {
+    var self = this;
+    self.leaveRoom(roomId);
+    self._firebase.child('room-users').child(roomId).remove();
+    self._messageRef.child(roomId).remove();
+    self._roomRef.child(roomId).remove();
+    self._firebase.child('users').once('value', function (snapshot) {
+        var users = snapshot.val();
+        for (var userId in users) {
+            self._firebase.child('users').child(userId).child(roomId).remove();
+        }
+    });
+  };
+    
 
   Chiselchat.prototype.sendMessage = function(roomId, messageContent, messageType, cb) {
     var self = this,

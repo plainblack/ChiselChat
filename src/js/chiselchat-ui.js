@@ -375,6 +375,13 @@
             }
             return false;
           };
+        
+          deleteRoom = function() {
+            var parent = $(this).parent(),
+                roomId = parent.data('room-id');
+            self._chat.removeRoom(roomId);
+            parent.remove();
+          };
 
       self._chat.getRoomList(function(rooms) {
         self.$roomList.empty();
@@ -382,8 +389,10 @@
           var room = rooms[roomId];
           if (room.type == "private") continue;
           room.isRoomOpen = !!self.$messages[room.id];
+          room.userIsModerator = self._chat.userIsModerator();
           var $roomItem = $(template(room));
-          $roomItem.children('a').bind('click', selectRoomListItem);
+          $roomItem.children('.chiselchat-room-list-item').bind('click', selectRoomListItem);
+          $roomItem.children('.chiselchat-delete-room').bind('click', deleteRoom);
           self.$roomList.append($roomItem.toggle(true));
         }
       });
