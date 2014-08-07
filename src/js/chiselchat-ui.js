@@ -164,20 +164,12 @@
 
             var profile, avatar;
             if (user.profileUri) {
-                profile = user.profileUri;
-            }
-            else {
-                profile = 'javascript: void(0)';
+                $message.find('.chiselchat-avatar a').attr('href', profile);
+                $message.find('.chiselchat-user a').attr('href', profile);
             }
             if (user.avatarUri) {
-                avatar = user.avatarUri;
+                $message.find('.chiselchat-avatar img').attr('src', avatar);
             }
-            else {
-                avatar = '/chiselchat/guest_logo.png';
-            }
-            $message.find('.chiselchat-avatar a').attr('href', profile);
-            $message.find('.chiselchat-user a').attr('href', profile);
-            $message.find('.chiselchat-avatar img').attr('src', avatar);
         });
       }
     },
