@@ -894,7 +894,12 @@ ChiselchatUI.prototype.success = function(message, title) {
       var message = self.trimWithEllipsis($textarea.val(), self.maxLengthMessage);
       if ((e.which === 13) && (message !== '')) {
         $textarea.val('');
-        self._chat.sendMessage(roomId, message, 'default', function(error) {
+        var messageType = 'default';
+        if (message.match(/^\/me\s/)) {
+            message = message.replace(/^\/me/,'');
+            messageType = 'activity';
+        } 
+        self._chat.sendMessage(roomId, message, messageType, function(error) {
             if (error) {
                 self.error('You are not allowed to post messages right now.');
             }
