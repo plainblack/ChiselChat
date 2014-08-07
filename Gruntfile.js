@@ -9,6 +9,7 @@ module.exports = function(grunt) {
     jshint: {
       files: ['src/js/shims.js', 'src/js/chiselchat.js', 'src/js/chiselchat-ui.js'],
       options: {
+        scripturl: false,
         regexdash: false
       }
     },

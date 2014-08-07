@@ -161,9 +161,23 @@
         self.showMessage(roomId, message);
         this._chat.lookupUser(userId, function (user) {
             var $message = $('div[data-message-id="'+message.id+'"]');
-            $message.find('.chiselchat-avatar a').attr('href', user.profileUri);
-            $message.find('.chiselchat-user a').attr('href', user.profileUri);
-            $message.find('.chiselchat-avatar img').attr('src', user.avatarUri);
+
+            var profile, avatar;
+            if (user.profileUri) {
+                profile = user.profileUri;
+            }
+            else {
+                profile = 'javascript: void(0)';
+            }
+            if (user.avatarUri) {
+                avatar = user.avatarUri;
+            }
+            else {
+                avatar = '/chiselchat/guest_logo.png';
+            }
+            $message.find('.chiselchat-avatar a').attr('href', profile);
+            $message.find('.chiselchat-user a').attr('href', profile);
+            $message.find('.chiselchat-avatar img').attr('src', avatar);
         });
       }
     },
