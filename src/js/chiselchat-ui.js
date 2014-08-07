@@ -158,8 +158,12 @@
       var self = this;
       if (!this._user || !this._user.muted || !this._user.muted[userId]) {
         //Lookup the user, then show the message
+        self.showMessage(roomId, message);
         this._chat.lookupUser(userId, function (user) {
-            self.showMessage(roomId, message, user);
+            var $message = $('div[data-message-id="'+message.id+'"]');
+            $message.find('.chiselchat-avatar a').attr('href', user.profileUri);
+            $message.find('.chiselchat-user a').attr('href', user.profileUri);
+            $message.find('.chiselchat-avatar img').attr('src', user.avatarUri);
         });
       }
     },
@@ -238,11 +242,11 @@
    * This method assumes that the underlying Firebase reference has
    * already been authenticated.
    */
-  ChiselchatUI.prototype.setUser = function(userId, userName, isModerator, userAvatarUri, userProfileUri) {
+  ChiselchatUI.prototype.setUser = function(userId, userName, isModerator, avatarUri, profileUri) {
     var self = this;
 
     // Initialize data events
-    self._chat.setUser(userId, userName, isModerator, userAvatarUri, userProfileUri, function(user) {
+    self._chat.setUser(userId, userName, isModerator, avatarUri, profileUri, function(user) {
       self._user = user;
 
       if (self._chat.userIsModerator()) {
@@ -975,7 +979,7 @@ ChiselchatUI.prototype.success = function(message, title) {
    * @param    {string}    roomId
    * @param    {string}    message
    */
-  ChiselchatUI.prototype.showMessage = function(roomId, rawMessage, user) {
+  ChiselchatUI.prototype.showMessage = function(roomId, rawMessage) {
     var self = this;
 
     // Setup defaults
@@ -989,15 +993,10 @@ ChiselchatUI.prototype.success = function(message, title) {
       isSelfMessage   : (self._user && rawMessage.userId == self._user.id),
       disableActions  : (!self._user || rawMessage.userId == self._user.id),
       userIsModerator : self._chat.userIsModerator(),
-      userAvatarUri   : '',
-      userProfileUri  : ''
+      //Placeholders for data that might come later
+      avatarUri   : '',
+      profileUri  : ''
     };
-
-    if (user) {
-        message.userAvatarUri  = user.userAvatarUri;
-        message.userProfileUri = user.userProfileUri;
-        message.name           = user.name;
-    }
 
     // While other data is escaped in the Underscore.js templates, escape and
     // process the message content here to add additional functionality (add links).

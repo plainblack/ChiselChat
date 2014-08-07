@@ -85,8 +85,8 @@
           return {
             id: self._userId,
             name: self._userName,
-            userAvatarUri: self._userAvatarUri,
-            userProfileUri: self._userProfileUri
+            avatarUri: self._avatarUri,
+            profileUri: self._profileUri
           };
       }, function(error, committed, snapshot) {
         self._user = snapshot.val();
@@ -253,7 +253,7 @@
   // --------------
 
   // Initialize the library and setup data listeners.
-  Chiselchat.prototype.setUser = function(userId, userName, isModerator, userAvatarUri, userProfileUri, callback) {
+  Chiselchat.prototype.setUser = function(userId, userName, isModerator, avatarUri, profileUri, callback) {
     var self = this;
 
     self._firebase.root().child('.info/authenticated').on('value', function(snapshot) {
@@ -263,8 +263,8 @@
         self._userId   = userId.toString();
         self._userName = userName.toString();
         self._isModerator = isModerator;
-        self._userAvatarUri  = userAvatarUri.toString();
-        self._userProfileUri = userProfileUri.toString();
+        self._avatarUri  = avatarUri.toString();
+        self._profileUri = profileUri.toString();
         if (self._isModerator === true) {
             self._moderatorsRef.child(self._userId).set(true);
             self._moderatorsRef.child(self._userId).onDisconnect().remove();
@@ -289,9 +289,6 @@
         var user = snap.val();
         self._chatter_cache[userId] = user;
         callback(user);
-      }, function () {
-        //Can't look up that user, call the callback anyway so stuff can happen without users.
-        callback();
       });
     }
     else {
