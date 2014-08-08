@@ -82,13 +82,22 @@
 
       // Update the user record on every visit.
       this._userRef.transaction(function(current) {
-          return {
+          console.log(current);
+          var account_data = {
             id: self._userId,
             name: self._userName,
             avatarUri: self._avatarUri,
             profileUri: self._profileUri,
             isModerator: self._isModerator
           };
+          if (current) {
+            console.log("Adding room data for "+self._userName);
+            account_data[rooms] = current.rooms;
+          }
+          else {
+            console.log("No current snapshot");
+          }
+          return account_data;
       }, function(error, committed, snapshot) {
         self._user = snapshot.val();
         //Preload the user cache to save a remote fetch.
