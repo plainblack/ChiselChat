@@ -155,7 +155,7 @@
       this._roomRef.on('child_removed', function(snapshot) {
           self.leaveRoom(snapshot.name());
       });              
-        
+
     },
 
     // Append the new callback to our list of event handlers.
@@ -483,7 +483,6 @@
 
   Chiselchat.prototype.deleteMessage = function(roomId, messageId, cb) {
     var self = this;
-
     self._messageRef.child(roomId).child(messageId).remove(cb);
   };
 

@@ -310,7 +310,6 @@
     $(document).delegate('[data-event="chiselchat-message-delete"]', 'click', function(event) {
       var messageVars = parseMessageVars.call(this, event);
       self._chat.deleteMessage(messageVars.roomId, messageVars.messageId);
-       $("[data-message-id='"+messageVars.messageId+"']").remove();
     });
   };
 
@@ -1030,7 +1029,7 @@ ChiselchatUI.prototype.success = function(message, title) {
    * @param    {string}    messageId
    */
   ChiselchatUI.prototype.removeMessage = function(roomId, messageId) {
-    $('.message[data-message-id="' + messageId + '"]').remove();
+    $('.chiselchat-message[data-message-id="' + messageId + '"]').remove();
   };
 
   /**
