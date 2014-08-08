@@ -1,19 +1,20 @@
 @charset "UTF-8";
-@main-background-color: #333;
-@main-text-color: #ccc;
-@message-text-color: #fff;
+@main-background-color: #fff;
+@main-text-color: #000;
+@controls-text-color: #aaa;
+@message-text-color: #000;
 @highlight-background-color: #aaa;
 @highlight-text-color: #000;
-@tab-background-color: lighten(@main-background-color, 10%);
-@tab-text-color: @main-text-color;
-@active-tab-background-color: #ccc;
+@tab-background-color: #0ba2f2;
+@tab-text-color: #111111;
+@active-tab-background-color: #fff;
 @active-tab-text-color: #000;
 @input-background-color: #fff;
 @input-text-color: #000;
-@moderator-text-color: orange;
+@moderator-text-color: #ff9b00;
 @staff-text-color: green;
-@user-text-color: yellow;
-@anonymous-text-color: white;
+@user-text-color: #014986;
+@anonymous-text-color: #000;
 
 .border-radius(@radius) {
   -webkit-border-radius: @radius;
@@ -187,7 +188,7 @@
 #chiselchat-tab-content .chiselchat-tab-pane span.chiselchat-controls a {
     font-size: 80%;
     padding: 1px;
-    color: lighten(@main-background-color,20%);   
+    color: @controls-text-color;   
     margin-left: 10px;
     text-decoration: none;
 }
