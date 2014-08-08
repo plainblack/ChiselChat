@@ -14,12 +14,12 @@
             <div class="chiselchat-title">
                 People    
             </div>
-        
-            <form id='chiselchat-user-search-form'>
-                <input type='text' data-event='chiselchat-user-search' data-template='templates/user-search-list-item.html' data-target='chiselchat-user-search' data-controls='chiselchat-user-search-controls' placeholder='Search'>
-            </form>
-            
             <div class="chiselchat-scrollable-list">
+
+                <form id='chiselchat-user-search-form'>
+                    <input type='text' data-event='chiselchat-user-search' data-template='templates/user-search-list-item.html' data-target='chiselchat-user-search' data-controls='chiselchat-user-search-controls' placeholder='Search'>
+                </form>
+
                 <ul id='chiselchat-user-search'></ul>
             </div>
         </div>     
@@ -28,13 +28,13 @@
                 Rooms    
             </div>
 
+            <div class="chiselchat-scrollable-list">
                 <form id='chiselchat-create-room'>
                     <input id='chiselchat-input-room-name' data-input='chiselchat-room-name' type='text' placeholder='Create new room...' maxlength='<%- maxLengthRoomName %>'>
                 </form>
     
-                <div class="chiselchat-scrollable-list">
                     <ul id='chiselchat-room-list'></ul>
-                </div>
+            </div>
             
         </div>       
     </div>

@@ -1,10 +1,12 @@
 <li data-user-id='<%- id %>' data-user-name='<%- name %>'>
-  <a href='javascript: void(0);' class='clearfix'>
-    <span class='left twothird clipped' title='<%- name %>'><%- name %></span>
-
-    <% if (!disableActions) { %>
-      <span data-event='chiselchat-user-mute-toggle' class='icon user-mute right <% if (isMuted) { %> red <% } %>' title='Toggle User Mute'>&nbsp;</span>
-      <span data-event='chiselchat-user-chat' class='icon user-chat right' title='Invite to Private Chat'>&nbsp;</span>
-    <% } %>
+  <a href='javascript: void(0);'>
+    <span class='' title='<%- name %>'><%- name %></span>
   </a>
+    <% if (!disableActions) { %>
+     <span class='chiselchat-controls'>
+      <a href='javascript: void(0);'><span data-event='chiselchat-user-mute-toggle' class='<% if (isMuted) { %> chiselchat-muted <% } %>' title='Toggle User Mute'>Mute</span></a>
+     <a href='javascript: void(0);'><span data-event='chiselchat-user-chat' title='Invite to Private Chat'>PM</span></a>
+     </span>
+    <% } %>
+  
 </li>
