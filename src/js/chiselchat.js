@@ -590,7 +590,7 @@
         self._userRef.child('invites').child(inviteId).update({
           'status': 'accepted',
           'toUserName': self._userName
-        }, cb);
+        }, cb(invite));
       }
     }, self);
   };

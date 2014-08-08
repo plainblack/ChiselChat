@@ -184,7 +184,12 @@
     _onChatInvite: function(invitation) {
       var self = this;
         self.confirm(invitation.fromUserName + ' invited you to join ' + invitation.toRoomName, 'Invitation', function(){
-            self._chat.acceptInvite(invitation.id);
+            self._chat.acceptInvite(invitation.id, function (obj) {
+                if (!( obj instanceof Error)) {
+                    //Expecting instance data
+                    self.focusTab(obj.roomId);
+                }
+            });
             return false;
         }, function() {
             self._chat.declineInvite(invitation.id);
@@ -197,13 +202,13 @@
       var self = this;
 
       if (invitation.status && invitation.status === 'accepted') {
-          self.success(invitation.toUserName + ' accepted your invite.','Invitation Accepted');
+        self.success(invitation.toUserName + ' accepted your invite.','Invitation Accepted');
         this._chat.getRoom(invitation.roomId, function(room) {
           self.autoFocusTab = true;
           self.attachTab(invitation.roomId, room.name);
         });
       } else {
-          self.error(invitation.toUserName + ' declined your invite.','Invitation Declined');
+        self.error(invitation.toUserName + ' declined your invite.','Invitation Declined');
       }
 
       $prompt.find('a.close').click(function() {
