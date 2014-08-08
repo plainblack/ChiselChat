@@ -92,6 +92,7 @@
       this._bindForUserMuting();
       this._bindForChatInvites();
       this._bindForRoomListing();
+      this._bindForRoomNotification();
 
       // Generic, non-chat-specific interactive elements.
       this._setupTabs();
@@ -104,6 +105,7 @@
 
       // Bind events for new messages, enter / leaving rooms, and user metadata.
       this._chat.on('room-enter', this._onEnterRoom.bind(this));
+      this._chat.on('room-create', this._onCreateRoom.bind(this));
       this._chat.on('room-exit', this._onLeaveRoom.bind(this));
       this._chat.on('message-add', this._onNewMessage.bind(this));
       this._chat.on('message-remove', this._onRemoveMessage.bind(this));
@@ -145,6 +147,14 @@
     _onEnterRoom: function(room) {
       this.attachTab(room.id, room.name);
     },
+
+    _onCreateRoom: function(room) {
+        self = this;
+        if (room.type == 'public') {
+            self.info('A new public chatroom called "<a href="javascript: void(0)" data-event="chiselchat-room-notification" data-room-id="'+room.id+'" data-room-name="'+room.name+'">'+room.name+'</a>" has been created.');   
+        }
+    },            
+      
     _onLeaveRoom: function(roomId) {
       this.removeTab(roomId);
 
@@ -553,6 +563,24 @@
     $(document).delegate('[data-event="chiselchat-user-chat"]', 'click', privateInviteUser);
     $(document).delegate('[data-event="chiselchat-user-invite"]', 'click', inviteUser);
   };
+    
+  /**
+   * Binds to elements with the data-event='chiselchat-room-notification' 
+   */
+  ChiselchatUI.prototype._bindForRoomNotification = function() {
+    var self = this,
+        notifyAboutRoom = function(event) {
+          var $this = $(this),
+              roomId = $this.data('room-id'),
+              roomName = $this.data('room-name');
+                self.autoFocusTab = true;
+                self._chat.enterRoom(roomId, roomName);
+          
+          return false;
+        };
+    $(document).delegate('[data-event="chiselchat-room-notification"]', 'click', notifyAboutRoom);
+  };
+
 
   /**
    * Binds to room dropdown button, menu items, and create room button.

@@ -156,6 +156,18 @@
           self.leaveRoom(snapshot.name());
       });              
 
+      // Listen for new rooms being created
+      var first_room_added_after_load = true;
+      this._roomRef.endAt().limit(1).on('child_added', function(snapshot){
+          if (first_room_added_after_load) { // we want to skip the first room, because it will already exist
+              first_room_added_after_load = false;
+              return;
+          }
+          else {
+              this._onCreateRoom(snapshot);
+          }
+      }, this);
+        
     },
 
     // Append the new callback to our list of event handlers.
@@ -210,6 +222,13 @@
       this._invokeEventCallbacks('user-update', this._user);
     },
 
+      
+    // Event to monitor current user state.
+    _onCreateRoom: function(snapshot) {
+      var room = snapshot.val();
+      this._invokeEventCallbacks('room-create', room);
+    },   
+      
     // Event to monitor current auth + user state.
     _onAuthRequired: function() {
       this._invokeEventCallbacks('auth-required');
