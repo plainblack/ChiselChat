@@ -515,12 +515,19 @@
           isMuted = $this.hasClass('chiselchat-muted');
 
       event.preventDefault();
-        self._chat.toggleUserMute(userId, function() {
-            if (isMuted) {
-                self.success(userName + ' has been unmuted.','User Unmuted');
+        self._chat.toggleUserMute(userId, function(error) {
+            if (error) {
+                self.error(error.message);
             }
             else {
-                self.error(userName + ' has been muted.', 'User Muted');
+                if (isMuted) {
+                    self.success(userName + ' has been unmuted.','User Unmuted');
+                    $this.html('Mute');
+                }
+                else {
+                    self.error(userName + ' has been muted.', 'User Muted');
+                    $this.html('Unmute');
+                }
             }
         });
     });

@@ -519,9 +519,16 @@
       return;
     }
 
-    self._userRef.child('muted').child(userId).transaction(function(isMuted) {
-      return (isMuted) ? null : true;
-    }, cb);
+    self._firebase.child('users').child(userId).once('value', function(snapshot) {
+        if (!snapshot.val().isModerator) {
+            self._userRef.child('muted').child(userId).transaction(function(isMuted) {
+              return (isMuted) ? null : true;
+            }, cb);
+        }
+        else {
+            cb(new Error('Cannot mute a moderator.'));
+        }
+    });
   };
 
   // Send a moderator notification to a specific user.

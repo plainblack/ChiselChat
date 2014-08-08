@@ -4,7 +4,7 @@
   </a>
     <% if (!disableActions) { %>
      <span class='chiselchat-controls'>
-      <a href='javascript: void(0);'><span data-event='chiselchat-user-mute-toggle' class='<% if (isMuted) { %> chiselchat-muted <% } %>' title='Toggle User Mute'>Mute</span></a>
+      <a href='javascript: void(0);'><span data-event='chiselchat-user-mute-toggle' class='<% if (isMuted) { %> chiselchat-muted <% } %>' title='Toggle User Mute'><% if (isMuted) { %>Unmute<% } else { %>Mute<% } %></span></a>
      <a href='javascript: void(0);'><span data-event='chiselchat-user-chat' title='Invite to Private Chat'>PM</span></a>
      </span>
     <% } %>
