@@ -171,7 +171,6 @@
                 $message.find('.chiselchat-avatar img').attr('src', user.avatarUri);
             }
             if (user.isModerator) {
-                console.log(user.name + " is a moderator ");
                 $message.find('.chiselchat-user > a').addClass('chiselchat-moderator');
             }
         });
