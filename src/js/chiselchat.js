@@ -82,7 +82,6 @@
 
       // Update the user record on every visit.
       this._userRef.transaction(function(current) {
-          console.log(current);
           var account_data = {
             id: self._userId,
             name: self._userName,
@@ -100,9 +99,6 @@
             if (current.muted) {
                 account_data.muted = current.muted;
             }
-          }
-          else {
-            console.log("No current snapshot");
           }
           return account_data;
       }, function(error, committed, snapshot) {
