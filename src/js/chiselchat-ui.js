@@ -133,7 +133,7 @@
       var mutedUsers = this._user.muted || {};
       $('[data-event="chiselchat-user-mute-toggle"]').each(function(i, el) {
         var userId = $(this).closest('[data-user-id]').data('user-id');
-        $(this).toggleClass('red', !!mutedUsers[userId]);
+        $(this).toggleClass('chiselchat-muted', !!mutedUsers[userId]);
       });
 
       // Ensure that all messages from muted users are removed.
@@ -503,35 +503,17 @@
       var $this = $(this),
           userId = $this.closest('[data-user-id]').data('user-id'),
           userName = $this.closest('[data-user-name]').data('user-name'),
-          isMuted = $this.hasClass('red'),
-          template = ChiselchatDefaultTemplates["templates/prompt-user-mute.html"];
+          isMuted = $this.hasClass('chiselchat-muted');
 
       event.preventDefault();
-
-      // Require user confirmation for muting.
-      if (!isMuted) {
-        var $prompt = self.prompt('Mute User?', template({
-          userName: userName
-        }));
-
-        $prompt.find('a.close').first().click(function() {
-          $prompt.remove();
-          return false;
+        self._chat.toggleUserMute(userId, function() {
+            if (isMuted) {
+                self.success(userName + ' has been unmuted.','User Unmuted');
+            }
+            else {
+                self.error(userName + ' has been muted.', 'User Muted');
+            }
         });
-
-        $prompt.find('[data-toggle=decline]').first().click(function() {
-          $prompt.remove();
-          return false;
-        });
-
-        $prompt.find('[data-toggle=accept]').first().click(function() {
-          self._chat.toggleUserMute(userId);
-          $prompt.remove();
-          return false;
-        });
-      } else {
-        self._chat.toggleUserMute(userId);
-      }
     });
   };
 
