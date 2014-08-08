@@ -210,11 +210,7 @@
       } else {
         self.error(invitation.toUserName + ' declined your invite.','Invitation Declined');
       }
-
-      $prompt.find('a.close').click(function() {
-        $prompt.remove();
-        return false;
-      });
+        
     },
 
     // Events related to admin or moderator notifications.
@@ -1081,28 +1077,6 @@ ChiselchatUI.prototype.success = function(message, title) {
     return '' + hours + ':' + minutes + ampm;
   };
 
-  
-
-  /**
-   * Inner method to launch a prompt given a specific title and HTML content.
-   * @param    {string}    title
-   * @param    {string}    content
-   */
-  ChiselchatUI.prototype.prompt = function(title, content) {
-    var template = ChiselchatDefaultTemplates["templates/prompt.html"],
-        $prompt;
-
-    $prompt = $(template({
-      title: title,
-      content: content
-    })).css({
-      top: this.$wrapper.position().top + (0.333 * this.$wrapper.height()),
-      left: this.$wrapper.position().left + (0.125 * this.$wrapper.width()),
-      width: 0.75 * this.$wrapper.width()
-    });
-    this.$wrapper.append($prompt.removeClass('hidden'));
-    return $prompt;
-  };
 
   // see http://stackoverflow.com/questions/37684/how-to-replace-plain-urls-with-links
   ChiselchatUI.prototype.linkify = function(str) {
