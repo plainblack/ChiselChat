@@ -91,8 +91,9 @@
             isModerator: self._isModerator
           };
           if (current) {
-            console.log("Adding room data for "+self._userName);
-            account_data[rooms] = current.rooms;
+            account_data.rooms. = current.rooms;
+            account_data.sessions. = current.sessions;
+            account_data.muted. = current.muted;
           }
           else {
             console.log("No current snapshot");
