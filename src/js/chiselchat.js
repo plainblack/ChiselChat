@@ -91,9 +91,15 @@
             isModerator: self._isModerator
           };
           if (current) {
-            account_data.rooms = current.rooms;
-            account_data.sessions = current.sessions;
-            account_data.muted = current.muted;
+            if (current.rooms) {
+                account_data.rooms = current.rooms;
+            }
+            if (current.sessions) {
+                account_data.sessions = current.sessions;
+            }
+            if (current.muted) {
+                account_data.muted = current.muted;
+            }
           }
           else {
             console.log("No current snapshot");
