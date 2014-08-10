@@ -38,6 +38,9 @@
     // A toggle so that in some circumstances a chat tab can focus automatically.
     this.autoFocusTab = false;
       
+    // A toggle so panes can be full screen
+    this.fullScreenTab = false;
+      
     // Define some constants regarding maximum lengths, client-enforced.
     this.maxLengthUsername = 15;
     this.maxLengthUsernameDisplay = 15;
@@ -354,6 +357,19 @@
       self._chat.leaveRoom(roomId);
       return false;
     });
+      
+    // Handle toggle of pane size
+    $(document).delegate('[data-event="chiselchat-toggle-pane-size"]', 'click', function(event) {
+      if (self.fullScreenTab) {
+          self.fullScreenTab = false;
+          $(this).closest('[data-room-id]').removeClass('fullscreen');
+      }
+      else {
+          $(this).closest('[data-room-id]').addClass('fullscreen');
+          self.fullScreenTab = true;
+      }
+      return false;
+    });
   };
 
   /**
@@ -363,9 +379,6 @@
     var self = this;
 
     $('#chiselchat-room-tab').bind('click', function() {
-   /*   if ($(this).hasClass('active')) {
-        return;
-      }*/
 
       var $this = $(this),
           template = ChiselchatDefaultTemplates["templates/room-list-item.html"],
@@ -664,10 +677,14 @@
 
             $active
               .removeClass('active')
+              .removeClass('fullscreen')
               .find('> .dropdown-menu > .active')
               .removeClass('active');
 
             element.addClass('active');
+            if (self.fullScreenTab) {
+                element.addClass('fullscreen');
+            }
 
             if (element.parent('.dropdown-menu')) {
               element.closest('li.dropdown').addClass('active');
