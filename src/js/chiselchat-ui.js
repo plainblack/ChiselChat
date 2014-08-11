@@ -288,8 +288,15 @@
       if (invitation.status && invitation.status === 'accepted') {
         self.success(invitation.toUserName + ' accepted your invite.','Invitation Accepted');
         this._chat.getRoom(invitation.roomId, function(room) {
-          self.autoFocusTab = true;
-          self.attachTab(invitation.roomId, room.name);
+            var tab = $('#chiselchat-tab-list li[data-room-id="'+invitation.roomId+'"]');
+            if (tab.length) {
+                if (!tab.hasClass('active')) {
+                    self.focusTab(invitation.roomId);
+                }
+            } else {
+              self.autoFocusTab = true;
+              self.attachTab(invitation.roomId, room.name);
+            }
         });
       } else {
         self.error(invitation.toUserName + ' declined your invite.','Invitation Declined');
