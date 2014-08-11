@@ -167,6 +167,10 @@
               this._onCreateRoom(snapshot);
           }
       }, this);
+
+      self._roomRef.on('child_changed',function(snapshot, prevChildName) {
+          self._invokeEventCallbacks('room-changed', snapshot.val());
+      });        
         
     },
 

@@ -41,6 +41,9 @@
     // A toggle so panes can be full screen
     this.fullScreenTab = false;
       
+    // A list of commands that will be executed from the text box
+    this.commands = [];
+      
     // Define some constants regarding maximum lengths, client-enforced.
     this.maxLengthUsername = 15;
     this.maxLengthUsernameDisplay = 15;
@@ -74,6 +77,9 @@
 
     // Setup bindings to internal methods
     this._bindDataEvents();
+      
+    // Set initial message preprocessors.
+    this._initCommands();
   }
 
   // Run ChiselchatUI in *noConflict* mode, returning the `ChiselchatUI` variable to
@@ -84,6 +90,59 @@
   };
 
   ChiselchatUI.prototype = {
+      
+    
+    _initCommands: function(proc) {
+        self = this;
+        self.addCommand({
+            match   : /^\/help$/,
+            func : function(message, chatui) {
+                var help = '';
+                for (var i in chatui.commands) {
+                    if (chatui.commands[i].moderatorOnly && !chatui._chat.userIsModerator()) {
+                        continue; // skip it
+                    }
+                    help += '<p><b>' + chatui.commands[i].name + '</b> - ' + chatui.commands[i].help + '</p>';
+                }
+                chatui.info(help,'Chat Help');
+                message.type = 'command';
+            },
+            name    : "/help",
+            help    : "Display this message."
+        });
+        self.addCommand({
+            match   : /^\/me\s/,
+            func : function(message) {
+                message.content = message.content.replace(/^\/me/,'');
+                message.type = 'activity';
+            },
+            name    : "/me <message>",
+            help    : "Your name will appear followed by any text you write."
+        });
+        self.addCommand({
+            match   : /^\/leave$/,
+            func : function(message,chatui) {
+                chatui._chat.leaveRoom(message.roomId);
+                message.type = 'command';
+            },
+            name    : "/leave",
+            help    : "Leave the current room."
+        });
+        self.addCommand({
+            match   : /^\/topic\s/,
+            func : function(message,chatui) {
+                var name = message.content.replace(/^\/topic\s+/,'');
+                if (message.content.match(/\w+/)) {
+                    chatui._chat._roomRef.child(message.roomId).child('name').set(name);
+                    chatui._chat.sendMessage(message.roomId, 'changed the topic to "'+name+'".', 'activity');
+                }
+                message.type = 'command';
+            },
+            name    : "/topic <new topic name>",
+            help    : "Change the name of the room.",
+            moderatorOnly: true
+        });
+    },
 
     _bindUIEvents: function() {
       // Chat-specific custom interactions and functionality.
@@ -109,6 +168,7 @@
       // Bind events for new messages, enter / leaving rooms, and user metadata.
       this._chat.on('room-enter', this._onEnterRoom.bind(this));
       this._chat.on('room-create', this._onCreateRoom.bind(this));
+      this._chat.on('room-changed', this._onRoomChanged.bind(this));
       this._chat.on('room-exit', this._onLeaveRoom.bind(this));
       this._chat.on('message-add', this._onNewMessage.bind(this));
       this._chat.on('message-remove', this._onRemoveMessage.bind(this));
@@ -149,6 +209,12 @@
 
     _onEnterRoom: function(room) {
       this.attachTab(room.id, room.name);
+    },
+
+    _onRoomChanged: function(room) {
+        var self = this;
+        $('#chiselchat-tab-list li[data-room-id="'+room.id+'"] a .chiselchat-tab-text').html(room.name);
+        $('[data-room-id="'+room.id+'"] .chiselchat-title-text').html(room.name);
     },
 
     _onCreateRoom: function(room) {
@@ -855,7 +921,25 @@ ChiselchatUI.prototype.success = function(message, title) {
         sticker: false
     });
 };    
+
+
+ChiselchatUI.prototype.addCommand = function(command) {
+    self = this;
+    self.commands.push(command);
+};
     
+ChiselchatUI.prototype.executeCommands = function(message) {
+    var self = this;
+    for (var i in self.commands) {
+        var command = self.commands[i];
+        if (message.content.match(command.match)) {
+            if (command.moderatorOnly && !self._chat.userIsModerator()) {
+                continue;
+            }
+            command.func(message, self);
+        }   
+    }
+};
     
   /**
    * Reset's the new message count on a room.
@@ -917,19 +1001,21 @@ ChiselchatUI.prototype.success = function(message, title) {
     // Attach on-enter event to textarea.
     var $textarea = $tabContent.find('textarea').first();
     $textarea.bind('keydown', function(e) {
-      var message = self.trimWithEllipsis($textarea.val(), self.maxLengthMessage);
-      if ((e.which === 13) && (message !== '')) {
+      var message = {
+          content: self.trimWithEllipsis($textarea.val(), self.maxLengthMessage),
+          type: 'default',
+          roomId : roomId
+      };
+      if ((e.which === 13) && (message.content !== '')) {
         $textarea.val('');
-        var messageType = 'default';
-        if (message.match(/^\/me\s/)) {
-            message = message.replace(/^\/me/,'');
-            messageType = 'activity';
-        } 
-        self._chat.sendMessage(roomId, message, messageType, function(error) {
-            if (error) {
-                self.error('You are not allowed to post messages right now.');
-            }
-        });
+        self.executeCommands(message);
+        if (message.type == 'activity' || message.type == 'default') {
+            self._chat.sendMessage(message.roomId, message.content, message.type, function(error) {
+                if (error) {
+                    self.error('You are not allowed to post messages right now.');
+                }
+            });
+        }
         return false;
       }
     });
