@@ -154,7 +154,6 @@
 
     _bindUIEvents: function() {
       // Chat-specific custom interactions and functionality.
-      this._bindForHeightChange();
       this._bindForTabControls();
       this._bindForRoomList();
       this._bindForUserRoomList();
@@ -400,25 +399,7 @@
     });
   };
 
-  /**
-   * Binds to height changes in the surrounding div.
-   */
-  ChiselchatUI.prototype._bindForHeightChange = function() {
-    var self = this,
-        $el = $(this._el),
-        lastHeight = null;
-
-    setInterval(function() {
-      var height = $el.height();
-      if (height != lastHeight) {
-        lastHeight = height;
-        $('.chat').each(function(i, el) {
-
-        });
-      }
-    }, 500);
-  };
-
+    
   /**
    * Binds custom inner-tab events.
    */
@@ -437,10 +418,12 @@
       if (self.fullScreenTab) {
           self.fullScreenTab = false;
           $(this).closest('[data-room-id]').removeClass('fullscreen');
+          $(window).trigger('resize');
       }
       else {
           $(this).closest('[data-room-id]').addClass('fullscreen');
           self.fullScreenTab = true;
+          $(window).trigger('resize');
       }
       return false;
     });
@@ -745,6 +728,8 @@
               relatedTarget: previous
             }); 
           });
+          $target.find('.chiselchat-history').css('height',  ($target.height() - 75) + 'px');
+
         },
         activate = function (element, container, callback) {
           var $active = container.find('> .active');
@@ -1032,8 +1017,8 @@ ChiselchatUI.prototype.executeCommands = function(message) {
     var tabListTemplate = ChiselchatDefaultTemplates["templates/tab-menu-item.html"];
     var $tab = $(tabListTemplate(room));
     this.$tabList.append($tab);
-      
-    $messages.css('height',  ($tabContent.height() - 75) + 'px');
+
+      $messages.css('height',  ($tabContent.height() - 75) + 'px');
       $(window).resize(function() {
           $messages.css('height',  ($tabContent.height() - 75) + 'px');
       });

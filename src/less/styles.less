@@ -190,7 +190,7 @@
 #chiselchat-tab-content .chiselchat-tab-pane span.chiselchat-controls {
     display: inline;
 }
-#chiselchat-tab-content .chiselchat-tab-pane span.chiselchat-controls a {
+#chiselchat-tab-content .chiselchat-tab-pane span.chiselchat-controls a, #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message .chiselchat-message-content span.chiselchat-controls a  {
     font-size: 80%;
     padding: 1px;
     color: @controls-text-color;   
@@ -277,7 +277,7 @@
     color: @main-text-color;
 }
 
-#chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-avatar, #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-timestamp, #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-controls {
+#chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-avatar, #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-timestamp, #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity .chiselchat-user .chiselchat-controls {
     display: none;
 }
 
@@ -288,7 +288,33 @@
 }
 @media (max-width: 960px) {
     #chiselchat-tab-content .chiselchat-tab-pane.active,#chiselchat-tab-content #chiselchat-presence-pane.active,#chiselchat-tab-content #chiselchat-room-pane.active {
+        bottom: 35px;
         width: 98%;
-        height: 95%;
+        height: 94%;
+    }
+    #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-toggle-pane-size {
+        display: none;
+    }
+    #chiselchat-tab-content .chiselchat-tab-pane {
+        font-size: 125%;
+    }
+    #chiselchat-tab-list {
+        height: 30px;
+    }
+    #chiselchat-tab-list li {
+        height: 30px;
+        width: 150px;
+        font-size: 150%;
+    }
+    #chiselchat-tab-list li#chiselchat-presence-tab,#chiselchat-tab-list li#chiselchat-room-tab {
+        width: 75px;
+    }
+    #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-tab-pane-menu {
+        display: none;
+    }
+    #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history {
+        width: 100%;
+        float: none;
+        height: 100%;
     }
 }
