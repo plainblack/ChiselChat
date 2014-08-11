@@ -154,7 +154,6 @@
 
     _bindUIEvents: function() {
       // Chat-specific custom interactions and functionality.
-      this._bindForTabControls();
       this._bindForRoomList();
       this._bindForUserRoomList();
       this._bindForUserSearch();
@@ -399,34 +398,6 @@
   };
 
     
-  /**
-   * Binds custom inner-tab events.
-   */
-  ChiselchatUI.prototype._bindForTabControls = function() {
-    var self = this;
-
-    // Handle click of tab close button.
-    $(document).delegate('[data-event="chiselchat-close-tab"]', 'click', function(event) {
-      var roomId = $(this).closest('[data-room-id]').data('room-id');
-      self._chat.leaveRoom(roomId);
-      return false;
-    });
-      
-    // Handle toggle of pane size
-    $(document).delegate('[data-event="chiselchat-toggle-pane-size"]', 'click', function(event) {
-      if (self.fullScreenTab) {
-          self.fullScreenTab = false;
-          $(this).closest('[data-room-id]').removeClass('fullscreen');
-      }
-      else {
-          $(this).closest('[data-room-id]').addClass('fullscreen');
-          self.fullScreenTab = true;
-      }
-      $(window).trigger('resize');
-      return false;
-    });
-  };
-
   /**
    * Binds room list tab to populate room list on-demand.
    */
@@ -746,7 +717,8 @@
             }
          
       };
-
+      
+      // Click on tab 
     $(document).delegate('[data-toggle="tab"]', 'click', function(event) {
       event.preventDefault();
       var $el = $(this);
@@ -757,6 +729,37 @@
            show($el);
        }
     });
+
+    // Handle minimize pane
+    $(document).delegate('[data-event="chiselchat-minimize-pane"]', 'click', function(event) {
+        var roomId = $(this).closest('[data-room-id]').data('room-id');
+        hide($('#chiselchat-tab-list li[data-room-id="'+roomId+'"] a'));
+      return false;
+    });
+  
+
+    // Handle click of tab close button.
+    $(document).delegate('[data-event="chiselchat-close-tab"]', 'click', function(event) {
+      var roomId = $(this).closest('[data-room-id]').data('room-id');
+      self._chat.leaveRoom(roomId);
+      return false;
+    });
+      
+    // Handle toggle of pane size
+    $(document).delegate('[data-event="chiselchat-toggle-pane-size"]', 'click', function(event) {
+      if (self.fullScreenTab) {
+          self.fullScreenTab = false;
+          $(this).closest('[data-room-id]').removeClass('fullscreen');
+      }
+      else {
+          $(this).closest('[data-room-id]').addClass('fullscreen');
+          self.fullScreenTab = true;
+      }
+      $(window).trigger('resize');
+      return false;
+    });
+      
+      
   };
 
 
