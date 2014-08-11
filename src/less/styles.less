@@ -1,9 +1,18 @@
 @charset "UTF-8";
+<<<<<<< HEAD
 @main-background-color: #fff;
 @main-text-color: #000;
 @controls-text-color: #aaa;
 @message-text-color: #000;
 @highlight-background-color: #ffcc00;
+=======
+@main-background-color: #333;
+@main-text-color: #ccc;
+@message-text-color: #fff;
+@link-text-color: #77aaff;
+@controls-text-color: lighten(@main-background-color,20%);
+@highlight-background-color: #aaa;
+>>>>>>> master
 @highlight-text-color: #000;
 @tab-background-color: #0ba2f2;
 @tab-text-color: #111111;
@@ -108,9 +117,17 @@
     color: @main-text-color;
     text-decoration: none;
     position: absolute;
-    top: 2;
-    right: 5;
+    top: 2px;
+    right: 5px;
     font-size: 110%;
+}
+#chiselchat-tab-content .chiselchat-tab-pane .chiselchat-toggle-pane-size {
+    color: @main-text-color;
+    text-decoration: none;
+    position: absolute;
+    top: 6px;
+    right: 20px;
+    font-size: 130%;
 }
 #chiselchat-tab-content .chiselchat-tab-pane {
     position: fixed;
@@ -249,14 +266,19 @@
 #chiselchat #chiselchat-presence-pane.active, #chiselchat #chiselchat-room-pane.active {
     display: block;
 }
-@media (max-width: 767px) {
-    #chiselchat-tab-content .chiselchat-tab-pane.active,#chiselchat-tab-content #chiselchat-presence-pane.active,#chiselchat-tab-content #chiselchat-room-pane.active {
-        width: 98%;
-        right: 5px;
-        height: 95%;
-    }
+#chiselchat-tab-content .chiselchat-tab-pane.active.fullscreen,#chiselchat-tab-content #chiselchat-presence-pane.active.fullscreen,#chiselchat-tab-content #chiselchat-room-pane.active.fullscreen {
+        width: 99%;
+        height: 96%;
 }
-
+#chiselchat-tab-content .chiselchat-tab-pane.fullscreen .chiselchat-tab-pane-menu {
+    width: 25%;
+}
+#chiselchat-tab-content .chiselchat-tab-pane.fullscreen .chiselchat-history {
+    width: 75%;
+}
+#chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message .chiselchat-message-content a {
+    color: @link-text-color;
+}
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity {
     text-align: center;
     font-style: italic;
@@ -271,4 +293,10 @@
     display: inline;
     padding: 0;
     margin: 0;
+}
+@media (max-width: 960px) {
+    #chiselchat-tab-content .chiselchat-tab-pane.active,#chiselchat-tab-content #chiselchat-presence-pane.active,#chiselchat-tab-content #chiselchat-room-pane.active {
+        width: 98%;
+        height: 95%;
+    }
 }
