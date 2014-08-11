@@ -157,15 +157,8 @@
       });              
 
       // Listen for new rooms being created
-      var first_room_added_after_load = true;
-      this._roomRef.endAt().limit(1).on('child_added', function(snapshot){
-          if (first_room_added_after_load) { // we want to skip the first room, because it will already exist
-              first_room_added_after_load = false;
-              return;
-          }
-          else {
-              this._onCreateRoom(snapshot);
-          }
+      this._roomRef.startAt(Date.now()).on('child_added', function(snapshot){
+        this._onCreateRoom(snapshot);
       }, this);
 
       self._roomRef.on('child_changed',function(snapshot, prevChildName) {
@@ -372,7 +365,7 @@
       name: roomName,
       type: roomType || 'public',
       createdByUserId: this._userId,
-      createdAt: Firebase.ServerValue.TIMESTAMP
+      '.priority': Firebase.ServerValue.TIMESTAMP
     };
 
     if (roomType === 'private') {
