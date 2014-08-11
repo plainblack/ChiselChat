@@ -2,6 +2,7 @@
 @main-background-color: #333;
 @main-text-color: #ccc;
 @message-text-color: #fff;
+@link-text-color: #77aaff;
 @controls-text-color: lighten(@main-background-color,20%);
 @highlight-background-color: #aaa;
 @highlight-text-color: #000;
@@ -267,13 +268,9 @@
 #chiselchat-tab-content .chiselchat-tab-pane.fullscreen .chiselchat-history {
     width: 75%;
 }
-@media (max-width: 960px) {
-    #chiselchat-tab-content .chiselchat-tab-pane.active,#chiselchat-tab-content #chiselchat-presence-pane.active,#chiselchat-tab-content #chiselchat-room-pane.active {
-        width: 98%;
-        height: 95%;
-    }
+#chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message .chiselchat-message-content a {
+    color: @link-text-color;
 }
-
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-activity {
     text-align: center;
     font-style: italic;
@@ -288,4 +285,10 @@
     display: inline;
     padding: 0;
     margin: 0;
+}
+@media (max-width: 960px) {
+    #chiselchat-tab-content .chiselchat-tab-pane.active,#chiselchat-tab-content #chiselchat-presence-pane.active,#chiselchat-tab-content #chiselchat-room-pane.active {
+        width: 98%;
+        height: 95%;
+    }
 }
