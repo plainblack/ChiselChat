@@ -133,8 +133,16 @@
             func : function(message,chatui) {
                 var name = message.content.replace(/^\/topic\s+/,'');
                 if (message.content.match(/\w+/)) {
-                    chatui._chat._roomRef.child(message.roomId).child('name').set(name);
-                    chatui._chat.sendMessage(message.roomId, 'changed the topic to "'+name+'".', 'activity');
+                    var roomRef = chatui._chat._roomRef.child(message.roomId);
+                    roomRef.transaction(function(currentData) {
+                        if (currentData.type == 'official') {
+                            chatui.error('Cannot modify the topic of an official room.');
+                        }
+                        else {
+                            roomRef.child('name').set(name);
+                            chatui._chat.sendMessage(message.roomId, 'changed the topic to "'+name+'".', 'activity');
+                        }
+                    });
                 }
                 message.type = 'command';
             },
