@@ -973,9 +973,6 @@ ChiselchatUI.prototype.executeCommands = function(message) {
       $messages.scrollTop($messages[0].scrollHeight);
     });
 
-    // Update the room listing to reflect that we're now in the room.
-    this.$roomList.children('[data-room-id=' + roomId + ']').children('a').addClass('highlight');
-
     // Sort each item in the user list alphabetically on click of the button.
     $('#chiselchat-btn-room-user-list-' + roomId).bind('click', function() {
       self.sortListLexicographically('#chiselchat-room-user-list-' + roomId);
@@ -1027,9 +1024,6 @@ ChiselchatUI.prototype.executeCommands = function(message) {
     if (tab_is_active) {
         this.$tabList.find('[data-toggle=tab]').first().trigger('click');
     }
-
-    // Update the room listing to reflect that we're now in the room.
-    this.$roomList.children('[data-room-id=' + roomId + ']').children('a').removeClass('highlight');
   };
 
   /**
