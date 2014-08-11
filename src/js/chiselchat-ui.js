@@ -154,7 +154,6 @@
 
     _bindUIEvents: function() {
       // Chat-specific custom interactions and functionality.
-      this._bindForHeightChange();
       this._bindForTabControls();
       this._bindForRoomList();
       this._bindForUserRoomList();
@@ -166,7 +165,6 @@
 
       // Generic, non-chat-specific interactive elements.
       this._setupTabs();
-      this._setupDropdowns();
       this._bindTextInputFieldLimits();
     },
 
@@ -400,25 +398,7 @@
     });
   };
 
-  /**
-   * Binds to height changes in the surrounding div.
-   */
-  ChiselchatUI.prototype._bindForHeightChange = function() {
-    var self = this,
-        $el = $(this._el),
-        lastHeight = null;
-
-    setInterval(function() {
-      var height = $el.height();
-      if (height != lastHeight) {
-        lastHeight = height;
-        $('.chat').each(function(i, el) {
-
-        });
-      }
-    }, 500);
-  };
-
+    
   /**
    * Binds custom inner-tab events.
    */
@@ -437,17 +417,19 @@
       if (self.fullScreenTab) {
           self.fullScreenTab = false;
           $(this).closest('[data-room-id]').removeClass('fullscreen');
+          $(window).trigger('resize');
       }
       else {
           $(this).closest('[data-room-id]').addClass('fullscreen');
           self.fullScreenTab = true;
+          $(window).trigger('resize');
       }
       return false;
     });
   };
 
   /**
-   * Binds room list dropdown to populate room list on-demand.
+   * Binds room list tab to populate room list on-demand.
    */
   ChiselchatUI.prototype._bindForRoomList = function() {
     var self = this;
@@ -494,12 +476,12 @@
   };
 
   /**
-   * Binds user list dropdown per room to populate user list on-demand.
+   * Binds user list  per room to populate user list on-demand.
    */
   ChiselchatUI.prototype._bindForUserRoomList = function() {
     var self = this;
 
-    // Upon click of the dropdown, autofocus the input field and trigger list population.
+    // Upon click of the button, autofocus the input field and trigger list population.
     $(document).delegate('[data-event="chiselchat-user-room-list-btn"]', 'click', function(event) {
       event.stopPropagation();
 
@@ -524,7 +506,7 @@
   };
 
   /**
-   * Binds user search buttons, dropdowns, and input fields for searching all
+   * Binds user search buttons and input fields for searching all
    * active users currently in chat.
    */
   ChiselchatUI.prototype._bindForUserSearch = function() {
@@ -580,7 +562,7 @@
     $(document).delegate('[data-event="chiselchat-user-search"]', 'click', handleUserSearchSubmit);
     $(document).delegate('#chiselchat-user-search-form', 'submit', handleUserSearchSubmit);
 
-    // Upon click of the dropdown, autofocus the input field and trigger list population.
+    // Upon click of the field autofocus the input field and trigger list population.
     $(document).delegate('#chiselchat-presence-tab', 'click', function(event) {
       event.stopPropagation();
       var $input = $('#chiselchat-user-search-form').find('input');
@@ -677,7 +659,7 @@
 
 
   /**
-   * Binds to room dropdown button, menu items, and create room button.
+   * Binds to room button, menu items, and create room button.
    */
   ChiselchatUI.prototype._bindForRoomListing = function() {
     var self = this,
@@ -715,7 +697,7 @@
         },
         show = function($el) {
           var $this = $el,
-              $ul = $this.closest('ul:not(.dropdown-menu)'),
+              $ul = $this.closest('ul'),
               selector = $this.attr('data-target'),
               previous = $ul.find('.active:last a')[0],
               $target,
@@ -745,23 +727,19 @@
               relatedTarget: previous
             }); 
           });
+          $target.find('.chiselchat-history').css('height',  ($target.height() - 75) + 'px');
+
         },
         activate = function (element, container, callback) {
           var $active = container.find('> .active');
 
             $active
               .removeClass('active')
-              .removeClass('fullscreen')
-              .find('> .dropdown-menu > .active')
-              .removeClass('active');
+              .removeClass('fullscreen');
 
             element.addClass('active');
             if (self.fullScreenTab) {
                 element.addClass('fullscreen');
-            }
-
-            if (element.parent('.dropdown-menu')) {
-              element.closest('li.dropdown').addClass('active');
             }
 
             if (callback) {
@@ -782,57 +760,6 @@
     });
   };
 
-  /**
-   * A stripped-down version of bootstrap-dropdown.js.
-   *
-   * Original bootstrap-dropdown.js Copyright 2012 Twitter, Inc., licensed under the Apache v2.0
-   */
-  ChiselchatUI.prototype._setupDropdowns = function() {
-    var self = this,
-        toggle = '[data-toggle=dropdown]',
-        toggleDropdown = function(event) {
-          var $this = $(this),
-              $parent = getParent($this),
-              isActive = $parent.hasClass('open');
-
-          if ($this.is('.disabled, :disabled')) return;
-
-          clearMenus();
-
-          if (!isActive) {
-            $parent.toggleClass('open');
-          }
-
-          $this.focus();
-
-          return false;
-        },
-        clearMenus = function() {
-          $('[data-toggle=dropdown]').each(function() {
-            getParent($(this)).removeClass('open');
-          });
-        },
-        getParent = function($this) {
-          var selector = $this.attr('data-target'),
-              $parent;
-
-          if (!selector) {
-            selector = $this.attr('href');
-            selector = selector && /#/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '');
-          }
-
-          $parent = selector && $(selector);
-
-          if (!$parent || !$parent.length) $parent = $this.parent();
-
-          return $parent;
-        };
-
-      $(document)
-        .bind('click', clearMenus)
-        .delegate('.dropdown-menu', 'click', function(event) { event.stopPropagation(); })
-        .delegate('[data-toggle=dropdown]', 'click', toggleDropdown);
-  };
 
   /**
    * Binds to any text input fields with data-provide='limit' and
@@ -1032,8 +959,8 @@ ChiselchatUI.prototype.executeCommands = function(message) {
     var tabListTemplate = ChiselchatDefaultTemplates["templates/tab-menu-item.html"];
     var $tab = $(tabListTemplate(room));
     this.$tabList.append($tab);
-      
-    $messages.css('height',  ($tabContent.height() - 75) + 'px');
+
+      $messages.css('height',  ($tabContent.height() - 75) + 'px');
       $(window).resize(function() {
           $messages.css('height',  ($tabContent.height() - 75) + 'px');
       });
@@ -1046,7 +973,7 @@ ChiselchatUI.prototype.executeCommands = function(message) {
     // Update the room listing to reflect that we're now in the room.
     this.$roomList.children('[data-room-id=' + roomId + ']').children('a').addClass('highlight');
 
-    // Sort each item in the user list alphabetically on click of the dropdown.
+    // Sort each item in the user list alphabetically on click of the button.
     $('#chiselchat-btn-room-user-list-' + roomId).bind('click', function() {
       self.sortListLexicographically('#chiselchat-room-user-list-' + roomId);
       return false;
