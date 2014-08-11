@@ -1017,12 +1017,16 @@ ChiselchatUI.prototype.executeCommands = function(message) {
 
     // Remove the inner tab content.
     this.$tabContent.find('[data-room-id=' + roomId + ']').remove();
-
+      
     // Remove the tab from the navigation menu.
-    this.$tabList.find('[data-room-id=' + roomId + ']').remove();
+    var tab = this.$tabList.find('[data-room-id=' + roomId + ']');
+    var tab_is_active = tab.hasClass('active');
+    tab.remove();
 
     // Automatically select the next tab if there is one.
-    this.$tabList.find('[data-toggle=tab]').first().trigger('click');
+    if (tab_is_active) {
+        this.$tabList.find('[data-toggle=tab]').first().trigger('click');
+    }
 
     // Update the room listing to reflect that we're now in the room.
     this.$roomList.children('[data-room-id=' + roomId + ']').children('a').removeClass('highlight');
