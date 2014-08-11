@@ -417,13 +417,12 @@
       if (self.fullScreenTab) {
           self.fullScreenTab = false;
           $(this).closest('[data-room-id]').removeClass('fullscreen');
-          $(window).trigger('resize');
       }
       else {
           $(this).closest('[data-room-id]').addClass('fullscreen');
           self.fullScreenTab = true;
-          $(window).trigger('resize');
       }
+      $(window).trigger('resize');
       return false;
     });
   };
@@ -963,6 +962,7 @@ ChiselchatUI.prototype.executeCommands = function(message) {
       $messages.css('height',  ($tabContent.height() - 75) + 'px');
       $(window).resize(function() {
           $messages.css('height',  ($tabContent.height() - 75) + 'px');
+          $messages.scrollTop($messages[0].scrollHeight);
       });
 
     // Attach on-shown event to move tab to front and scroll to bottom.
