@@ -23,6 +23,21 @@
   border-radius: @radius;
 }
 
+.border-radii(@topright, @bottomright, @bottomleft, @topleft) {
+  -webkit-border-top-right-radius: @topright;
+  -webkit-border-bottom-right-radius: @bottomright;
+  -webkit-border-bottom-left-radius: @bottomleft;
+  -webkit-border-top-left-radius: @topleft;
+  -moz-border-radius-topright: @topright;
+  -moz-border-radius-bottomright: @bottomright;
+  -moz-border-radius-bottomleft: @bottomleft;
+  -moz-border-radius-topleft: @topleft;
+  border-top-right-radius: @topright;
+  border-bottom-right-radius: @bottomright;
+  border-bottom-left-radius: @bottomleft;
+  border-top-left-radius: @topleft;
+}
+
 #chiselchat {
     font-family: sans-serif;
     font-size: 12px;
@@ -51,6 +66,7 @@
     position: relative;
     overflow: hidden;
     white-space: nowrap;
+    .border-radii(2px, 0, 0, 2px);
 }
 #chiselchat-tab-list li a {
     text-decoration: none;
@@ -94,6 +110,7 @@
     display: none;
 }
 #chiselchat-tab-content {
+    .border-radius(3px);
 }
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-title {
     color: @tab-text-color;
@@ -104,6 +121,7 @@
     font-weight: bold;
     z-index: 1000001;
     overflow: hidden;
+    .border-radii(3px, 0, 0, 3px);
 }
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-close-tab {
     color: @main-text-color;
@@ -137,6 +155,7 @@
     width: 50%;
     height: 50%;
     display: none;
+    .border-radius(3px);
 }
 
 #chiselchat-tab-content .chiselchat-tab-pane.active {
@@ -208,6 +227,7 @@
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message-content {
     margin-top: 3px;
     margin-left: 30px;
+    padding-right: 10px;
     font-size: 110%;
 }
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-user .chiselchat-anonymous {
@@ -239,6 +259,7 @@
     font-size: 110%;
     max-width: 100%;
     font-family: sans-serif;
+    .border-radius(10px);
 }
 #chiselchat #chiselchat-presence-pane, #chiselchat #chiselchat-room-pane {
     position: fixed;
