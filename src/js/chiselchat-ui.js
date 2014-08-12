@@ -154,7 +154,6 @@
 
     _bindUIEvents: function() {
       // Chat-specific custom interactions and functionality.
-      this._bindForTabControls();
       this._bindForRoomList();
       this._bindForUserRoomList();
       this._bindForUserSearch();
@@ -289,8 +288,11 @@
       if (invitation.status && invitation.status === 'accepted') {
         self.success(invitation.toUserName + ' accepted your invite.','Invitation Accepted');
         this._chat.getRoom(invitation.roomId, function(room) {
-          self.autoFocusTab = true;
-          self.attachTab(invitation.roomId, room.name);
+            var tab = $('#chiselchat-tab-list li[data-room-id="'+invitation.roomId+'"]');
+            if (!tab.length) {
+              self.autoFocusTab = true;
+              self.attachTab(invitation.roomId, room.name);
+            }
         });
       } else {
         self.error(invitation.toUserName + ' declined your invite.','Invitation Declined');
@@ -399,35 +401,6 @@
   };
 
     
-  /**
-   * Binds custom inner-tab events.
-   */
-  ChiselchatUI.prototype._bindForTabControls = function() {
-    var self = this;
-
-    // Handle click of tab close button.
-    $(document).delegate('[data-event="chiselchat-close-tab"]', 'click', function(event) {
-      var roomId = $(this).closest('[data-room-id]').data('room-id');
-      self._chat.leaveRoom(roomId);
-      return false;
-    });
-      
-    // Handle toggle of pane size
-    $(document).delegate('[data-event="chiselchat-toggle-pane-size"]', 'click', function(event) {
-      if (self.fullScreenTab) {
-          self.fullScreenTab = false;
-          $(this).closest('[data-room-id]').removeClass('fullscreen');
-          $(window).trigger('resize');
-      }
-      else {
-          $(this).closest('[data-room-id]').addClass('fullscreen');
-          self.fullScreenTab = true;
-          $(window).trigger('resize');
-      }
-      return false;
-    });
-  };
-
   /**
    * Binds room list tab to populate room list on-demand.
    */
@@ -747,7 +720,8 @@
             }
          
       };
-
+      
+      // Click on tab 
     $(document).delegate('[data-toggle="tab"]', 'click', function(event) {
       event.preventDefault();
       var $el = $(this);
@@ -758,6 +732,37 @@
            show($el);
        }
     });
+
+    // Handle minimize pane
+    $(document).delegate('[data-event="chiselchat-minimize-pane"]', 'click', function(event) {
+        var roomId = $(this).closest('[data-room-id]').data('room-id');
+        hide($('#chiselchat-tab-list li[data-room-id="'+roomId+'"] a, #chiselchat-room-tab a, #chiselchat-presence-tab a'));
+      return false;
+    });
+  
+
+    // Handle click of tab close button.
+    $(document).delegate('[data-event="chiselchat-close-tab"]', 'click', function(event) {
+      var roomId = $(this).closest('[data-room-id]').data('room-id');
+      self._chat.leaveRoom(roomId);
+      return false;
+    });
+      
+    // Handle toggle of pane size
+    $(document).delegate('[data-event="chiselchat-toggle-pane-size"]', 'click', function(event) {
+      if (self.fullScreenTab) {
+          self.fullScreenTab = false;
+          $(this).closest('.chiselchat-tab-pane').removeClass('fullscreen');
+      }
+      else {
+          $(this).closest('.chiselchat-tab-pane').addClass('fullscreen');
+          self.fullScreenTab = true;
+      }
+      $(window).trigger('resize');
+      return false;
+    });
+      
+      
   };
 
 
@@ -963,6 +968,7 @@ ChiselchatUI.prototype.executeCommands = function(message) {
       $messages.css('height',  ($tabContent.height() - 75) + 'px');
       $(window).resize(function() {
           $messages.css('height',  ($tabContent.height() - 75) + 'px');
+          $messages.scrollTop($messages[0].scrollHeight);
       });
 
     // Attach on-shown event to move tab to front and scroll to bottom.
@@ -970,23 +976,21 @@ ChiselchatUI.prototype.executeCommands = function(message) {
       $messages.scrollTop($messages[0].scrollHeight);
     });
 
-    // Update the room listing to reflect that we're now in the room.
-    this.$roomList.children('[data-room-id=' + roomId + ']').children('a').addClass('highlight');
-
     // Sort each item in the user list alphabetically on click of the button.
     $('#chiselchat-btn-room-user-list-' + roomId).bind('click', function() {
       self.sortListLexicographically('#chiselchat-room-user-list-' + roomId);
       return false;
     });
       
-    // set message count to 0
-    self.resetNewMessageCount(roomId); 
-
     // Automatically select the new tab.
     if (self.autoFocusTab) {
         this.focusTab(roomId);
         self.autoFocusTab = false;
     }
+      else {
+        // set message count to 0
+        self.resetNewMessageCount(roomId); 
+      }
   };
 
   /**
@@ -1014,15 +1018,16 @@ ChiselchatUI.prototype.executeCommands = function(message) {
 
     // Remove the inner tab content.
     this.$tabContent.find('[data-room-id=' + roomId + ']').remove();
-
+      
     // Remove the tab from the navigation menu.
-    this.$tabList.find('[data-room-id=' + roomId + ']').remove();
+    var tab = this.$tabList.find('[data-room-id=' + roomId + ']');
+    var tab_is_active = tab.hasClass('active');
+    tab.remove();
 
     // Automatically select the next tab if there is one.
-    this.$tabList.find('[data-toggle=tab]').first().trigger('click');
-
-    // Update the room listing to reflect that we're now in the room.
-    this.$roomList.children('[data-room-id=' + roomId + ']').children('a').removeClass('highlight');
+    if (tab_is_active) {
+        this.$tabList.find('[data-toggle=tab]').first().trigger('click');
+    }
   };
 
   /**
