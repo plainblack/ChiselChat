@@ -736,7 +736,7 @@
     // Handle minimize pane
     $(document).delegate('[data-event="chiselchat-minimize-pane"]', 'click', function(event) {
         var roomId = $(this).closest('[data-room-id]').data('room-id');
-        hide($('#chiselchat-tab-list li[data-room-id="'+roomId+'"] a'));
+        hide($('#chiselchat-tab-list li[data-room-id="'+roomId+'"] a, #chiselchat-room-tab a, #chiselchat-presence-tab a'));
       return false;
     });
   
@@ -752,10 +752,10 @@
     $(document).delegate('[data-event="chiselchat-toggle-pane-size"]', 'click', function(event) {
       if (self.fullScreenTab) {
           self.fullScreenTab = false;
-          $(this).closest('[data-room-id]').removeClass('fullscreen');
+          $(this).closest('.chiselchat-tab-pane').removeClass('fullscreen');
       }
       else {
-          $(this).closest('[data-room-id]').addClass('fullscreen');
+          $(this).closest('.chiselchat-tab-pane').addClass('fullscreen');
           self.fullScreenTab = true;
       }
       $(window).trigger('resize');
