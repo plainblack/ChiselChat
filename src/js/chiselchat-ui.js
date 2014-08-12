@@ -289,11 +289,7 @@
         self.success(invitation.toUserName + ' accepted your invite.','Invitation Accepted');
         this._chat.getRoom(invitation.roomId, function(room) {
             var tab = $('#chiselchat-tab-list li[data-room-id="'+invitation.roomId+'"]');
-            if (tab.length) {
-                if (!tab.hasClass('active')) {
-                    self.focusTab(invitation.roomId);
-                }
-            } else {
+            if (!tab.length) {
               self.autoFocusTab = true;
               self.attachTab(invitation.roomId, room.name);
             }
@@ -986,14 +982,15 @@ ChiselchatUI.prototype.executeCommands = function(message) {
       return false;
     });
       
-    // set message count to 0
-    self.resetNewMessageCount(roomId); 
-
     // Automatically select the new tab.
     if (self.autoFocusTab) {
         this.focusTab(roomId);
         self.autoFocusTab = false;
     }
+      else {
+        // set message count to 0
+        self.resetNewMessageCount(roomId); 
+      }
   };
 
   /**
