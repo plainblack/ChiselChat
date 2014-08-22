@@ -341,6 +341,10 @@
       self._chat.resumeSession();
     });
   };
+    
+  ChiselchatUI.prototype.unsetUser = function() {
+      self._chat.unsetUser();
+  };
 
   /**
    * Exposes internal chat bindings via this external interface.
