@@ -315,6 +315,29 @@
       }
     });
   };
+    
+    
+ // Uninit everything if a user logs out in a SPWA
+  Chiselchat.prototype.unsetUser = function() {
+        var self = this;
+        self._userRef.child('rooms').once('value', function(snapshot) {
+              var rooms = snapshot.val();
+              for (var roomId in rooms) {
+                self.leaveRoom(rooms[roomId].id);
+              }
+            });
+        self._firebase.root().child('.info/authenticated').off();
+        self._user = null;
+        self._userId = null;
+        self._userName = null;
+        self._isModerator = false;
+        self._avatarUri   = null;
+        self._profileUri  = null;
+        self._sessionId = null;
+        self._userRef = null;
+  };
+        
+    // User-specific instance variables.
 
   //Load user data from firebase for display in messages and presence.
   //After the data is found

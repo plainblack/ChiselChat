@@ -341,6 +341,10 @@
       self._chat.resumeSession();
     });
   };
+    
+  ChiselchatUI.prototype.unsetUser = function() {
+      self._chat.unsetUser();
+  };
 
   /**
    * Exposes internal chat bindings via this external interface.
@@ -947,14 +951,30 @@ ChiselchatUI.prototype.executeCommands = function(message) {
           roomId : roomId
       };
       if ((e.which === 13) && (message.content !== '')) {
-        $textarea.val('');
-        self.executeCommands(message);
-        if (message.type == 'activity' || message.type == 'default') {
-            self._chat.sendMessage(message.roomId, message.content, message.type, function(error) {
-                if (error) {
-                    self.error('You are not allowed to post messages right now.');
-                }
-            });
+        if (e.ctrlKey) {
+            var val = this.value;
+            if (typeof this.selectionStart == "number" && typeof this.selectionEnd == "number") {
+                var start = this.selectionStart;
+                this.value = val.slice(0, start) + "\n" + val.slice(this.selectionEnd);
+                this.selectionStart = this.selectionEnd = start + 1;
+            } else if (document.selection && document.selection.createRange) {
+                this.focus();
+                var range = document.selection.createRange();
+                range.text = "\r\n";
+                range.collapse(false);
+                range.select();
+            }
+        }
+        else {
+            $textarea.val('');
+            self.executeCommands(message);
+            if (message.type == 'activity' || message.type == 'default') {
+                self._chat.sendMessage(message.roomId, message.content, message.type, function(error) {
+                    if (error) {
+                        self.error('You are not allowed to post messages right now.');
+                    }
+                });
+            }
         }
         return false;
       }
@@ -1067,6 +1087,7 @@ ChiselchatUI.prototype.executeCommands = function(message) {
       }
     }).join(' ');
     message.message = self.trimWithEllipsis(message.message, self.maxLengthMessage);
+    message.message = message.message.replace(/\n/g,'<br>');
 
     // Populate and render the message template.
     var template = ChiselchatDefaultTemplates["templates/message.html"];
