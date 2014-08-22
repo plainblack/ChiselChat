@@ -296,11 +296,11 @@
       if (snapshot.val() === true) {
         self._firebase.root().child('.info/authenticated').off();
 
-        self._userId      = userObj.userId.toString();
-        self._userName    = userObj.userName.toString();
+        self._userId      = userObj.userId;
+        self._userName    = userObj.userName;
         self._isModerator = userObj.isModerator;
-        self._avatarUri   = userObj.avatarUri.toString();
-        self._profileUri  = userObj.profileUri.toString();
+        self._avatarUri   = userObj.avatarUri;
+        self._profileUri  = userObj.profileUri;
         if (self._isModerator === true) {
             self._moderatorsRef.child(self._userId).set(true);
             self._moderatorsRef.child(self._userId).onDisconnect().remove();
