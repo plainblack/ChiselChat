@@ -50,6 +50,7 @@
     this.maxLengthRoomName = 16;
     this.maxLengthMessage = 1000;
     this.maxUserSearchResults = 100;
+    this.messageHistoryScrollHeight = 80;
 
     // Define some useful regexes.
     this.urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
@@ -704,7 +705,7 @@
               relatedTarget: previous
             }); 
           });
-          $target.find('.chiselchat-history').css('height',  ($target.height() - 75) + 'px');
+          $target.find('.chiselchat-history').css('height',  ($target.height() - self.messageHistoryScrollHeight) + 'px');
 
         },
         activate = function (element, container, callback) {
@@ -985,9 +986,9 @@ ChiselchatUI.prototype.executeCommands = function(message) {
     var $tab = $(tabListTemplate(room));
     this.$tabList.append($tab);
 
-      $messages.css('height',  ($tabContent.height() - 75) + 'px');
+      $messages.css('height',  ($tabContent.height() - self.messageHistoryScrollHeight) + 'px');
       $(window).resize(function() {
-          $messages.css('height',  ($tabContent.height() - 75) + 'px');
+          $messages.css('height',  ($tabContent.height() - self.messageHistoryScrollHeight) + 'px');
           $messages.scrollTop($messages[0].scrollHeight);
       });
 
