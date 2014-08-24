@@ -953,7 +953,7 @@ ChiselchatUI.prototype.executeCommands = function(message) {
           roomId : roomId
       };
       if ((e.which === 13) && (message.content !== '')) {
-        if (e.ctrlKey) {
+        if (e.shiftKey) {
             var val = this.value;
             if (typeof this.selectionStart == "number" && typeof this.selectionEnd == "number") {
                 var start = this.selectionStart;
