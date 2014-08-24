@@ -1,10 +1,8 @@
 <li data-room-type='<%- type %>' data-room-id='<%- id %>' data-room-name='<%- name %>'>
-  <a href='javascript: void(0);' class='chiselchat-room-list-item <% if (isRoomOpen) { %> highlight <% } %>'>
-    <span title='<%- name %>'><%- name %></span>
-  </a> 
+  <a href='javascript: void(0);' class='chiselchat-room-list-item <% if (isRoomOpen) { %> highlight <% } %>'><span title='<%- name %>'><%- name %></span></a> 
   <% if (type != 'official') { %>
       <% if (userIsModerator) { %>
-        <a href='javascript: void(0);' class='chiselchat-delete-room' title='Remove Room'>&times;</a>
+        <span class='chiselchat-controls chiselchat-delete-room'><a href='javascript: void(0);' title='Remove Room'>&times;</a></span>
       <% } %>
   <% } %>
 </li>

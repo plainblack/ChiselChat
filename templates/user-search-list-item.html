@@ -1,10 +1,10 @@
 <li data-user-id='<%- id %>' data-user-name='<%- name %>'>
-  <a href='javascript: void(0);'>
+  
     <% if (disableActions) { %>
-      <span title='<%- name %>'><%- name %></span>
+      <a href="javascript: void(0);" class='chiselchat-user-list-item'><span title='<%- name %>'><%- name %></span></a>
     <% } else { %>
-      <span data-event='chiselchat-user-chat' title='<%- name %>'><%- name %></span>
-      <span data-event='chiselchat-user-chat' title='Invite to Private Chat'>+</span>
+      <span title='<%- name %>'><%- name %></span>
+      <span data-event='chiselchat-user-chat' title='Invite to Private Chat' class='chiselchat-controls'><a href='javascript: void(0);'>PM</a></span>
     <% } %>
   </a>
 </li>
