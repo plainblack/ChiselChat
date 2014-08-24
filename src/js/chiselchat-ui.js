@@ -50,6 +50,7 @@
     this.maxLengthRoomName = 16;
     this.maxLengthMessage = 1000;
     this.maxUserSearchResults = 100;
+    this.messageHistoryScrollHeight = 80;
 
     // Define some useful regexes.
     this.urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
@@ -225,7 +226,7 @@
     _onCreateRoom: function(room) {
         self = this;
         if (room.type == 'public') {
-            self.info('A new public chatroom called "<a href="javascript: void(0)" data-event="chiselchat-room-notification" data-room-id="'+room.id+'" data-room-name="'+room.name+'">'+room.name+'</a>" has been created.');   
+            self.info('A new public chatroom called "<a href="javascript: void(0)" data-event="chiselchat-room-notification" data-room-id="'+room.id+'" data-room-name="'+room.name+'" class="alert-link">'+room.name+'</a>" has been created.','New Public Room');   
         }
     },            
       
@@ -343,7 +344,10 @@
   };
     
   ChiselchatUI.prototype.unsetUser = function() {
+      var self = this;
       self._chat.unsetUser();
+      self._user = null;
+      self._roomQueue = [];
   };
 
   /**
@@ -430,7 +434,7 @@
           };
         
           deleteRoom = function() {
-            var parent = $(this).parent(),
+            var parent = $(this).closest('li'),
                 roomId = parent.data('room-id');
             self._chat.removeRoom(roomId);
             parent.remove();
@@ -704,7 +708,7 @@
               relatedTarget: previous
             }); 
           });
-          $target.find('.chiselchat-history').css('height',  ($target.height() - 75) + 'px');
+          $target.find('.chiselchat-history').css('height',  ($target.height() - self.messageHistoryScrollHeight) + 'px');
 
         },
         activate = function (element, container, callback) {
@@ -792,9 +796,9 @@ ChiselchatUI.prototype.confirm = function(message, title, confirm, cancel) {
     (new PNotify({
     title: title || 'Confirmation Needed',
     text: message,
-    addclass: 'alert-info',
+    addclass: 'chiselchat-alert-info',
     type: 'info',
-    icon: 'glyphicon glyphicon-question-sign',
+    icon: 'chiselchat-glyphicon chiselchat-glyphicon-question-sign',
     hide: false,
     confirm: {
         confirm: true
@@ -813,14 +817,12 @@ ChiselchatUI.prototype.confirm = function(message, title, confirm, cancel) {
     });
 }; 
     
-    
-    
 ChiselchatUI.prototype.warn = function(message, title) {
     new PNotify({
-        addclass: 'alert-warning',
+        addclass: 'chiselchat-alert',
         title: title || 'Warning',
         text: message,
-        icon: 'glyphicon glyphicon-exclamation-sign',
+        icon: 'chiselchat-glyphicon chiselchat-glyphicon-exclamation-sign',
         opacity: 0.95,
         history: false,
         sticker: false
@@ -829,11 +831,11 @@ ChiselchatUI.prototype.warn = function(message, title) {
     
 ChiselchatUI.prototype.info = function(message, title) {
     new PNotify({
-        addclass: 'alert-info',
+        addclass: 'chiselchat-alert',
         type: 'info',
         title: title || 'Info',
         text: message,
-        icon: 'glyphicon glyphicon-info-sign',
+        icon: 'chiselchat-glyphicon chiselchat-glyphicon-info-sign',
         opacity: 0.95,
         history: false,
         sticker: false
@@ -842,11 +844,11 @@ ChiselchatUI.prototype.info = function(message, title) {
     
 ChiselchatUI.prototype.error = function(message, title) {
     new PNotify({
-        addclass: 'alert-danger',
+        addclass: 'chiselchat-alert',
         type: 'error',
         title: title || 'Error',
         text: message,
-        icon: 'glyphicon glyphicon-warning-sign',
+        icon: 'chiselchat-glyphicon chiselchat-glyphicon-warning-sign',
         opacity: 0.95,
         history: false,
         sticker: false
@@ -855,11 +857,11 @@ ChiselchatUI.prototype.error = function(message, title) {
 
 ChiselchatUI.prototype.success = function(message, title) {
     new PNotify({
-        addclass: 'alert-success',
+        addclass: 'chiselchat-alert',
         type: 'success',
         title: title || 'Success',
         text: message,
-        icon: 'glyphicon glyphicon-ok-sign',
+        icon: 'chiselchat-glyphicon chiselchat-glyphicon-ok-sign',
         opacity: 0.95,
         history: false,
         sticker: false
@@ -951,7 +953,7 @@ ChiselchatUI.prototype.executeCommands = function(message) {
           roomId : roomId
       };
       if ((e.which === 13) && (message.content !== '')) {
-        if (e.ctrlKey) {
+        if (e.shiftKey) {
             var val = this.value;
             if (typeof this.selectionStart == "number" && typeof this.selectionEnd == "number") {
                 var start = this.selectionStart;
@@ -985,9 +987,9 @@ ChiselchatUI.prototype.executeCommands = function(message) {
     var $tab = $(tabListTemplate(room));
     this.$tabList.append($tab);
 
-      $messages.css('height',  ($tabContent.height() - 75) + 'px');
+      $messages.css('height',  ($tabContent.height() - self.messageHistoryScrollHeight) + 'px');
       $(window).resize(function() {
-          $messages.css('height',  ($tabContent.height() - 75) + 'px');
+          $messages.css('height',  ($tabContent.height() - self.messageHistoryScrollHeight) + 'px');
           $messages.scrollTop($messages[0].scrollHeight);
       });
 

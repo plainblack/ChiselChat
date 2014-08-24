@@ -296,11 +296,11 @@
       if (snapshot.val() === true) {
         self._firebase.root().child('.info/authenticated').off();
 
-        self._userId      = userObj.userId.toString();
-        self._userName    = userObj.userName.toString();
+        self._userId      = userObj.userId;
+        self._userName    = userObj.userName;
         self._isModerator = userObj.isModerator;
-        self._avatarUri   = userObj.avatarUri.toString();
-        self._profileUri  = userObj.profileUri.toString();
+        self._avatarUri   = userObj.avatarUri;
+        self._profileUri  = userObj.profileUri;
         if (self._isModerator === true) {
             self._moderatorsRef.child(self._userId).set(true);
             self._moderatorsRef.child(self._userId).onDisconnect().remove();
@@ -308,8 +308,8 @@
         self._userRef = self._firebase.child('users').child(self._userId);
         self._loadUserMetadata(function() {
           root.setTimeout(function() {
-            callback(self._user);
             self._setupDataEvents();
+            callback(self._user);
           }, 0);
         });
       }
@@ -321,20 +321,24 @@
   Chiselchat.prototype.unsetUser = function() {
         var self = this;
         self._userRef.child('rooms').once('value', function(snapshot) {
-              var rooms = snapshot.val();
-              for (var roomId in rooms) {
+            var rooms = snapshot.val();
+            for (var roomId in rooms) {
                 self.leaveRoom(rooms[roomId].id);
-              }
-            });
-        self._firebase.root().child('.info/authenticated').off();
-        self._user = null;
-        self._userId = null;
-        self._userName = null;
-        self._isModerator = false;
-        self._avatarUri   = null;
-        self._profileUri  = null;
-        self._sessionId = null;
-        self._userRef = null;
+            }
+            self._firebase.root().child('.info/connected').off();
+            self._userRef.child('invites').off();
+            self._userRef.child('notifications').off();
+            self._userRef.off();
+            self._firebase.root().child('.info/authenticated').off();
+            self._user = null;
+            self._userId = null;
+            self._userName = null;
+            self._isModerator = false;
+            self._avatarUri   = null;
+            self._profileUri  = null;
+            self._sessionId = null;
+            self._userRef = null;
+        });
   };
         
     // User-specific instance variables.

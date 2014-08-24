@@ -40,6 +40,8 @@
 
 #chiselchat {
     font-family: sans-serif;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
     font-size: 12px;
     z-index: 2000000000;
     position: relative;
@@ -119,8 +121,9 @@
     color: @tab-text-color;
     background-color: @tab-background-color;
     margin: 0;
+    display: block;
     padding: 5px;
-    height: 24px;
+    height: 13px;
     font-weight: bold;
     z-index: 1000001;
     overflow: hidden;
@@ -212,7 +215,7 @@
 #chiselchat-tab-content .chiselchat-tab-pane span.chiselchat-controls {
     display: inline;
 }
-#chiselchat-tab-content .chiselchat-tab-pane span.chiselchat-controls a, #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message .chiselchat-message-content span.chiselchat-controls a  {
+#chiselchat-user-search span.chiselchat-controls a, #chiselchat-tab-content .chiselchat-tab-pane span.chiselchat-controls a, #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-history .chiselchat-message .chiselchat-message-content span.chiselchat-controls a  {
     font-size: 80%;
     padding: 1px;
     color: @controls-text-color;   
@@ -245,6 +248,10 @@
     left: 0;
 }
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-say textarea {
+    margin: 0;
+    font-family: inherit;
+    overflow: auto;
+    vertical-align: top;
     color: @input-text-color;
     border: 5px solid @main-background-color;
     background-color: @input-background-color;
@@ -275,9 +282,12 @@
 #chiselchat #chiselchat-room-pane #chiselchat-room-list, #chiselchat #chiselchat-presence-pane #chiselchat-user-search {
     padding-left: 5px;
 }
-
-#chiselchat #chiselchat-presence-pane a, #chiselchat #chiselchat-room-pane a {
+#chiselchat #chiselchat-room-pane #chiselchat-room-list li, #chiselchat #chiselchat-presence-pane #chiselchat-user-search li {
+    padding-bottom: 5px;
+}
+#chiselchat #chiselchat-presence-pane .chiselchat-user-list-item, #chiselchat #chiselchat-room-pane .chiselchat-room-list-item {
     color: @main-text-color;
+    text-decoration: none;
 }
 #chiselchat #chiselchat-presence-pane.active, #chiselchat #chiselchat-room-pane.active {
     display: block;
@@ -339,4 +349,842 @@
         float: none;
         height: 100%;
     }
+}
+
+// this stuff is needed from bootstrap to display pnotify messages properly
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('//netdna.bootstrapcdn.com/bootstrap/3.0.3/fonts/glyphicons-halflings-regular.eot');
+  src: url('//netdna.bootstrapcdn.com/bootstrap/3.0.3/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('//netdna.bootstrapcdn.com/bootstrap/3.0.3/fonts/glyphicons-halflings-regular.woff') format('woff'), url('//netdna.bootstrapcdn.com/bootstrap/3.0.3/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('//netdna.bootstrapcdn.com/bootstrap/3.0.3/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
+}
+
+.chiselchat-glyphicon {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  -webkit-font-smoothing: antialiased;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.chiselchat-glyphicon:empty {
+  width: 1em;
+}
+
+.chiselchat-glyphicon-asterisk:before {
+  content: "\2a";
+}
+
+.chiselchat-glyphicon-plus:before {
+  content: "\2b";
+}
+
+.chiselchat-glyphicon-euro:before {
+  content: "\20ac";
+}
+
+.chiselchat-glyphicon-minus:before {
+  content: "\2212";
+}
+
+.chiselchat-glyphicon-cloud:before {
+  content: "\2601";
+}
+
+.chiselchat-glyphicon-envelope:before {
+  content: "\2709";
+}
+
+.chiselchat-glyphicon-pencil:before {
+  content: "\270f";
+}
+
+.chiselchat-glyphicon-glass:before {
+  content: "\e001";
+}
+
+.chiselchat-glyphicon-music:before {
+  content: "\e002";
+}
+
+.chiselchat-glyphicon-search:before {
+  content: "\e003";
+}
+
+.chiselchat-glyphicon-heart:before {
+  content: "\e005";
+}
+
+.chiselchat-glyphicon-star:before {
+  content: "\e006";
+}
+
+.chiselchat-glyphicon-star-empty:before {
+  content: "\e007";
+}
+
+.chiselchat-glyphicon-user:before {
+  content: "\e008";
+}
+
+.chiselchat-glyphicon-film:before {
+  content: "\e009";
+}
+
+.chiselchat-glyphicon-th-large:before {
+  content: "\e010";
+}
+
+.chiselchat-glyphicon-th:before {
+  content: "\e011";
+}
+
+.chiselchat-glyphicon-th-list:before {
+  content: "\e012";
+}
+
+.chiselchat-glyphicon-ok:before {
+  content: "\e013";
+}
+
+.chiselchat-glyphicon-remove:before {
+  content: "\e014";
+}
+
+.chiselchat-glyphicon-zoom-in:before {
+  content: "\e015";
+}
+
+.chiselchat-glyphicon-zoom-out:before {
+  content: "\e016";
+}
+
+.chiselchat-glyphicon-off:before {
+  content: "\e017";
+}
+
+.chiselchat-glyphicon-signal:before {
+  content: "\e018";
+}
+
+.chiselchat-glyphicon-cog:before {
+  content: "\e019";
+}
+
+.chiselchat-glyphicon-trash:before {
+  content: "\e020";
+}
+
+.chiselchat-glyphicon-home:before {
+  content: "\e021";
+}
+
+.chiselchat-glyphicon-file:before {
+  content: "\e022";
+}
+
+.chiselchat-glyphicon-time:before {
+  content: "\e023";
+}
+
+.chiselchat-glyphicon-road:before {
+  content: "\e024";
+}
+
+.chiselchat-glyphicon-download-alt:before {
+  content: "\e025";
+}
+
+.chiselchat-glyphicon-download:before {
+  content: "\e026";
+}
+
+.chiselchat-glyphicon-upload:before {
+  content: "\e027";
+}
+
+.chiselchat-glyphicon-inbox:before {
+  content: "\e028";
+}
+
+.chiselchat-glyphicon-play-circle:before {
+  content: "\e029";
+}
+
+.chiselchat-glyphicon-repeat:before {
+  content: "\e030";
+}
+
+.chiselchat-glyphicon-refresh:before {
+  content: "\e031";
+}
+
+.chiselchat-glyphicon-list-alt:before {
+  content: "\e032";
+}
+
+.chiselchat-glyphicon-lock:before {
+  content: "\e033";
+}
+
+.chiselchat-glyphicon-flag:before {
+  content: "\e034";
+}
+
+.chiselchat-glyphicon-headphones:before {
+  content: "\e035";
+}
+
+.chiselchat-glyphicon-volume-off:before {
+  content: "\e036";
+}
+
+.chiselchat-glyphicon-volume-down:before {
+  content: "\e037";
+}
+
+.chiselchat-glyphicon-volume-up:before {
+  content: "\e038";
+}
+
+.chiselchat-glyphicon-qrcode:before {
+  content: "\e039";
+}
+
+.chiselchat-glyphicon-barcode:before {
+  content: "\e040";
+}
+
+.chiselchat-glyphicon-tag:before {
+  content: "\e041";
+}
+
+.chiselchat-glyphicon-tags:before {
+  content: "\e042";
+}
+
+.chiselchat-glyphicon-book:before {
+  content: "\e043";
+}
+
+.chiselchat-glyphicon-bookmark:before {
+  content: "\e044";
+}
+
+.chiselchat-glyphicon-print:before {
+  content: "\e045";
+}
+
+.chiselchat-glyphicon-camera:before {
+  content: "\e046";
+}
+
+.chiselchat-glyphicon-font:before {
+  content: "\e047";
+}
+
+.chiselchat-glyphicon-bold:before {
+  content: "\e048";
+}
+
+.chiselchat-glyphicon-italic:before {
+  content: "\e049";
+}
+
+.chiselchat-glyphicon-text-height:before {
+  content: "\e050";
+}
+
+.chiselchat-glyphicon-text-width:before {
+  content: "\e051";
+}
+
+.chiselchat-glyphicon-align-left:before {
+  content: "\e052";
+}
+
+.chiselchat-glyphicon-align-center:before {
+  content: "\e053";
+}
+
+.chiselchat-glyphicon-align-right:before {
+  content: "\e054";
+}
+
+.chiselchat-glyphicon-align-justify:before {
+  content: "\e055";
+}
+
+.chiselchat-glyphicon-list:before {
+  content: "\e056";
+}
+
+.chiselchat-glyphicon-indent-left:before {
+  content: "\e057";
+}
+
+.chiselchat-glyphicon-indent-right:before {
+  content: "\e058";
+}
+
+.chiselchat-glyphicon-facetime-video:before {
+  content: "\e059";
+}
+
+.chiselchat-glyphicon-picture:before {
+  content: "\e060";
+}
+
+.chiselchat-glyphicon-map-marker:before {
+  content: "\e062";
+}
+
+.chiselchat-glyphicon-adjust:before {
+  content: "\e063";
+}
+
+.chiselchat-glyphicon-tint:before {
+  content: "\e064";
+}
+
+.chiselchat-glyphicon-edit:before {
+  content: "\e065";
+}
+
+.chiselchat-glyphicon-share:before {
+  content: "\e066";
+}
+
+.chiselchat-glyphicon-check:before {
+  content: "\e067";
+}
+
+.chiselchat-glyphicon-move:before {
+  content: "\e068";
+}
+
+.chiselchat-glyphicon-step-backward:before {
+  content: "\e069";
+}
+
+.chiselchat-glyphicon-fast-backward:before {
+  content: "\e070";
+}
+
+.chiselchat-glyphicon-backward:before {
+  content: "\e071";
+}
+
+.chiselchat-glyphicon-play:before {
+  content: "\e072";
+}
+
+.chiselchat-glyphicon-pause:before {
+  content: "\e073";
+}
+
+.chiselchat-glyphicon-stop:before {
+  content: "\e074";
+}
+
+.chiselchat-glyphicon-forward:before {
+  content: "\e075";
+}
+
+.chiselchat-glyphicon-fast-forward:before {
+  content: "\e076";
+}
+
+.chiselchat-glyphicon-step-forward:before {
+  content: "\e077";
+}
+
+.chiselchat-glyphicon-eject:before {
+  content: "\e078";
+}
+
+.chiselchat-glyphicon-chevron-left:before {
+  content: "\e079";
+}
+
+.chiselchat-glyphicon-chevron-right:before {
+  content: "\e080";
+}
+
+.chiselchat-glyphicon-plus-sign:before {
+  content: "\e081";
+}
+
+.chiselchat-glyphicon-minus-sign:before {
+  content: "\e082";
+}
+
+.chiselchat-glyphicon-remove-sign:before {
+  content: "\e083";
+}
+
+.chiselchat-glyphicon-ok-sign:before {
+  content: "\e084";
+}
+
+.chiselchat-glyphicon-question-sign:before {
+  content: "\e085";
+}
+
+.chiselchat-glyphicon-info-sign:before {
+  content: "\e086";
+}
+
+.chiselchat-glyphicon-screenshot:before {
+  content: "\e087";
+}
+
+.chiselchat-glyphicon-remove-circle:before {
+  content: "\e088";
+}
+
+.chiselchat-glyphicon-ok-circle:before {
+  content: "\e089";
+}
+
+.chiselchat-glyphicon-ban-circle:before {
+  content: "\e090";
+}
+
+.chiselchat-glyphicon-arrow-left:before {
+  content: "\e091";
+}
+
+.chiselchat-glyphicon-arrow-right:before {
+  content: "\e092";
+}
+
+.chiselchat-glyphicon-arrow-up:before {
+  content: "\e093";
+}
+
+.chiselchat-glyphicon-arrow-down:before {
+  content: "\e094";
+}
+
+.chiselchat-glyphicon-share-alt:before {
+  content: "\e095";
+}
+
+.chiselchat-glyphicon-resize-full:before {
+  content: "\e096";
+}
+
+.chiselchat-glyphicon-resize-small:before {
+  content: "\e097";
+}
+
+.chiselchat-glyphicon-exclamation-sign:before {
+  content: "\e101";
+}
+
+.chiselchat-glyphicon-gift:before {
+  content: "\e102";
+}
+
+.chiselchat-glyphicon-leaf:before {
+  content: "\e103";
+}
+
+.chiselchat-glyphicon-fire:before {
+  content: "\e104";
+}
+
+.chiselchat-glyphicon-eye-open:before {
+  content: "\e105";
+}
+
+.chiselchat-glyphicon-eye-close:before {
+  content: "\e106";
+}
+
+.chiselchat-glyphicon-warning-sign:before {
+  content: "\e107";
+}
+
+.chiselchat-glyphicon-plane:before {
+  content: "\e108";
+}
+
+.chiselchat-glyphicon-calendar:before {
+  content: "\e109";
+}
+
+.chiselchat-glyphicon-random:before {
+  content: "\e110";
+}
+
+.chiselchat-glyphicon-comment:before {
+  content: "\e111";
+}
+
+.chiselchat-glyphicon-magnet:before {
+  content: "\e112";
+}
+
+.chiselchat-glyphicon-chevron-up:before {
+  content: "\e113";
+}
+
+.chiselchat-glyphicon-chevron-down:before {
+  content: "\e114";
+}
+
+.chiselchat-glyphicon-retweet:before {
+  content: "\e115";
+}
+
+.chiselchat-glyphicon-shopping-cart:before {
+  content: "\e116";
+}
+
+.chiselchat-glyphicon-folder-close:before {
+  content: "\e117";
+}
+
+.chiselchat-glyphicon-folder-open:before {
+  content: "\e118";
+}
+
+.chiselchat-glyphicon-resize-vertical:before {
+  content: "\e119";
+}
+
+.chiselchat-glyphicon-resize-horizontal:before {
+  content: "\e120";
+}
+
+.chiselchat-glyphicon-hdd:before {
+  content: "\e121";
+}
+
+.chiselchat-glyphicon-bullhorn:before {
+  content: "\e122";
+}
+
+.chiselchat-glyphicon-bell:before {
+  content: "\e123";
+}
+
+.chiselchat-glyphicon-certificate:before {
+  content: "\e124";
+}
+
+.chiselchat-glyphicon-thumbs-up:before {
+  content: "\e125";
+}
+
+.chiselchat-glyphicon-thumbs-down:before {
+  content: "\e126";
+}
+
+.chiselchat-glyphicon-hand-right:before {
+  content: "\e127";
+}
+
+.chiselchat-glyphicon-hand-left:before {
+  content: "\e128";
+}
+
+.chiselchat-glyphicon-hand-up:before {
+  content: "\e129";
+}
+
+.chiselchat-glyphicon-hand-down:before {
+  content: "\e130";
+}
+
+.chiselchat-glyphicon-circle-arrow-right:before {
+  content: "\e131";
+}
+
+.chiselchat-glyphicon-circle-arrow-left:before {
+  content: "\e132";
+}
+
+.chiselchat-glyphicon-circle-arrow-up:before {
+  content: "\e133";
+}
+
+.chiselchat-glyphicon-circle-arrow-down:before {
+  content: "\e134";
+}
+
+.chiselchat-glyphicon-globe:before {
+  content: "\e135";
+}
+
+.chiselchat-glyphicon-wrench:before {
+  content: "\e136";
+}
+
+.chiselchat-glyphicon-tasks:before {
+  content: "\e137";
+}
+
+.chiselchat-glyphicon-filter:before {
+  content: "\e138";
+}
+
+.chiselchat-glyphicon-briefcase:before {
+  content: "\e139";
+}
+
+.chiselchat-glyphicon-fullscreen:before {
+  content: "\e140";
+}
+
+.chiselchat-glyphicon-dashboard:before {
+  content: "\e141";
+}
+
+.chiselchat-glyphicon-paperclip:before {
+  content: "\e142";
+}
+
+.chiselchat-glyphicon-heart-empty:before {
+  content: "\e143";
+}
+
+.chiselchat-glyphicon-link:before {
+  content: "\e144";
+}
+
+.chiselchat-glyphicon-phone:before {
+  content: "\e145";
+}
+
+.chiselchat-glyphicon-pushpin:before {
+  content: "\e146";
+}
+
+.chiselchat-glyphicon-usd:before {
+  content: "\e148";
+}
+
+.chiselchat-glyphicon-gbp:before {
+  content: "\e149";
+}
+
+.chiselchat-glyphicon-sort:before {
+  content: "\e150";
+}
+
+.chiselchat-glyphicon-sort-by-alphabet:before {
+  content: "\e151";
+}
+
+.chiselchat-glyphicon-sort-by-alphabet-alt:before {
+  content: "\e152";
+}
+
+.chiselchat-glyphicon-sort-by-order:before {
+  content: "\e153";
+}
+
+.chiselchat-glyphicon-sort-by-order-alt:before {
+  content: "\e154";
+}
+
+.chiselchat-glyphicon-sort-by-attributes:before {
+  content: "\e155";
+}
+
+.chiselchat-glyphicon-sort-by-attributes-alt:before {
+  content: "\e156";
+}
+
+.chiselchat-glyphicon-unchecked:before {
+  content: "\e157";
+}
+
+.chiselchat-glyphicon-expand:before {
+  content: "\e158";
+}
+
+.chiselchat-glyphicon-collapse-down:before {
+  content: "\e159";
+}
+
+.chiselchat-glyphicon-collapse-up:before {
+  content: "\e160";
+}
+
+.chiselchat-glyphicon-log-in:before {
+  content: "\e161";
+}
+
+.chiselchat-glyphicon-flash:before {
+  content: "\e162";
+}
+
+.chiselchat-glyphicon-log-out:before {
+  content: "\e163";
+}
+
+.chiselchat-glyphicon-new-window:before {
+  content: "\e164";
+}
+
+.chiselchat-glyphicon-record:before {
+  content: "\e165";
+}
+
+.chiselchat-glyphicon-save:before {
+  content: "\e166";
+}
+
+.chiselchat-glyphicon-open:before {
+  content: "\e167";
+}
+
+.chiselchat-glyphicon-saved:before {
+  content: "\e168";
+}
+
+.chiselchat-glyphicon-import:before {
+  content: "\e169";
+}
+
+.chiselchat-glyphicon-export:before {
+  content: "\e170";
+}
+
+.chiselchat-glyphicon-send:before {
+  content: "\e171";
+}
+
+.chiselchat-glyphicon-floppy-disk:before {
+  content: "\e172";
+}
+
+.chiselchat-glyphicon-floppy-saved:before {
+  content: "\e173";
+}
+
+.chiselchat-glyphicon-floppy-remove:before {
+  content: "\e174";
+}
+
+.chiselchat-glyphicon-floppy-save:before {
+  content: "\e175";
+}
+
+.chiselchat-glyphicon-floppy-open:before {
+  content: "\e176";
+}
+
+.chiselchat-glyphicon-credit-card:before {
+  content: "\e177";
+}
+
+.chiselchat-glyphicon-transfer:before {
+  content: "\e178";
+}
+
+.chiselchat-glyphicon-cutlery:before {
+  content: "\e179";
+}
+
+.chiselchat-glyphicon-header:before {
+  content: "\e180";
+}
+
+.chiselchat-glyphicon-compressed:before {
+  content: "\e181";
+}
+
+.chiselchat-glyphicon-earphone:before {
+  content: "\e182";
+}
+
+.chiselchat-glyphicon-phone-alt:before {
+  content: "\e183";
+}
+
+.chiselchat-glyphicon-tower:before {
+  content: "\e184";
+}
+
+.chiselchat-glyphicon-stats:before {
+  content: "\e185";
+}
+
+.chiselchat-glyphicon-sd-video:before {
+  content: "\e186";
+}
+
+.chiselchat-glyphicon-hd-video:before {
+  content: "\e187";
+}
+
+.chiselchat-glyphicon-subtitles:before {
+  content: "\e188";
+}
+
+.chiselchat-glyphicon-sound-stereo:before {
+  content: "\e189";
+}
+
+.chiselchat-glyphicon-sound-dolby:before {
+  content: "\e190";
+}
+
+.chiselchat-glyphicon-sound-5-1:before {
+  content: "\e191";
+}
+
+.chiselchat-glyphicon-sound-6-1:before {
+  content: "\e192";
+}
+
+.chiselchat-glyphicon-sound-7-1:before {
+  content: "\e193";
+}
+
+.chiselchat-glyphicon-copyright-mark:before {
+  content: "\e194";
+}
+
+.chiselchat-glyphicon-registration-mark:before {
+  content: "\e195";
+}
+
+.chiselchat-glyphicon-cloud-download:before {
+  content: "\e197";
+}
+
+.chiselchat-glyphicon-cloud-upload:before {
+  content: "\e198";
+}
+
+.chiselchat-glyphicon-tree-conifer:before {
+  content: "\e199";
+}
+
+.chiselchat-glyphicon-tree-deciduous:before {
+  content: "\e200";
+}
+
+.chiselchat-alert {
+  color: @main-text-color;
+  background-color: @main-background-color;
+  font-family: sans-serif;
+}
+
+.chiselchat-alert hr {
+  border-top-color: @main-text-color;
+}
+
+.chiselchat-alert .alert-link {
+  color: @link-text-color;
 }
