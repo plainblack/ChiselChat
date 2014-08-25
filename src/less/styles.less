@@ -1,21 +1,21 @@
 @charset "UTF-8";
-@main-background-color: #fff;
-@main-text-color: #000;
-@message-text-color: #000;
-@link-text-color: #014986;
-@controls-text-color: #aaa;
-@highlight-background-color: #ffcc00;
+@main-background-color: #333;
+@main-text-color: #ccc;
+@message-text-color: #fff;
+@link-text-color: #77aaff;
+@controls-text-color: lighten(@main-background-color,20%);
+@highlight-background-color: #aaa;
 @highlight-text-color: #000;
-@tab-background-color: #0099f2;
-@tab-text-color: #111111;
-@active-tab-background-color: #fff;
+@tab-background-color: lighten(@main-background-color, 10%);
+@tab-text-color: @main-text-color;
+@active-tab-background-color: #ccc;
 @active-tab-text-color: #000;
-@input-background-color: #eee;
+@input-background-color: #fff;
 @input-text-color: #000;
-@moderator-text-color: #ff9b00;
+@moderator-text-color: orange;
 @staff-text-color: green;
-@user-text-color: #014986;
-@anonymous-text-color: #000;
+@user-text-color: yellow;
+@anonymous-text-color: white;
 
 .border-radius(@radius) {
   -webkit-border-radius: @radius;
