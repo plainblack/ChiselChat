@@ -796,7 +796,7 @@ ChiselchatUI.prototype.confirm = function(message, title, confirm, cancel) {
     (new PNotify({
     title: title || 'Confirmation Needed',
     text: message,
-    addclass: 'chiselchat-alert-info',
+    addclass: 'chiselchat-alert',
     type: 'info',
     icon: 'chiselchat-glyphicon chiselchat-glyphicon-question-sign',
     hide: false,
