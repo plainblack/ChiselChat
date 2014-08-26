@@ -29,7 +29,10 @@
     this._user = null;
     this._userId = null;
     this._userName = null;
+    this._avatarUri = '';
+    this._profileUri = '';
     this._isModerator = false;
+    this._isGuest = false;
 
     // A unique id generated for each session.
     this._sessionId = null;
@@ -51,6 +54,8 @@
     this._moderatorsRef  = this._firebase.child('moderators');
     this._suspensionsRef = this._firebase.child('suspensions');
     this._usersOnlineRef = this._firebase.child('user-names-online');
+    this._guestNameList = [ 'Arnold', 'Burton', 'Cal', 'Caroline',
+    'Chris', 'David', 'Donald', 'Dude', 'Dudette', 'Ernest', 'Esther', 'Fern', 'Gertrude', 'Hazel', 'Isobel', 'Kevin', 'Malcolm', 'Neville', 'Oscar', 'Paul', 'Quentin', 'Rupert', 'Simon', 'Thom', 'Vern', 'Wally'];
 
     // Setup and establish default options.
     this._options = options || {};
@@ -87,11 +92,12 @@
             name: self._userName,
             avatarUri: self._avatarUri,
             profileUri: self._profileUri,
-            isModerator: self._isModerator
+            isModerator: self._isModerator,
+            isGuest: self._isGuest
           };
           if (current) {
             if (current.rooms) {
-                account_data.rooms = current.rooms;
+               account_data.rooms = current.rooms;
             }
             if (current.sessions) {
                 account_data.sessions = current.sessions;
@@ -99,10 +105,14 @@
             if (current.muted) {
                 account_data.muted = current.muted;
             }
+            if ((current.userName === '' || typeof(current.userName) === 'undefined') && account_data.isGuest) {
+                account_data.name = 'Guest '+self._guestNameList[ Math.floor(Math.random() * self._guestNameList.length) ];
+                self._userName = account_data.name;
+            }
           }
           return account_data;
       }, function(error, committed, snapshot) {
-        self._user = snapshot.val();
+        self._user = snapshot.val(); 
         //Preload the user cache to save a remote fetch.
         self._chatter_cache[self._user.id] = self._user;
         self._moderatorsRef.child(self._userId).once('value', function(snapshot) {
@@ -301,6 +311,7 @@
         self._isModerator = userObj.isModerator;
         self._avatarUri   = userObj.avatarUri;
         self._profileUri  = userObj.profileUri;
+        self._isGuest     = userObj.isGuest;
         if (self._isModerator === true) {
             self._moderatorsRef.child(self._userId).set(true);
             self._moderatorsRef.child(self._userId).onDisconnect().remove();
