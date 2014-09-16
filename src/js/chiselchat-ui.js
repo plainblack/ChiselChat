@@ -730,7 +730,7 @@
       };
       
       // Click on tab 
-    $(document).delegate('[data-toggle="tab"]', 'click', function(event) {
+    $(document).delegate('[chisel-toggle="tab"]', 'click', function(event) {
       event.preventDefault();
       var $el = $(this);
       if ($el.parent('li').hasClass('active')) {
@@ -1048,7 +1048,7 @@ ChiselchatUI.prototype.executeCommands = function(message) {
 
     // Automatically select the next tab if there is one.
     if (tab_is_active) {
-        this.$tabList.find('[data-toggle=tab]').first().trigger('click');
+        this.$tabList.find('[chisel-toggle=tab]').first().trigger('click');
     }
   };
 
