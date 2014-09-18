@@ -105,9 +105,15 @@
             if (current.muted) {
                 account_data.muted = current.muted;
             }
-            if ((current.userName === '' || typeof(current.userName) === 'undefined') && account_data.isGuest) {
+            if (account_data.isGuest) {
+              if (current.name === '' || typeof(current.name) === 'undefined') {
                 account_data.name = 'Guest '+self._guestNameList[ Math.floor(Math.random() * self._guestNameList.length) ];
                 self._userName = account_data.name;
+              }
+              else {
+                self._userName = current.name;
+                account_data.name = current.name;
+              }
             }
           }
           return account_data;
