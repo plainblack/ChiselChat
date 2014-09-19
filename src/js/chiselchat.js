@@ -109,10 +109,12 @@
               if (current.name === '' || typeof(current.name) === 'undefined') {
                 account_data.name = 'Guest '+self._guestNameList[ Math.floor(Math.random() * self._guestNameList.length) ];
                 self._userName = account_data.name;
+                console.log("setting guest name to "+account_data.name);
               }
               else {
                 self._userName = current.name;
                 account_data.name = current.name;
+                console.log("using existing guest name "+account_data.name);
               }
             }
           }
