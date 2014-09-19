@@ -351,6 +351,9 @@
     if (typeof(userObj.isModerator) === 'undefined') {
         userObj.isModerator = false;
     }
+    if (typeof(userObj.isStaff) === 'undefined') {
+        userObj.isStaff = false;
+    }
     if (typeof(userObj.isGuest) === 'undefined') {
         userObj.isGuest = true;
     }
