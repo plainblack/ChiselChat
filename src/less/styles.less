@@ -15,7 +15,7 @@
 @moderator-text-color: orange;
 @staff-text-color: green;
 @user-text-color: yellow;
-@anonymous-text-color: white;
+@guest-text-color: white;
 
 .border-radius(@radius) {
   -webkit-border-radius: @radius;
@@ -235,8 +235,8 @@
     padding-right: 10px;
     font-size: 110%;
 }
-#chiselchat-tab-content .chiselchat-tab-pane .chiselchat-user .chiselchat-anonymous {
-    color: @anonymous-text-color;
+#chiselchat-tab-content .chiselchat-tab-pane .chiselchat-user .chiselchat-guest {
+    color: @guest-text-color;
 }
 #chiselchat-tab-content .chiselchat-tab-pane .chiselchat-user .chiselchat-moderator {
     font-weight: bold;

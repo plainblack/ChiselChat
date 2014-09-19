@@ -265,6 +265,9 @@
             if (user.avatarUri) {
                 $message.find('.chiselchat-avatar img').attr('src', user.avatarUri);
             }
+            if (user.isGuest) {
+                $message.find('.chiselchat-user > a').addClass('chiselchat-guest');
+            }
             if (user.isModerator) {
                 $message.find('.chiselchat-user > a').addClass('chiselchat-moderator');
             }
