@@ -9,6 +9,8 @@ body { color: white; }
 <link href="//cdnjs.cloudflare.com/ajax/libs/pnotify/2.0.0/pnotify.all.min.css" rel="stylesheet">
    </head> 
     <body style="background-color: black;">
+<button id="fakestaff">Login as Fake Staff</button>
+<button id="fakemoderator">Login as Fake Moderator</button>
 <button id="staff">Login as Staff</button>
 <button id="moderator">Login as Moderator</button>
 <button id="user">Login as User</button>
@@ -28,6 +30,8 @@ body { color: white; }
 	$('#logout').on('click',function(){ chat.unsetUser(); });
 	$('#join').on('click',function(){ chat._chat.enterRoom('xxx','Howdy'); });
    	$('#staff').on('click', function(){ authUser('staff') });
+   	$('#fakestaff').on('click', function(){ authUser('fakestaff') });
+   	$('#fakemoderator').on('click', function(){ authUser('fakemoderator') });
    	$('#moderator').on('click', function(){ authUser('moderator') });
    	$('#user').on('click', function(){ authUser('user') });
    	function authUser(type) {

@@ -55,8 +55,14 @@
     this._moderatorsRef  = this._firebase.child('moderators');
     this._suspensionsRef = this._firebase.child('suspensions');
     this._usersOnlineRef = this._firebase.child('user-names-online');
-    this._guestNameList = [ 'Arnold', 'Burton', 'Cal', 'Caroline',
-    'Chris', 'David', 'Donald', 'Dude', 'Dudette', 'Ernest', 'Esther', 'Fern', 'Gertrude', 'Gus', 'Hazel', 'Isobel', 'Kevin', 'Malcolm', 'Neville', 'Oscar', 'Paul', 'Quentin', 'Rupert', 'Simon', 'Thom', 'Vern', 'Wally'];
+    this._guestNameList = [ 'Arnold', 'Burton', 'Cal', 'Caroline', 'Peabody','Pubert', 'Gomez', 'Morticia', 'Wednesday', 'Uncle Fester', 'Pugsly',
+    'Greggory', 'Greg', 'Bruce', 'Jean Claude', 'Herobrine', 'Cake', 'Lilith', 'Penelope', 'Rhiannon', 'Medusa', 'Sally', 'Barry', 'Elmer', 'Gretel',
+    'Chris', 'David', 'Donald', 'Dude', 'Dudette', 'Ernest', 'Esther', 'Fern', 'Gertrude', 'Gus', 'Hazel', 'Isobel', 'Kevin', 'Malcolm', 'Neville', 'Oscar', 'Paul', 'Quentin', 'Rupert', 'Simon', 'Thom', 'Vern', 'Wally', 'Trudy', 'Bertha', 'Abernathy','Adolf','Attila','Kurt','Helen','Marv','Magda',
+    'Hansel', 'Mort', 'Gunther', 'Dreshawn', 'Percy', 'Shaneekwa', 'Ronald', 'Tyquasia', 'Tallulah', 'Margot', 'Ennis', 'Roscoe', 'Heloise',
+    'Eunice', 'Cecil', 'Bueford', 'Eustace', 'Baxter','Tiara','Garland','Judy', 'Cooter', 'Daisy', 'Cletus', 'Crystal', 'Martha', 'Jesse', 'Bo', 'Luke',
+    'Martha', 'Jefferson', 'Martha','Albert', 'Beauregard', 'Al', 'Peggy', 'Bud', 'Kelly','Igor','Boris','Natasha','Moose','Squirrel','Fannie', 'Chuck',
+    'Dennis','Hamish', 'Angus', 'Tate', 'Mildred', 'Waldo', 'Stewart', 'Horace', 'Jean Luc', 'William', 'Beverly', 'Data', 'Geordi', 'Worf', 'Deanna',
+    'James', 'Spock', 'Leonard', 'Pavel', 'Hickaru','Nyota','Wesley','Laren','Miles','Keiko','Montgomery','Christine','Janice'];
 
     // Setup and establish default options.
     this._options = options || {};
