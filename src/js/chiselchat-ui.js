@@ -201,7 +201,7 @@
       $(this._el).html(template({
         maxLengthUsername: this.maxLengthUsername,
         maxLengthRoomName: this.maxLengthRoomName,
-        isModerator: this._chat.userIsModerator()
+        isModerator: this._chat.userIsModerator(),
         isStaff: this._chat.userIsStaff()
       }));
     },
