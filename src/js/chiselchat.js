@@ -118,13 +118,18 @@
           }
           return account_data;
       }, function(error, committed, snapshot) {
-        self._user = snapshot.val(); 
-        //Preload the user cache to save a remote fetch.
-        self._chatter_cache[self._user.id] = self._user;
-        self._moderatorsRef.child(self._userId).once('value', function(snapshot) {
-          self._isModerator = !!snapshot.val();
-          root.setTimeout(onComplete, 0);
-        });
+        if (!error) {
+            self._user = snapshot.val(); 
+            //Preload the user cache to save a remote fetch.
+            self._chatter_cache[self._user.id] = self._user;
+            self._moderatorsRef.child(self._userId).once('value', function(snapshot) {
+              self._isModerator = !!snapshot.val();
+              root.setTimeout(onComplete, 0);
+            });
+        }
+        else {
+            console.warn(error);
+        }
       });
     },
 
