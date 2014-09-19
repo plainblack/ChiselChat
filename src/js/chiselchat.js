@@ -784,4 +784,7 @@
   Chiselchat.prototype.userIsModerator = function() {
     return this._isModerator;
   };
+  Chiselchat.prototype.userIsStaff = function() {
+    return this._isStaff;
+  };
 })(Firebase);
