@@ -121,6 +121,15 @@
             help    : "Your name will appear followed by any text you write."
         });
         self.addCommand({
+            match   : /^\/whoami$/,
+            func : function(message,chatui) {
+                chatui.info(chatui._user.name,'Who Am I?');
+                message.type = 'command';
+            },
+            name    : "/whoami",
+            help    : "Display your name."
+        });
+        self.addCommand({
             match   : /^\/leave$/,
             func : function(message,chatui) {
                 chatui._chat.leaveRoom(message.roomId);
