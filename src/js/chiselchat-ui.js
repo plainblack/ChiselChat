@@ -332,6 +332,21 @@
     var self = this;
 
     // Initialize data events
+    if (typeof(userObj.userName) === 'undefined') {
+        userObj.userName = '';
+    }
+    if (typeof(userObj.isModerator) === 'undefined') {
+        userObj.isModerator = false;
+    }
+    if (typeof(userObj.isGuest) === 'undefined') {
+        userObj.isGuest = true;
+    }
+    if (typeof(userObj.avatarUri) === 'undefined') {
+        userObj.avatarUri = '';
+    }
+    if (typeof(userObj.profileUri) === 'undefined') {
+        userObj.profileUri = '';
+    }
     self._chat.setUser(userObj, function(user) {
       self._user = user;
 
