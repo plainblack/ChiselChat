@@ -140,7 +140,7 @@
         else {
             console.warn(error);
         }
-      });
+      }, false);
     },
 
     // Initialize Firebase listeners and callbacks for the supported bindings.
