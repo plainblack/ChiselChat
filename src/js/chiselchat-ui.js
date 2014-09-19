@@ -123,7 +123,20 @@
         self.addCommand({
             match   : /^\/whoami$/,
             func : function(message,chatui) {
-                chatui.info(chatui._user.name,'Who Am I?');
+                var text = 'You are "' + chatui._user.name + '", ';
+                if (chatui._user.isStaff) {
+                    text += 'a staffer.';
+                }
+                else if (chatui._user.isModerator) {
+                    text += 'a moderator.';
+                }
+                else if (chatui._user.isGuest) {
+                    text += 'an anonymous guest user.';
+                }
+                else {
+                    text += 'a normal user.';
+                }
+                chatui.info(text,'Who Am I?');
                 message.type = 'command';
             },
             name    : "/whoami",
