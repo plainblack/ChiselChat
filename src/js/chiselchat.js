@@ -108,7 +108,7 @@
                 account_data.muted = current.muted;
             }
             if (account_data.isGuest) {
-              if (current.name === '' || typeof(current.name) === 'undefined') {
+              if (current.name == '' || typeof(current.name) === 'undefined') {
                 account_data.name = 'Guest '+self._guestNameList[ Math.floor(Math.random() * self._guestNameList.length) ];
                 self._userName = account_data.name;
                 console.log("setting guest name to "+account_data.name);
