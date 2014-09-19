@@ -32,6 +32,7 @@
     this._avatarUri = '';
     this._profileUri = '';
     this._isModerator = false;
+    this._isStaff = false;
     this._isGuest = false;
 
     // A unique id generated for each session.
@@ -55,7 +56,7 @@
     this._suspensionsRef = this._firebase.child('suspensions');
     this._usersOnlineRef = this._firebase.child('user-names-online');
     this._guestNameList = [ 'Arnold', 'Burton', 'Cal', 'Caroline',
-    'Chris', 'David', 'Donald', 'Dude', 'Dudette', 'Ernest', 'Esther', 'Fern', 'Gertrude', 'Hazel', 'Isobel', 'Kevin', 'Malcolm', 'Neville', 'Oscar', 'Paul', 'Quentin', 'Rupert', 'Simon', 'Thom', 'Vern', 'Wally'];
+    'Chris', 'David', 'Donald', 'Dude', 'Dudette', 'Ernest', 'Esther', 'Fern', 'Gertrude', 'Gus', 'Hazel', 'Isobel', 'Kevin', 'Malcolm', 'Neville', 'Oscar', 'Paul', 'Quentin', 'Rupert', 'Simon', 'Thom', 'Vern', 'Wally'];
 
     // Setup and establish default options.
     this._options = options || {};
@@ -93,6 +94,7 @@
             avatarUri: self._avatarUri,
             profileUri: self._profileUri,
             isModerator: self._isModerator,
+            isStaff: self._isStaff,
             isGuest: self._isGuest
           };
           if (current) {
@@ -325,6 +327,7 @@
         self._avatarUri   = userObj.avatarUri;
         self._profileUri  = userObj.profileUri;
         self._isGuest     = userObj.isGuest;
+        self._isStaff     = userObj.isStaff;
         if (self._isModerator === true) {
             self._moderatorsRef.child(self._userId).set(true);
             self._moderatorsRef.child(self._userId).onDisconnect().remove();
@@ -358,6 +361,7 @@
             self._userId = null;
             self._userName = null;
             self._isModerator = false;
+            self._isGuest = true;
             self._avatarUri   = null;
             self._profileUri  = null;
             self._sessionId = null;

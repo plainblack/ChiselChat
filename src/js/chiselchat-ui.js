@@ -202,6 +202,7 @@
         maxLengthUsername: this.maxLengthUsername,
         maxLengthRoomName: this.maxLengthRoomName,
         isModerator: this._chat.userIsModerator()
+        isStaff: this._chat.userIsStaff()
       }));
     },
 
@@ -266,6 +267,9 @@
             }
             if (user.isModerator) {
                 $message.find('.chiselchat-user > a').addClass('chiselchat-moderator');
+            }
+            if (user.isStaff) {
+                $message.find('.chiselchat-user > a').addClass('chiselchat-staff');
             }
         });
       }
