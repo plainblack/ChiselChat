@@ -6,6 +6,8 @@
 @controls-text-color: lighten(@main-background-color,20%);
 @highlight-background-color: #aaa;
 @highlight-text-color: #000;
+@highlight-alert-background-color: red;
+@highlight-alert-text-color: white;
 @tab-background-color: lighten(@main-background-color, 10%);
 @tab-text-color: @main-text-color;
 @active-tab-background-color: #ccc;
@@ -106,8 +108,8 @@
     top: 3px;
 }
 #chiselchat-tab-list li .chiselchat-new-count.chiselchat-new-count-alert {
-    background-color: @highlight-text-color;
-    color: @highlight-background-color;
+    background-color: @highlight-alert-background-color;
+    color: @highlight-alert-text-color;
 }
 #chiselchat-tab-list li.active {
     background-color: @active-tab-background-color;
