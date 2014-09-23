@@ -1165,7 +1165,7 @@ ChiselchatUI.prototype.executeCommands = function(message) {
       if ($tabLink.length) {
           var $newCount = $tabLink.first().children('.chiselchat-new-count');
           $newCount.html(parseInt($newCount.html(),10) + 1);
-          this.pulse($newCount, 'chiselchat-new-count-alert', { pulses : 3, duration : 300 });
+          this.pulse($newCount, 'chiselchat-new-count-alert', { pulses : 2, duration : 300 });
       }        
         
         
