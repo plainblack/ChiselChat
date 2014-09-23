@@ -41,6 +41,9 @@
     // A toggle so panes can be full screen
     this.fullScreenTab = false;
       
+    // A toggle to not display new message counts right after login
+    this.displayNewMessageCount = false;
+      
     // A list of commands that will be executed from the text box
     this.commands = [];
       
@@ -386,6 +389,7 @@
         self._bindSuperuserUIEvents();
       }
 
+      window.setTimeout(function(){ self.displayNewMessageCount = true; }, 1000);
       self._chat.resumeSession();
     });
   };
@@ -395,6 +399,7 @@
       self._chat.unsetUser();
       self._user = null;
       self._roomQueue = [];
+      self.displayNewMessageCount = false; 
   };
 
   /**
@@ -1162,7 +1167,7 @@ ChiselchatUI.prototype.executeCommands = function(message) {
         
         
       var $tabLink = this.$tabList.find('[data-room-id=' + roomId + ']').find('a');
-      if ($tabLink.length) {
+      if ($tabLink.length && self.displayNewMessageCount) {
           var $newCount = $tabLink.first().children('.chiselchat-new-count');
           $newCount.html(parseInt($newCount.html(),10) + 1);
           this.pulse($newCount, 'chiselchat-new-count-alert', { pulses : 2, duration : 300 });
