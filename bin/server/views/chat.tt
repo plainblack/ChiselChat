@@ -1,0 +1,90 @@
+<html>
+   <head>
+        <title>Welcome to The Chat</title>
+        <style type="text/css" rel="stylesheet">
+body { color: white; }
+        </style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="/chiselchat/chiselchat.css">
+<link href="//cdnjs.cloudflare.com/ajax/libs/pnotify/2.0.0/pnotify.all.min.css" rel="stylesheet">
+   </head> 
+    <body style="background-color: black;">
+<button id="fakestaff">Login as Fake Staff</button>
+<button id="fakemoderator">Login as Fake Moderator</button>
+<button id="staff">Login as Staff</button>
+<button id="moderator">Login as Moderator</button>
+<button id="user">Login as User</button>
+<button id="guest">Login as Guest</button>
+<button id="logout">Log Out</button>
+<button id="join">Join Private Group</button>
+<div id="chiselchat-wrapper"></div>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//cdn.firebase.com/js/client/1.0.19/firebase.js"></script>
+<script src="//cdn.firebase.com/js/simple-login/1.6.3/firebase-simple-login.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/pnotify/2.0.0/pnotify.all.min.js"></script>
+<script src="/chiselchat/chiselchat.js"></script>
+        
+<script>
+	var chatRef = new Firebase('//chiselchat.firebaseio.com');
+    	var chat = new ChiselchatUI(chatRef, document.getElementById("chiselchat-wrapper"));
+	$('#logout').on('click',function(){ chat.unsetUser(); });
+	$('#join').on('click',function(){ chat._chat.enterRoom('xxx','Howdy'); });
+   	$('#staff').on('click', function(){ authUser('staff') });
+   	$('#fakestaff').on('click', function(){ authUser('fakestaff') });
+   	$('#fakemoderator').on('click', function(){ authUser('fakemoderator') });
+   	$('#moderator').on('click', function(){ authUser('moderator') });
+   	$('#user').on('click', function(){ authUser('user') });
+   	function authUser(type) {
+		$.ajax({
+			url: '/'+type,
+		}).done(function(user) {
+			console.dir(user);
+			chatRef.auth(user.token, function(error) {
+				if (error) {
+					console.log("Auth failed.",error);
+				}
+				else {
+					console.log("Auth success.");
+					userObject = {
+						userId	: user.id,
+						userName : user.name,
+						isGuest : false,
+						isModerator : user.isModerator,
+						isStaff	: user.isStaff,
+						avatarUri : user.avatarUri,
+						profileUri : user.profileUri,
+					};
+					console.dir(userObject);
+					chat.setUser(userObject);
+				}
+        		});
+		});
+   	}
+	$('#guest').on('click', function() {
+		var simpleLogin = new FirebaseSimpleLogin(chatRef, function(err, user) {
+			if (err) {
+				console.log('Anonymous auth failed.',err);
+			}
+			else if (user) {
+				console.log("Chisel anonymous login successful");
+        			chatRef.auth(user.firebaseAuthToken, function(error) {
+            				if (error) {
+                				console.log('Chisel anonymous authentcation failed!', error);
+            				}
+            				else {
+                				console.dir(user);
+               	 				chat.setUser({
+                	    				userId: user.uid,
+                				});
+            				}
+        			});
+      			}
+      			else {
+        			simpleLogin.login('anonymous');    
+      			}				
+		});
+	});
+</script>
+
+    </body>
+</html>

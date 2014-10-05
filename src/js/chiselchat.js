@@ -29,7 +29,11 @@
     this._user = null;
     this._userId = null;
     this._userName = null;
+    this._avatarUri = '';
+    this._profileUri = '';
     this._isModerator = false;
+    this._isStaff = false;
+    this._isGuest = false;
 
     // A unique id generated for each session.
     this._sessionId = null;
@@ -51,6 +55,14 @@
     this._moderatorsRef  = this._firebase.child('moderators');
     this._suspensionsRef = this._firebase.child('suspensions');
     this._usersOnlineRef = this._firebase.child('user-names-online');
+    this._guestNameList = [ 'Arnold', 'Burton', 'Cal', 'Caroline', 'Peabody','Pubert', 'Gomez', 'Morticia', 'Wednesday', 'Uncle Fester', 'Pugsly',
+    'Greggory', 'Greg', 'Bruce', 'Jean Claude', 'Herobrine', 'Cake', 'Lilith', 'Penelope', 'Rhiannon', 'Medusa', 'Sally', 'Barry', 'Elmer', 'Gretel',
+    'Chris', 'David', 'Donald', 'Dude', 'Dudette', 'Ernest', 'Esther', 'Fern', 'Gertrude', 'Gus', 'Hazel', 'Isobel', 'Kevin', 'Malcolm', 'Neville', 'Oscar', 'Paul', 'Quentin', 'Rupert', 'Simon', 'Thom', 'Vern', 'Wally', 'Trudy', 'Bertha', 'Abernathy','Adolf','Attila','Kurt','Helen','Marv','Magda',
+    'Hansel', 'Mort', 'Gunther', 'Dreshawn', 'Percy', 'Shaneekwa', 'Ronald', 'Tyquasia', 'Tallulah', 'Margot', 'Ennis', 'Roscoe', 'Heloise',
+    'Eunice', 'Cecil', 'Bueford', 'Eustace', 'Baxter','Tiara','Garland','Judy', 'Cooter', 'Daisy', 'Cletus', 'Crystal', 'Martha', 'Jesse', 'Bo', 'Luke',
+    'Martha', 'Jefferson', 'Martha','Albert', 'Beauregard', 'Al', 'Peggy', 'Bud', 'Kelly','Igor','Boris','Natasha','Moose','Squirrel','Fannie', 'Chuck',
+    'Dennis','Hamish', 'Angus', 'Tate', 'Mildred', 'Waldo', 'Stewart', 'Horace', 'Jean Luc', 'William', 'Beverly', 'Data', 'Geordi', 'Worf', 'Deanna',
+    'James', 'Spock', 'Leonard', 'Pavel', 'Hickaru','Nyota','Wesley','Laren','Miles','Keiko','Montgomery','Christine','Janice'];
 
     // Setup and establish default options.
     this._options = options || {};
@@ -87,11 +99,13 @@
             name: self._userName,
             avatarUri: self._avatarUri,
             profileUri: self._profileUri,
-            isModerator: self._isModerator
+            isModerator: self._isModerator,
+            isStaff: self._isStaff,
+            isGuest: self._isGuest
           };
           if (current) {
             if (current.rooms) {
-                account_data.rooms = current.rooms;
+               account_data.rooms = current.rooms;
             }
             if (current.sessions) {
                 account_data.sessions = current.sessions;
@@ -100,16 +114,33 @@
                 account_data.muted = current.muted;
             }
           }
+          if (account_data.isGuest) {
+            if (!current || current.name === '' || typeof(current.name) === 'undefined') {
+              account_data.name = 'Guest '+self._guestNameList[ Math.floor(Math.random() * self._guestNameList.length) ];
+              self._userName = account_data.name;
+              console.log("setting guest name to "+account_data.name);
+            }
+            else {
+              self._userName = current.name;
+              account_data.name = current.name;
+              console.log("using existing guest name "+account_data.name);
+            }
+          }
           return account_data;
       }, function(error, committed, snapshot) {
-        self._user = snapshot.val();
-        //Preload the user cache to save a remote fetch.
-        self._chatter_cache[self._user.id] = self._user;
-        self._moderatorsRef.child(self._userId).once('value', function(snapshot) {
-          self._isModerator = !!snapshot.val();
-          root.setTimeout(onComplete, 0);
-        });
-      });
+        if (!error) {
+            self._user = snapshot.val(); 
+            //Preload the user cache to save a remote fetch.
+            self._chatter_cache[self._user.id] = self._user;
+            self._moderatorsRef.child(self._userId).once('value', function(snapshot) {
+              self._isModerator = !!snapshot.val();
+              root.setTimeout(onComplete, 0);
+            });
+        }
+        else {
+            console.warn(error);
+        }
+      }, false);
     },
 
     // Initialize Firebase listeners and callbacks for the supported bindings.
@@ -301,6 +332,8 @@
         self._isModerator = userObj.isModerator;
         self._avatarUri   = userObj.avatarUri;
         self._profileUri  = userObj.profileUri;
+        self._isGuest     = userObj.isGuest;
+        self._isStaff     = userObj.isStaff;
         if (self._isModerator === true) {
             self._moderatorsRef.child(self._userId).set(true);
             self._moderatorsRef.child(self._userId).onDisconnect().remove();
@@ -334,6 +367,7 @@
             self._userId = null;
             self._userName = null;
             self._isModerator = false;
+            self._isGuest = true;
             self._avatarUri   = null;
             self._profileUri  = null;
             self._sessionId = null;
@@ -755,5 +789,8 @@
 
   Chiselchat.prototype.userIsModerator = function() {
     return this._isModerator;
+  };
+  Chiselchat.prototype.userIsStaff = function() {
+    return this._isStaff;
   };
 })(Firebase);

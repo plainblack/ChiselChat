@@ -1,4 +1,4 @@
-(function($) {
+(function($, window) {
 
 
   if (!$ || (parseInt($().jquery.replace(/\./g, ""), 10) < 170)) {
@@ -40,6 +40,9 @@
       
     // A toggle so panes can be full screen
     this.fullScreenTab = false;
+      
+    // A toggle to not display new message counts right after login
+    this.displayNewMessageCount = false;
       
     // A list of commands that will be executed from the text box
     this.commands = [];
@@ -121,6 +124,28 @@
             help    : "Your name will appear followed by any text you write."
         });
         self.addCommand({
+            match   : /^\/whoami$/,
+            func : function(message,chatui) {
+                var text = 'You are "' + chatui._user.name + '", ';
+                if (chatui._user.isStaff) {
+                    text += 'a staffer.';
+                }
+                else if (chatui._user.isModerator) {
+                    text += 'a moderator.';
+                }
+                else if (chatui._user.isGuest) {
+                    text += 'an anonymous guest user.';
+                }
+                else {
+                    text += 'a normal user.';
+                }
+                chatui.info(text,'Who Am I?');
+                message.type = 'command';
+            },
+            name    : "/whoami",
+            help    : "Display your name."
+        });
+        self.addCommand({
             match   : /^\/leave$/,
             func : function(message,chatui) {
                 chatui._chat.leaveRoom(message.roomId);
@@ -192,7 +217,8 @@
       $(this._el).html(template({
         maxLengthUsername: this.maxLengthUsername,
         maxLengthRoomName: this.maxLengthRoomName,
-        isModerator: this._chat.userIsModerator()
+        isModerator: this._chat.userIsModerator(),
+        isStaff: this._chat.userIsStaff()
       }));
     },
 
@@ -255,8 +281,14 @@
             if (user.avatarUri) {
                 $message.find('.chiselchat-avatar img').attr('src', user.avatarUri);
             }
+            if (user.isGuest) {
+                $message.find('.chiselchat-user > a').addClass('chiselchat-guest');
+            }
             if (user.isModerator) {
                 $message.find('.chiselchat-user > a').addClass('chiselchat-moderator');
+            }
+            if (user.isStaff) {
+                $message.find('.chiselchat-user > a').addClass('chiselchat-staff');
             }
         });
       }
@@ -332,6 +364,24 @@
     var self = this;
 
     // Initialize data events
+    if (typeof(userObj.userName) === 'undefined') {
+        userObj.userName = '';
+    }
+    if (typeof(userObj.isModerator) === 'undefined') {
+        userObj.isModerator = false;
+    }
+    if (typeof(userObj.isStaff) === 'undefined') {
+        userObj.isStaff = false;
+    }
+    if (typeof(userObj.isGuest) === 'undefined') {
+        userObj.isGuest = true;
+    }
+    if (typeof(userObj.avatarUri) === 'undefined') {
+        userObj.avatarUri = '';
+    }
+    if (typeof(userObj.profileUri) === 'undefined') {
+        userObj.profileUri = '';
+    }
     self._chat.setUser(userObj, function(user) {
       self._user = user;
 
@@ -339,6 +389,7 @@
         self._bindSuperuserUIEvents();
       }
 
+      window.setTimeout(function(){ self.displayNewMessageCount = true; }, 1000);
       self._chat.resumeSession();
     });
   };
@@ -348,6 +399,7 @@
       self._chat.unsetUser();
       self._user = null;
       self._roomQueue = [];
+      self.displayNewMessageCount = false; 
   };
 
   /**
@@ -730,7 +782,7 @@
       };
       
       // Click on tab 
-    $(document).delegate('[data-toggle="tab"]', 'click', function(event) {
+    $(document).delegate('[chisel-toggle="tab"]', 'click', function(event) {
       event.preventDefault();
       var $el = $(this);
       if ($el.parent('li').hasClass('active')) {
@@ -895,7 +947,9 @@ ChiselchatUI.prototype.executeCommands = function(message) {
   ChiselchatUI.prototype.resetNewMessageCount = function(roomId) {
       var $tabLink = this.$tabList.find('[data-room-id=' + roomId + ']').find('a');
       if ($tabLink.length) {
-          $tabLink.first().children('.chiselchat-new-count').html('0');
+          var $newMessageCount = $tabLink.first().children('.chiselchat-new-count');
+          $newMessageCount.html('0');
+          $newMessageCount.removeClass('chiselchat-new-count-alert');
       }
   };
 
@@ -1021,11 +1075,12 @@ ChiselchatUI.prototype.executeCommands = function(message) {
    * @param    {string}    roomId
    */
   ChiselchatUI.prototype.focusTab = function(roomId) {
-    if (this.$messages[roomId]) {
-      var $tabLink = this.$tabList.find('[data-room-id=' + roomId + ']').find('a');
+      var self = this;
+    if (self.$messages[roomId]) {
+      var $tabLink = self.$tabList.find('[data-room-id=' + roomId + ']').find('a');
       if ($tabLink.length) {
         $tabLink.first().trigger('click');
-          $tabLink.first().children('.chiselchat-new-count').html('0');
+        self.resetNewMessageCount(roomId);
       }
     }
   };
@@ -1048,7 +1103,7 @@ ChiselchatUI.prototype.executeCommands = function(message) {
 
     // Automatically select the next tab if there is one.
     if (tab_is_active) {
-        this.$tabList.find('[data-toggle=tab]').first().trigger('click');
+        this.$tabList.find('[chisel-toggle=tab]').first().trigger('click');
     }
   };
 
@@ -1112,8 +1167,10 @@ ChiselchatUI.prototype.executeCommands = function(message) {
         
         
       var $tabLink = this.$tabList.find('[data-room-id=' + roomId + ']').find('a');
-      if ($tabLink.length) {
-          $tabLink.first().children('.chiselchat-new-count').html(parseInt($tabLink.first().children('.chiselchat-new-count').html(),10) + 1);
+      if ($tabLink.length && self.displayNewMessageCount) {
+          var $newCount = $tabLink.first().children('.chiselchat-new-count');
+          $newCount.html(parseInt($newCount.html(),10) + 1);
+          this.pulse($newCount, 'chiselchat-new-count-alert', { pulses : 2, duration : 300 });
       }        
         
         
@@ -1185,5 +1242,69 @@ ChiselchatUI.prototype.executeCommands = function(message) {
       .replace(self.urlPattern, '<a target="_blank" href="$&">$&</a>')
       .replace(self.pseudoUrlPattern, '$1<a target="_blank" href="http://$2">$2</a>');
   };
+    
 
-})(jQuery);
+  ChiselchatUI.prototype.pulse = function(selector, classname, options, callback) {
+  var defaults = {
+      pulses   : 1,
+      interval : 0,
+      returnDelay : 0,
+      duration : 500
+    };
+      
+      // $(...).pulse('destroy');
+    var stop = classname === 'destroy';
+
+    if (typeof options === 'function') {
+      callback = options;
+      options = {};
+    }
+
+    options = $.extend({}, defaults, options);
+
+    if (options.interval < 0)    options.interval = 0;
+    if (options.returnDelay < 0) options.returnDelay = 0;
+    if (options.duration < 0)    options.duration = 500;
+    if (options.pulses < -1)     options.pulses = 1;
+    if (typeof callback !== 'function') callback = function(){};
+
+    return selector.each(function () {
+
+      var el = $(this),
+          property,
+          original = {};
+        
+      var data = el.data('pulse') || {};
+      data.stop = stop;
+      el.data('pulse', data);
+
+      var timesPulsed = 0;
+
+      var fromOptions = $.extend({}, options);
+      fromOptions.duration = options.duration / 2;
+      fromOptions.complete = function() {
+        window.setTimeout(animate, options.interval);
+      };
+
+      var toOptions = $.extend({}, options);
+      toOptions.duration = options.duration / 2;
+      toOptions.complete = function(){
+        window.setTimeout(function(){
+            el.addClass(classname);
+            window.setTimeout(fromOptions.complete, fromOptions.duration);
+        },options.returnDelay);
+      };
+
+      function animate() {
+        if (typeof el.data('pulse') === 'undefined') return;
+        if (el.data('pulse').stop) return;
+        if (options.pulses > -1 && ++timesPulsed > options.pulses) return callback.apply(el);
+        el.removeClass(classname);
+        window.setTimeout(toOptions.complete, toOptions.duration);
+      }
+
+      animate();
+    });
+  };
+
+})(jQuery, window, document);
