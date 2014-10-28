@@ -19,8 +19,7 @@ body { color: white; }
 <button id="join">Join Private Group</button>
 <div id="chiselchat-wrapper"></div>
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="//cdn.firebase.com/js/client/1.0.19/firebase.js"></script>
-<script src="//cdn.firebase.com/js/simple-login/1.6.3/firebase-simple-login.js"></script>
+<script src="https://cdn.firebase.com/js/client/1.1.0/firebase.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/pnotify/2.0.0/pnotify.all.min.js"></script>
 <script src="/chiselchat/chiselchat.js"></script>
         
@@ -39,7 +38,7 @@ body { color: white; }
 			url: '/'+type,
 		}).done(function(user) {
 			console.dir(user);
-			chatRef.auth(user.token, function(error) {
+			chatRef.authWithCustomToken(user.token, function(error) {
 				if (error) {
 					console.log("Auth failed.",error);
 				}
@@ -61,7 +60,18 @@ body { color: white; }
 		});
    	}
 	$('#guest').on('click', function() {
-		var simpleLogin = new FirebaseSimpleLogin(chatRef, function(err, user) {
+		chatRef.authAnonymously(function(error, anonymous) {
+			if (error) {
+				console.log('Anonymous auth failed.',error);
+			}
+			else {
+				console.dir(anonymous);
+				chat.setUser({
+					userId: anonymous.uid
+				});	
+			}
+                });
+/*		var simpleLogin = new FirebaseSimpleLogin(chatRef, function(err, user) {
 			if (err) {
 				console.log('Anonymous auth failed.',err);
 			}
@@ -78,11 +88,12 @@ body { color: white; }
                 				});
             				}
         			});
-      			}
+      			} 
       			else {
         			simpleLogin.login('anonymous');    
       			}				
 		});
+*/
 	});
 </script>
 

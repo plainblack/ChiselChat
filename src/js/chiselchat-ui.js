@@ -1,5 +1,33 @@
 (function($, window) {
 
+  var title_original = document.title;
+  var title_timeout;
+
+  window.flashTitle = function (newMsg, howManyTimes) {
+    function step() {
+        document.title = (document.title == title_original) ? newMsg : title_original;
+
+        if (--howManyTimes > 0) {
+            title_timeout = setTimeout(step, 300);
+        }
+    }
+
+    howManyTimes = parseInt(howManyTimes,10);
+
+    if (isNaN(howManyTimes)) {
+        howManyTimes = 5;
+    }
+
+    cancelFlashTitle(title_timeout);
+    step();
+  };
+
+  window.cancelFlashTitle = function () {
+    clearTimeout(title_timeout);
+    document.title = title_original;
+  };
+
+
 
   if (!$ || (parseInt($().jquery.replace(/\./g, ""), 10) < 170)) {
     throw new Error("jQuery 1.7 or later required!");
@@ -945,6 +973,7 @@ ChiselchatUI.prototype.executeCommands = function(message) {
    * @param {string} roomId
    */
   ChiselchatUI.prototype.resetNewMessageCount = function(roomId) {
+      window.cancelFlashTitle();
       var $tabLink = this.$tabList.find('[data-room-id=' + roomId + ']').find('a');
       if ($tabLink.length) {
           var $newMessageCount = $tabLink.first().children('.chiselchat-new-count');
@@ -1170,7 +1199,8 @@ ChiselchatUI.prototype.executeCommands = function(message) {
       if ($tabLink.length && self.displayNewMessageCount) {
           var $newCount = $tabLink.first().children('.chiselchat-new-count');
           $newCount.html(parseInt($newCount.html(),10) + 1);
-          this.pulse($newCount, 'chiselchat-new-count-alert', { pulses : 2, duration : 300 });
+          this.pulse($newCount, 'chiselchat-new-count-alert', { pulses : 5, duration : 300 });
+          window.flashTitle('New Chat Message!',10);
       }        
         
         
