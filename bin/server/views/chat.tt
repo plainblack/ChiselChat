@@ -71,29 +71,6 @@ body { color: white; }
 				});	
 			}
                 });
-/*		var simpleLogin = new FirebaseSimpleLogin(chatRef, function(err, user) {
-			if (err) {
-				console.log('Anonymous auth failed.',err);
-			}
-			else if (user) {
-				console.log("Chisel anonymous login successful");
-        			chatRef.auth(user.firebaseAuthToken, function(error) {
-            				if (error) {
-                				console.log('Chisel anonymous authentcation failed!', error);
-            				}
-            				else {
-                				console.dir(user);
-               	 				chat.setUser({
-                	    				userId: user.uid,
-                				});
-            				}
-        			});
-      			} 
-      			else {
-        			simpleLogin.login('anonymous');    
-      			}				
-		});
-*/
 	});
 </script>
 
