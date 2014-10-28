@@ -1,5 +1,63 @@
 (function($, window) {
 
+  function getCookie( name ) {	
+	var start = document.cookie.indexOf( name + "=" );
+	var len = start + name.length + 1;
+	if ( ( !start ) && ( name != document.cookie.substring( 0, name.length ) ) ) {
+		return null;
+	}
+	if ( start == -1 ) return null;
+	var end = document.cookie.indexOf( ';', len );
+	if ( end == -1 ) end = document.cookie.length;
+	return unescape( document.cookie.substring( len, end ) );
+  }
+
+  function setCookie( name, value, expires, path, domain, secure ) {
+	var today = new Date();
+	today.setTime( today.getTime() );
+	if ( expires ) {
+		expires = expires * 1000 * 60 * 60 * 24;
+	}
+	var expires_date = new Date( today.getTime() + (expires) );
+	document.cookie = name+'='+escape( value ) +
+		( ( expires ) ? ';expires='+expires_date.toGMTString() : '' ) + //expires.toGMTString()
+		( ( path ) ? ';path=' + path : '' ) + 
+		( ( domain ) ? ';domain=' + domain : '' ) +
+		( ( secure ) ? ';secure' : '' );
+  }
+
+  function deleteCookie( name, path, domain ) {
+	if ( getCookie( name ) ) document.cookie = name + '=' +
+			( ( path ) ? ';path=' + path : '') +
+			( ( domain ) ? ';domain=' + domain : '' ) +
+			';expires=Thu, 01-Jan-1970 00:00:01 GMT';
+  }
+
+  var title_original = document.title;
+  var title_timeout;
+
+  window.flashTitle = function (newMsg) {
+    window.cancelFlashTitle();
+    var ttl = 100;
+    function step() {
+        document.title = (document.title == title_original) ? newMsg : title_original;
+
+        if (ttl < 60000) {
+            ttl += 100;
+            title_timeout = setTimeout(step, ttl);
+        }
+    }
+    if (!document.hasFocus()) {
+       step();
+    }
+  };
+
+  var cancelFlashTitle = function () {
+    clearTimeout(title_timeout);
+    document.title = title_original;
+  };
+  window.cancelFlashTitle = cancelFlashTitle;
+  $(window).focus(cancelFlashTitle);
 
   if (!$ || (parseInt($().jquery.replace(/\./g, ""), 10) < 170)) {
     throw new Error("jQuery 1.7 or later required!");
@@ -40,6 +98,9 @@
       
     // A toggle so panes can be full screen
     this.fullScreenTab = false;
+      
+    // A toggle so sounds can be played
+    this.playSounds = getCookie("chiselchat-playSounds") === 'true' ? true : false;
       
     // A toggle to not display new message counts right after login
     this.displayNewMessageCount = false;
@@ -822,6 +883,24 @@
       return false;
     });
       
+    // Handle toggle of sound
+    $(document).delegate('[data-event="chiselchat-toggle-sound"]', 'click', function(event) {
+      var control = $('.chiselchat-sound-control');
+      if (self.playSounds) {
+          self.playSounds = false;
+          setCookie("chiselchat-playSounds", false, 30);
+          control.removeClass('chiselchat-glyphicon-volume-up');
+          control.addClass('chiselchat-glyphicon-volume-off');
+      }
+      else {
+          self.playSounds = true;
+          setCookie("chiselchat-playSounds", true, 30);
+          control.addClass('chiselchat-glyphicon-volume-up');
+          control.removeClass('chiselchat-glyphicon-volume-off');
+      }
+      return false;
+    });
+      
       
   };
 
@@ -945,6 +1024,7 @@ ChiselchatUI.prototype.executeCommands = function(message) {
    * @param {string} roomId
    */
   ChiselchatUI.prototype.resetNewMessageCount = function(roomId) {
+      window.cancelFlashTitle();
       var $tabLink = this.$tabList.find('[data-room-id=' + roomId + ']').find('a');
       if ($tabLink.length) {
           var $newMessageCount = $tabLink.first().children('.chiselchat-new-count');
@@ -1067,6 +1147,14 @@ ChiselchatUI.prototype.executeCommands = function(message) {
         // set message count to 0
         self.resetNewMessageCount(roomId); 
       }
+
+    // render the sound control
+    if (this.playSounds) {
+        $('.chiselchat-sound-control').addClass('chiselchat-glyphicon-volume-up');
+    }
+    else {
+        $('.chiselchat-sound-control').addClass('chiselchat-glyphicon-volume-off');
+    }
   };
 
   /**
@@ -1170,7 +1258,9 @@ ChiselchatUI.prototype.executeCommands = function(message) {
       if ($tabLink.length && self.displayNewMessageCount) {
           var $newCount = $tabLink.first().children('.chiselchat-new-count');
           $newCount.html(parseInt($newCount.html(),10) + 1);
-          this.pulse($newCount, 'chiselchat-new-count-alert', { pulses : 2, duration : 300 });
+          this.pulse($newCount, 'chiselchat-new-count-alert', { pulses : 5, duration : 300 });
+          window.flashTitle('New Chat Message!');
+          this.playNewMessageSound();
       }        
         
         
@@ -1242,7 +1332,12 @@ ChiselchatUI.prototype.executeCommands = function(message) {
       .replace(self.urlPattern, '<a target="_blank" href="$&">$&</a>')
       .replace(self.pseudoUrlPattern, '$1<a target="_blank" href="http://$2">$2</a>');
   };
-    
+
+  ChiselchatUI.prototype.playNewMessageSound = function() {
+      if (this.playSounds) {
+	document.getElementById('chiselchat-new-message-sound').play();
+      }
+  };    
 
   ChiselchatUI.prototype.pulse = function(selector, classname, options, callback) {
   var defaults = {
