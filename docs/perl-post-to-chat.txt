@@ -1,0 +1,55 @@
+The following is a sample class you might create for a user that has ChiselChat permissions.
+
+package User;
+
+use Moo;
+use strict;
+
+has id => (
+ is => 'rw',
+ required => 1,
+);
+
+has username => (
+ is => 'rw',
+ required => 1,
+);
+
+has is_chat_moderator => (
+ is => 'rw',
+ default => sub { 0 }
+);
+
+has is_chat_staff => (
+ is => 'rw',
+ default => sub { 0 }
+);
+
+
+sub post_message_to_chat {
+    my ($self, $message, $options) = @_;
+    my $firebase_config = get_config('firebase');
+    my $room_id = $options->{room_id} || $firebase_config->{general_chat_id}; # defaults to general chat
+    my $firebase = Firebase->new(
+	firebase => $firebase_config->{firebase}, 
+	auth => {
+		secret	=> $firebase_config->{auth}{secret},
+		data	=> {
+            		uid             => $self->id,
+            		isModerator     => $self->is_chat_moderator ? \1 : \0,
+            		isStaff         => $self->is_chat_staff ? \1 : \0,
+		},
+    } );
+    return $firebase->post('room-messages/'.$room_id, {
+        userId      => $self->username,
+        name        => 'user name goes here',
+        timestamp   => {".sv"   => "timestamp"},
+        message     => $message,
+        type        => $options->{message_type} || 'default',
+        '.priority' => {".sv"   => "timestamp"},
+    });
+}
+
+1;
+
+

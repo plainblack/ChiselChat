@@ -1,0 +1,67 @@
+First you must load all the important files into your HTML document:
+
+<link rel="stylesheet" href="/chiselchat/chiselchat.css">
+<link href="//cdnjs.cloudflare.com/ajax/libs/pnotify/2.0.0/pnotify.all.min.css" rel="stylesheet">
+<div id="chiselchat-wrapper"></div>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://cdn.firebase.com/js/client/1.1.0/firebase.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/pnotify/2.0.0/pnotify.all.min.js"></script>
+<script src="/chiselchat/chiselchat.js"></script>
+
+
+
+Then you need to create a couple of objects that point to your firebase:
+
+var chatRef = new Firebase(‘//myfirebase.firebaseio.com’);
+var chat = new ChiselchatUI(chatRef, document.getElementById("chiselchat-wrapper"));
+
+
+
+Then you can do authenticated logins:
+
+
+
+chatRef.authWithCustomToken(’auth token goes here', function(error) {
+  if (error) {
+    console.log("Auth failed.",error);
+  }
+  else {
+    console.log("Auth success.");
+    chat.setUser({
+      userId  : ‘user id goes here',
+      userName : ‘user name goes here',
+      isGuest : false,
+      isModerator : false,
+      isStaff : false,
+      profileUri : 'url to account profile',
+      avatarUri : ‘url for avatar logo goes here',
+    });
+
+});
+
+
+NOTE: If logins happen via some javascript callback, then you should call this after that occurs, rather than as part of a login form.
+
+
+
+You can also do anonymous logins:
+
+
+chatRef.authAnonymously(function(error, anonymous) {
+  if (error) {
+    console.log('Anonymous auth failed.',error);
+  }
+  else {
+    console.dir(anonymous);
+    chat.setUser({
+      userId: anonymous.uid
+    });
+  }
+});
+
+
+NOTE: If you want to convert an annonymous user into an authenticated user, you must call this first:
+
+chat.unsetUser();
+
+

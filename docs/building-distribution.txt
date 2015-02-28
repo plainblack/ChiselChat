@@ -1,0 +1,11 @@
+You must have grunt installed which means you must have node.js installed.
+
+
+From the root of the repo just type:
+
+grunt
+
+
+Then all the files will be built and placed in: build/chiselchat
+
+

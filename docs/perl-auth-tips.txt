@@ -1,0 +1,22 @@
+You want to make sure you have the latest version of the Firebase perl module.
+
+This is how you would invoke various chat user types:
+
+my $fba = Firebase::Auth->new(secret => 'xxxx' );
+my $admin = $fba->create_token({uid => "1", isStaff => \1, isModerator => \1});
+my $moderator = $fba->create_token({uid => "2", isModerator => \1});
+my $user = $fba->create_token({uid => "3"});
+
+You can also do it in the constructor like this:
+
+my $admin = Firebase::Auth->new( secret => 'xxxx', data => {uid => "1", isStaff => \1, isModerator => \1})->create_token;
+
+Or directly through the Firebase module like this:
+
+my $firebase = Firebase->new(firebase => 'myfirebase', auth => { secret => 'xxxx', data => { uid => "1", isStaff => \1, isModerator => \1 }  });
+my $admin = $firebase->authobj->create_token;
+
+And if you want to override all permissions when doing something, you need to add an "admin" flag to Firebase::Auth
+
+my $superuser = Firebase::Auth->new(secret => 'xxxx', admin => 'true', data => { uid => '1' })->create_token;
+my $superuser = Firebase->new(firebase => 'myfirebase', auth => { secret => 'xxxx', data => { uid => "1" }, admin => 'true' });
