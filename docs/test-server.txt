@@ -1,0 +1,33 @@
+You can play around with a test server by following these steps:
+
+
+Install Dancer2:
+
+cpanm Dancer2
+
+
+Go to the server folder:
+
+cd bin/server
+
+
+Start the server:
+
+perl server.pl
+
+
+Access it through your browser:
+
+http://0.0.0.0:3000
+
+
+
+It does not automatically log you in. You can log in using the buttons at the top. This way you can open multiple tabs in your browser and each one can be a different user type. This test server is great for playing around with changes. You can also use perl code against the test server. Here's the relavent info:
+
+
+secret: nvXmjpJQSiMnAaUVWiK9lGMcBZyRzwccG7mZPeN4
+firebase: chiselchat
+
+
+
+
