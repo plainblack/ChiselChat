@@ -499,19 +499,29 @@
     // Handle click of the 'Suspend User (1 Hour)' moderation item.
     $(document).delegate('[data-event="chiselchat-user-suspend-hour"]', 'click', function(event) {
       var messageVars = parseMessageVars.call(this, event);
-      self._chat.suspendUser(messageVars.userId, /* 1 Hour = 3600s */ 60*60);
-      self._chat.getUserNameById(messageVars.userId, function(snapshot) {
-        self._chat.sendMessage(messageVars.roomId, 'suspended '+snapshot.val()+' for 1 hour.', 'activity');
-      });
+      self.confirm("Are you sure you want to ban this user?", "Ban User", function () {
+          self._chat.suspendUser(messageVars.userId, /* 1 Hour = 3600s */ 60*60);
+          self._chat.getUserNameById(messageVars.userId, function(snapshot) {
+            self._chat.sendMessage(messageVars.roomId, 'suspended '+snapshot.val()+' for 1 hour.', 'activity');
+          });
+          return false;
+        },
+        function () {return false;}
+      );
     });
 
     // Handle click of the 'Suspend User (1 Day)' moderation item.
     $(document).delegate('[data-event="chiselchat-user-suspend-day"]', 'click', function(event) {
       var messageVars = parseMessageVars.call(this, event);
-      self._chat.suspendUser(messageVars.userId, /* 1 Day = 86400s */ 24*60*60);
-      self._chat.getUserNameById(messageVars.userId, function(snapshot) {
-        self._chat.sendMessage(messageVars.roomId, 'suspended '+snapshot.val()+' for 1 day.', 'activity');
-      });
+      self.confirm("Are you sure you want to ban this user?", "Ban User", function () {
+          self._chat.suspendUser(messageVars.userId, /* 1 Day = 86400s */ 24*60*60);
+          self._chat.getUserNameById(messageVars.userId, function(snapshot) {
+            self._chat.sendMessage(messageVars.roomId, 'suspended '+snapshot.val()+' for 1 day.', 'activity');
+          });
+          return false;
+        },
+        function () {return false;}
+      );
     });
 
     // Handle click of the 'Delete Message' moderation item.
