@@ -8,7 +8,7 @@ To get started you'll need to check out this repository. We check it out to /dat
 
 Then you'll need to get yourself a copy of grunt: http://gruntjs.com
 
-Then you'll need to get Perl installed and install a few Perl modules, so that you can run the test server. Once you have Perl installed installing the moduels is pretty easy. First start by installing the module manager known as CPANminus. To do that you run this command:
+Then you'll need to get Perl installed (it comes with most *nix, but if you're on Windows get http://strawberryperl.com) and install a few Perl modules, so that you can run the test server. Once you have Perl installed installing the moduels is pretty easy. First start by installing the module manager known as CPANminus. To do that you run this command:
 
 perl -MCPAN -e shell App::cpanminus
 
