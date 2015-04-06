@@ -118,6 +118,7 @@
 
     // Define some useful regexes.
     this.urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
+    //This pattern must avoid relinking links created by urlPattern
     this.pseudoUrlPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
 
     this._renderLayout();

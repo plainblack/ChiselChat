@@ -35,7 +35,7 @@ body { color: white; }
    	$('#user').on('click', function(){ authUser('user') });
    	function authUser(type) {
 		$.ajax({
-			url: '/'+type,
+			url: '/api/'+type,
 		}).done(function(user) {
 			console.dir(user);
 			chatRef.authWithCustomToken(user.token, function(error) {
