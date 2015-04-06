@@ -19,9 +19,9 @@ cpanm Dancer2 Firebase::Auth Template
 Now you're ready to run the test server:
 
 cd bin/server
-./server.pl
+plackup server.psgi --port=3000
 
-Connect your browser to http://0.0.0.0:3000 and you can start using the chat as is.
+Connect your browser to http://0:3000 and you can start using the chat as is.
 
 
 COMPILING CHISELCHAT

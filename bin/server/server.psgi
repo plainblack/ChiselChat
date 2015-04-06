@@ -1,15 +1,20 @@
 #!/usr/bin/env perl
+
+package ChiselChat::Web;
 use Dancer2;
-use Firebase::Auth;
 use Template;
 
-my $firebase = Firebase::Auth->new(secret => 'nvXmjpJQSiMnAaUVWiK9lGMcBZyRzwccG7mZPeN4');
-set serializer => 'JSON';
 get '/' => sub {
     template 'chat' => {
     };
 };
 
+package ChiselChat::Rest;
+use Dancer2;
+use Firebase::Auth;
+
+my $firebase = Firebase::Auth->new(secret => 'nvXmjpJQSiMnAaUVWiK9lGMcBZyRzwccG7mZPeN4');
+set serializer => 'JSON';
 get '/staff' => sub {
     { id => "1", name => 'Staff', isStaff => \1, isModerator => \1, token => $firebase->create_token({uid => "1", isStaff => \1, isModerator => \1}) };
 };
@@ -30,4 +35,13 @@ get '/user' => sub {
     { id => "3", name => 'User', token => $firebase->create_token({uid => "3"}) };
 };
 
-dance;
+1;
+
+use Plack::Builder;
+
+ builder {
+         mount '/api' => ChiselChat::Rest->to_app;
+         mount '/'  => ChiselChat::Web->to_app;
+ };
+
+
