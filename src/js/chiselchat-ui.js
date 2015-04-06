@@ -490,10 +490,14 @@
     // Handle click of the 'Warn User' moderation item.
     $(document).delegate('[data-event="chiselchat-user-warn"]', 'click', function(event) {
       var messageVars = parseMessageVars.call(this, event);
-      self._chat.warnUser(messageVars.userId);
-      self._chat.getUserNameById(messageVars.userId, function(snapshot) {
-        self._chat.sendMessage(messageVars.roomId, 'warned '+snapshot.val()+'.', 'activity');
-      });
+      self.confirm("Are you sure you want to warn this user?", "Warn User", function () {
+          self._chat.warnUser(messageVars.userId);
+          self._chat.getUserNameById(messageVars.userId, function(snapshot) {
+            self._chat.sendMessage(messageVars.roomId, 'warned '+snapshot.val()+'.', 'activity');
+          });
+          return false;
+      },
+      function () { return false; });
     });
 
     // Handle click of the 'Suspend User (1 Hour)' moderation item.
@@ -682,29 +686,34 @@
   ChiselchatUI.prototype._bindForUserMuting = function() {
     var self = this;
     $(document).delegate('[data-event="chiselchat-user-mute-toggle"]', 'click', function(event) {
-      var $this = $(this),
+        var $this = $(this),
           userId = $this.closest('[data-user-id]').data('user-id'),
           userName = $this.closest('[data-user-name]').data('user-name'),
           isMuted = $this.hasClass('chiselchat-muted');
 
-      event.preventDefault();
-        self._chat.toggleUserMute(userId, function(error) {
-            if (error) {
-                self.error(error.message);
-            }
-            else {
-                if (isMuted) {
-                    self.success(userName + ' has been unmuted.','User Unmuted');
-                    $this.html('Mute');
+        event.preventDefault();
+        self.confirm("Are you sure you want to mute/unmute this user?", "Mute/Unmute User", function () {
+            self._chat.toggleUserMute(userId, function(error) {
+                if (error) {
+                    self.error(error.message);
                 }
                 else {
-                    self.error(userName + ' has been muted.', 'User Muted');
-                    $this.html('Unmute');
+                    if (isMuted) {
+                        self.success(userName + ' has been unmuted.','User Unmuted');
+                        $this.html('Mute');
+                    }
+                    else {
+                        self.error(userName + ' has been muted.', 'User Muted');
+                        $this.html('Unmute');
+                        return false;
+                    }
                 }
-            }
-        });
+            });
+        },
+        function () { return false; }
+        );
     });
-  };
+  },
 
   /**
    * Binds to elements with the data-event='chiselchat-user-(private)-invite' and
