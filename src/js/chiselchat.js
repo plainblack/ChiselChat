@@ -266,9 +266,10 @@
     _onEnterRoom: function(room) {
       this._invokeEventCallbacks('room-enter', room);
     },
-    _onNewMessage: function(roomId, snapshot) {
+    _onNewMessage: function(roomId, snapshot, prevChildKey) {
       var message = snapshot.val();
       message.id = snapshot.name();
+      message.prevChildId = prevChildKey;
       this._invokeEventCallbacks('message-add', roomId, message);
     },
     _onRemoveMessage: function(roomId, snapshot) {
@@ -480,8 +481,8 @@
 
       // Setup message listeners
       self._roomRef.child(roomId).once('value', function(snapshot) {
-        self._messageRef.child(roomId).limit(self._options.numMaxMessages).on('child_added', function(snapshot) {
-          self._onNewMessage(roomId, snapshot);
+        self._messageRef.child(roomId).limit(self._options.numMaxMessages).on('child_added', function(snapshot, prevChildKey) {
+          self._onNewMessage(roomId, snapshot, prevChildKey);
         }, /* onCancel */ function() {
           // Turns out we don't have permission to access these messages.
           self.leaveRoom(roomId);

@@ -1232,6 +1232,7 @@ ChiselchatUI.prototype.executeCommands = function(message) {
       userId          : rawMessage.userId,
       name            : rawMessage.name,
       type            : rawMessage.type || 'default',
+      prevChildId     : rawMessage.prevChildId,
       isSelfMessage   : (self._user && rawMessage.userId == self._user.id),
       disableActions  : (!self._user || rawMessage.userId == self._user.id),
       userIsModerator : self._chat.userIsModerator(),
@@ -1269,7 +1270,11 @@ ChiselchatUI.prototype.executeCommands = function(message) {
         scrollToBottom = true;
       }
 
-      $messages.append($message);
+      if (message.prevChildId){
+        $messages.append($message);
+      } else {
+        $messages.prepend($message);
+      }
 
         
         
