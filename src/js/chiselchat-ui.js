@@ -244,6 +244,7 @@
       // Chat-specific custom interactions and functionality.
       this._bindForRoomList();
       this._bindForUserRoomList();
+      this._bindForPreviousMessages();
       this._bindForUserSearch();
       this._bindForUserMuting();
       this._bindForChatInvites();
@@ -611,6 +612,23 @@
         }
         self.sortListLexicographically('#' + targetId);
       });
+    });
+  };
+  
+  /**
+   * Binds Load Previous Messages link per room to show more chat history
+   */
+  ChiselchatUI.prototype._bindForPreviousMessages = function() {
+    var self = this;
+
+    // Upon click of the button, load more chat history
+    $(document).delegate('[data-event="chiselchat-previous-messages-link"]', 'click', function(event) {
+      event.stopPropagation();
+      
+      var $this = $(this),
+          roomId = $this.closest('[data-room-id]').data('room-id');
+      
+      self._chat.loadPreviousMessages(roomId);
     });
   };
 
@@ -1135,6 +1153,14 @@ ChiselchatUI.prototype.executeCommands = function(message) {
         return false;
       }
     });
+    
+    // Attach scroll event to show Load More Messages link, which is hidden initially
+    $("#chiselchat-previous-messages-text-" + roomId).hide(0);
+    $messages.scroll(function(){
+      if ($messages.scrollTop() <= 0 && $messages.find(".chiselchat-message").length == self._options["numMessages_"+roomId]){
+        $("#chiselchat-previous-messages-text-" + roomId).slideDown(500);
+      }
+    });
 
     // Populate and render the tab menu template.
     var tabListTemplate = ChiselchatDefaultTemplates["templates/tab-menu-item.html"];
@@ -1233,6 +1259,7 @@ ChiselchatUI.prototype.executeCommands = function(message) {
       name            : rawMessage.name,
       type            : rawMessage.type || 'default',
       prevChildId     : rawMessage.prevChildId,
+      priority        : rawMessage.timestamp,
       isSelfMessage   : (self._user && rawMessage.userId == self._user.id),
       disableActions  : (!self._user || rawMessage.userId == self._user.id),
       userIsModerator : self._chat.userIsModerator(),
@@ -1269,11 +1296,26 @@ ChiselchatUI.prototype.executeCommands = function(message) {
         // Haven't added the scrollbar yet
         scrollToBottom = true;
       }
-
+      
+      // Message has previous child, so it should be added after the child
       if (message.prevChildId){
-        $messages.append($message);
+        var $prevChild = $messages.find('[data-message-id=' + message.prevChildId + ']');
+        
+        if ($prevChild.length){
+          // Insert after previous child, if previous child exists
+          $prevChild.after($message);
+        } else {
+          // Append if priority is higher than newest message, otherwise prepend in case messages history came in out of order
+          if (message.priority >= $messages.find(".chiselchat-timestamp").last().attr("data-message-priority")){
+            $messages.append($message);
+          } else {
+            // Prepend by adding after load previous messages link
+            $("#chiselchat-previous-messages-" + roomId).after($message);
+          }
+        }
       } else {
-        $messages.prepend($message);
+        // Add to back of list since this is the first child in our fetched set
+        $("#chiselchat-previous-messages-" + roomId).after($message);
       }
 
         

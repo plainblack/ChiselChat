@@ -481,18 +481,58 @@
 
       // Setup message listeners
       self._roomRef.child(roomId).once('value', function(snapshot) {
-        self._messageRef.child(roomId).limit(self._options.numMaxMessages).on('child_added', function(snapshot, prevChildKey) {
+        self._options["numMessages_" + roomId] = self._options.numMaxMessages;
+
+        self._messageRef.child(roomId).limit(self._options["numMessages_" + roomId]).on('child_added', function(snapshot, prevChildKey) {
           self._onNewMessage(roomId, snapshot, prevChildKey);
         }, /* onCancel */ function() {
           // Turns out we don't have permission to access these messages.
           self.leaveRoom(roomId);
         }, /* context */ self);
 
-        self._messageRef.child(roomId).limit(self._options.numMaxMessages).on('child_removed', function(snapshot) {
+        self._messageRef.child(roomId).limit(self._options["numMessages_" + roomId]).on('child_removed', function(snapshot) {
           self._onRemoveMessage(roomId, snapshot);
         }, /* onCancel */ function(){}, /* context */ self);
       }, /* onFailure */ function(){}, self);
     });
+  };
+  
+  //Load message history
+  Chiselchat.prototype.loadPreviousMessages = function(roomId){
+    var self = this;
+
+    if (!roomId) return;
+
+    // Skip if we're not in this room.
+    if (!self._rooms[roomId]) {
+      return;
+    }
+    
+    // Hide Load link
+    $("#chiselchat-previous-messages-text-" + roomId).slideUp(300);
+    
+    //Load more messages and reset child_removed callback to new limit
+    self._roomRef.child(roomId).once('value', function(snapshot) {
+        var $messages = $("#chiselchat-messages" + roomId);
+        var priority = $messages.find(".chiselchat-message .chiselchat-timestamp").first().attr("data-message-priority");
+        self._options["numMessages_"+roomId] = (self._options["numMessages_" + roomId] + self._options.numMaxMessages) || self._options["numMessages_" + roomId];
+
+        self._messageRef.child(roomId).off('child_removed');
+
+        self._messageRef.child(roomId).endAt(priority-1).limit(self._options.numMaxMessages).on('child_added', function(snapshot, prevChildKey) {
+          var scrollFromBottom = $messages[0].scrollHeight - $messages.scrollTop();
+          self._onNewMessage(roomId, snapshot, prevChildKey);
+          $messages.scrollTop($messages[0].scrollHeight - scrollFromBottom);
+        }, /* onCancel */ function() {
+          // Turns out we don't have permission to access these messages.
+          self.leaveRoom(roomId);
+        }, /* context */ self);
+        
+        self._messageRef.child(roomId).limit(self._options["numMessages_" + roomId]).on('child_removed', function(snapshot) {
+          self._onRemoveMessage(roomId, snapshot);
+        }, /* onCancel */ function(){}, /* context */ self);
+      }, /* onFailure */ function(){}, self);
+      
   };
 
   // Leave a chat room.

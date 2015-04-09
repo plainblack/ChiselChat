@@ -27,7 +27,13 @@
     </div>
          
 
-  <div id='chiselchat-messages<%- id %>' class='chiselchat-history'></div>
+  <div id='chiselchat-messages<%- id %>' class='chiselchat-history'>
+      <div id='chiselchat-previous-messages-<%- id %>' class="chiselchat-message-activity">
+          <span class="chiselchat-controls" id='chiselchat-previous-messages-text-<%- id %>'>
+              <a title="Load Previous Messages" data-event='chiselchat-previous-messages-link' href="javascript: void(0);">Load Previous Messages</a>
+          </span>
+      </div>
+  </div>
   
 
   <div class='chiselchat-say'>
