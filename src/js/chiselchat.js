@@ -511,18 +511,17 @@
     // Hide Load link
     $("#chiselchat-previous-messages-text-" + roomId).slideUp(300);
     
-    //Load more messages and reset child_removed callback to new limit
+    // Reset message listeners
     self._roomRef.child(roomId).once('value', function(snapshot) {
         var $messages = $("#chiselchat-messages" + roomId);
-        var priority = $messages.find(".chiselchat-message .chiselchat-timestamp").first().attr("data-message-priority");
         self._options["numMessages_"+roomId] = (self._options["numMessages_" + roomId] + self._options.numMaxMessages) || self._options["numMessages_" + roomId];
 
-        self._messageRef.child(roomId).off('child_removed');
+        // Remove current listeners
+        self._messageRef.child(roomId).off();
 
-        self._messageRef.child(roomId).endAt(priority-1).limit(self._options.numMaxMessages).on('child_added', function(snapshot, prevChildKey) {
-          var scrollFromBottom = $messages[0].scrollHeight - $messages.scrollTop();
+        // Add new listeners with new limits
+        self._messageRef.child(roomId).limit(self._options["numMessages_" + roomId]).on('child_added', function(snapshot, prevChildKey) {
           self._onNewMessage(roomId, snapshot, prevChildKey);
-          $messages.scrollTop($messages[0].scrollHeight - scrollFromBottom);
         }, /* onCancel */ function() {
           // Turns out we don't have permission to access these messages.
           self.leaveRoom(roomId);

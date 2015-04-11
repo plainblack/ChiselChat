@@ -1267,34 +1267,46 @@ ChiselchatUI.prototype.executeCommands = function(message) {
       avatarUri   : '',
       profileUri  : ''
     };
-
-    // While other data is escaped in the Underscore.js templates, escape and
-    // process the message content here to add additional functionality (add links).
-    // Also trim the message length to some client-defined maximum.
-    var messageConstructed = '';
-    message.message = _.map(message.message.split(' '), function(token) {
-      if (self.urlPattern.test(token) || self.pseudoUrlPattern.test(token)) {
-        return self.linkify(encodeURI(token));
-      } else {
-        return _.escape(token);
-      }
-    }).join(' ');
-    message.message = self.trimWithEllipsis(message.message, self.maxLengthMessage);
-    message.message = message.message.replace(/\n/g,'<br>');
-
-    // Populate and render the message template.
-    var template = ChiselchatDefaultTemplates["templates/message.html"];
-    var $message = $(template(message));
+    
     var $messages = self.$messages[roomId];
     if ($messages) {
+    
+      // If message is already in window, just return (this happens when loading history)
+      if ($messages.find('[data-message-id=' + message.id + ']').length){
+        return;
+      }
+
+      // While other data is escaped in the Underscore.js templates, escape and
+      // process the message content here to add additional functionality (add links).
+      // Also trim the message length to some client-defined maximum.
+      var messageConstructed = '';
+      message.message = _.map(message.message.split(' '), function(token) {
+        if (self.urlPattern.test(token) || self.pseudoUrlPattern.test(token)) {
+          return self.linkify(encodeURI(token));
+        } else {
+          return _.escape(token);
+        }
+      }).join(' ');
+      message.message = self.trimWithEllipsis(message.message, self.maxLengthMessage);
+      message.message = message.message.replace(/\n/g,'<br>');
+
+      // Populate and render the message template.
+      var template = ChiselchatDefaultTemplates["templates/message.html"];
+      var $message = $(template(message));
 
       var scrollToBottom = false;
+      var scrollFromBottom = 0;
       if ($messages.scrollTop() / ($messages[0].scrollHeight - $messages[0].offsetHeight) >= 0.95) {
         // Pinned to bottom
         scrollToBottom = true;
       } else if ($messages[0].scrollHeight <= $messages.height()) {
         // Haven't added the scrollbar yet
         scrollToBottom = true;
+      } else {
+        // If not pinned to bottom, keep message position if adding history
+        if ($messages.find(".chiselchat-message").length < (self._chat._options["numMessages_" + roomId] - 1)){
+          scrollFromBottom = $messages[0].scrollHeight - $messages.scrollTop();
+        }
       }
       
       // Message has previous child, so it should be added after the child
@@ -1317,8 +1329,6 @@ ChiselchatUI.prototype.executeCommands = function(message) {
         // Add to back of list since this is the first child in our fetched set
         $("#chiselchat-previous-messages-" + roomId).after($message);
       }
-
-        
         
         
       var $tabLink = this.$tabList.find('[data-room-id=' + roomId + ']').find('a');
@@ -1333,6 +1343,8 @@ ChiselchatUI.prototype.executeCommands = function(message) {
         
       if (scrollToBottom) {
         $messages.scrollTop($messages[0].scrollHeight);
+      } else if (scrollFromBottom) {
+        $messages.scrollTop($messages[0].scrollHeight - scrollFromBottom);
       }
     }
   };
